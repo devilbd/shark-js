@@ -41,8 +41,9 @@ export class AppCore {
     }
 
     updateView() {
+        this.componentResolver.resolveComponents('input-bindings');
         this.componentResolver.resolveComponents('text-bindings');
-        this.componentResolver.resolveComponents('repeateable-bindings');
+        this.componentResolver.resolveComponents('repeatable-bindings');
     }
 
     updateCss() {

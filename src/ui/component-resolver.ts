@@ -31,7 +31,7 @@ export class ComponentResolver extends Dependency {
                     case 'event-bindings':
                         this.resolveEventBindings(componentRef as HTMLElement, componentInstance);
                         break;
-                    case 'repeateable-bindings':
+                    case 'repeatable-bindings':
                         this.resolveRepeatableBindings(componentRef as HTMLElement, componentInstance);
                     case 'input-bindings':
                         this.resolveInputBindings(componentRef as HTMLElement, componentInstance);

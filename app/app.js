@@ -41,10 +41,7 @@ class App {
 
     onValueChangedTimeout = 0;
     onValueChanged(e) {
-        // clearTimeout(this.onValueChanged);
-        // this.onValueChangedTimeout = setTimeout(() =>{
         this.updateView();
-        // }, 250)
     }
 
     testClick(e) {
