@@ -19,10 +19,11 @@ export class ComponentResolver extends Dependency {
 
     resolveComponents(phase: string = '') {
         const components = document.querySelectorAll('[bind-component]');
-        components.forEach(componentRef => {
+        components.forEach(componentRef => {            
             const componentName = componentRef.attributes.getNamedItem('bind-component')?.value;
             if (componentName) {
                 const componentInstance = this.dependencyResolver.getType(componentName);
+                this.sharkJSConextFactory(componentRef, {...componentInstance});
                 switch(phase) {
                     case 'text-bindings':
                         this.resolveTextBindings(componentRef as HTMLElement, componentInstance);
@@ -46,6 +47,7 @@ export class ComponentResolver extends Dependency {
                         this.resolveEventBindings(componentRef as HTMLElement, componentInstance);
                         break;
                 }
+                (<any>componentRef).sharkJS.state = 'resolved';
             }
         });
     }
@@ -54,8 +56,9 @@ export class ComponentResolver extends Dependency {
         const bindings = componentRef.querySelectorAll('[bind-value]');
         bindings.forEach(binding => {
             const bindingValue = binding.attributes.getNamedItem('bind-value')?.value;
-            if (bindingValue) {                
-                componentInstance[bindingValue] = (<any>binding).value;
+            if (bindingValue) {
+                const newValue = (<any>binding).value;
+                componentInstance[bindingValue] = newValue;
             }
         });
     }
@@ -81,9 +84,11 @@ export class ComponentResolver extends Dependency {
                     const evetnSplitValue = event.split(':');
                     const eventType = evetnSplitValue[0];
                     const eventSource = evetnSplitValue[1];
-                    const sharkJSConext = this.getDataContextFromParent(binding as HTMLElement); // (<any>binding).sharkJS || (<any>binding).parentElement.sharkJS;
+                    const sharkJS = this.getSharkJSContextFromParent(binding as HTMLElement);
                     binding.addEventListener(eventType, (e) => {
-                        componentInstance[eventSource].apply(componentInstance, [{ event: e, sharkJSContext: sharkJSConext }]);
+                        setTimeout(() => {
+                            componentInstance[eventSource].apply(componentInstance, [{ event: e, sharkJS: sharkJS }]);
+                        });
                     });
                 });
             }
@@ -165,8 +170,8 @@ export class ComponentResolver extends Dependency {
                     let condition = componentInstance[conditions[1]];
 
                     if (typeof condition == 'function') {
-                        const sharkJSConext = this.getSharkJSContextFromParent(binding as HTMLElement); // (<any>binding).sharkJS || (<any>binding).parentElement.sharkJS;
-                        condition = condition(sharkJSConext);
+                        const sharkJS = this.getSharkJSContextFromParent(binding as HTMLElement); // (<any>binding).sharkJS || (<any>binding).parentElement.sharkJS;
+                        condition = condition(sharkJS);
                     }
 
                     if (conditions[1].includes('!')) {

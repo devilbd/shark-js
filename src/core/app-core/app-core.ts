@@ -1,7 +1,7 @@
-import { Configurations } from "./common/configurations";
-import { HttpClient } from "./core/communication/http-client";
-import { DependencyResolver } from "./core/dependency-resolver/dependency-resolver";
-import { ComponentResolver } from "./ui/component-resolver";
+import { Configurations } from "../../common/configurations";
+import { HttpClient } from "../communication/http-client";
+import { DependencyResolver } from "../dependency-resolver/dependency-resolver";
+import { ComponentResolver } from "../../ui/component-resolver";
 
 export class AppCore { 
     private componentResolver: ComponentResolver;
@@ -9,7 +9,7 @@ export class AppCore {
     public appName: string;
     public appInstance: object;
 
-    constructor(appName: string, appInstance: Function, components: any[]) {
+    constructor(appName: string, appInstance: Function, components: any[], services: any[]) {
         this.dependencyResolver.registerType(Configurations, 'Configurations', [], () => 'test');
         this.dependencyResolver.registerType(HttpClient, 'HttpClient', []);
         this.dependencyResolver.registerType(ComponentResolver, 'ComponentResolver', [], () => {
@@ -22,6 +22,10 @@ export class AppCore {
 
         components.forEach(component => {
             this.dependencyResolver.registerType(component.type, component.name, []);
+        });
+
+        services.forEach(service => {
+            this.dependencyResolver.registerType(service.type, service.name, []);
         });
 
         this.dependencyResolver.registerType(appInstance, appName, []);

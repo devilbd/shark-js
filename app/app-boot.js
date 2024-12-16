@@ -5,5 +5,11 @@
             type: DashboardComponent
         }
     ];
-    sharkJS.run('App', App, components);
+    const services = [
+        {
+            name: 'MainDataService',
+            type: MainDataService
+        }
+    ];
+    sharkJS.run('App', App, components, services);
 })();

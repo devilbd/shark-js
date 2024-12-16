@@ -39,13 +39,18 @@ class App {
         this.testProperty = 123;
     }
 
+    onValueChangedTimeout = 0;
     onValueChanged(e) {
+        // clearTimeout(this.onValueChanged);
+        // this.onValueChangedTimeout = setTimeout(() =>{
         this.updateView();
+        // }, 250)
     }
 
     testClick(e) {
-        if (e.dataContext) {
-            this.testProperty = e.dataContext.value;
+        if (e.sharkJS) {
+            let newValue = e.sharkJS.dataContext.value;
+            this.testProperty = newValue;
         }
         this.testArray[2].value = 'updated mannyally' + this.iterator;
         this.iterator++;

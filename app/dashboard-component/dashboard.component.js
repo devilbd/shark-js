@@ -4,4 +4,9 @@ class DashboardComponent {
     constructor() {
 
     }
+
+    async getData() {
+        await MainDataService.getData();
+        console.log('test');
+    }
 }
