@@ -4,10 +4,10 @@ import { DependencyResolver } from "../dependency-resolver/dependency-resolver";
 import { ComponentResolver } from "../../ui/component-resolver";
 
 export class AppCore { 
-    private componentResolver: ComponentResolver;
     public dependencyResolver = new DependencyResolver();
     public appName: string;
     public appInstance: object;
+    private componentResolver: ComponentResolver;
 
     constructor(appName: string, appInstance: Function, components: any[], services: any[]) {
         this.dependencyResolver.registerType(Configurations, 'Configurations', [], () => 'test');

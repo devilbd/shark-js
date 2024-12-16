@@ -41,6 +41,10 @@ class App {
 
     onValueChangedTimeout = 0;
     onValueChanged(e) {
+        if (e.sharkJS) {
+            let newValue = e.sharkJS.dataContext.value;
+            this.testProperty = newValue;
+        }
         this.updateView();
     }
 
