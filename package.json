@@ -1,0 +1,24 @@
+{
+  "name": "@webplatformteam_npm/widgetsenvironmentjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "build-watch": "webpack --watch",
+    "serve": "http-server -p 8080"
+  },
+  "author": "webplatformteam_npm",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "http-server": "^14.1.1",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.6.2",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4",
+    "html-loader": "^5.1.0"
+  }
+}

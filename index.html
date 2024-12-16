@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+    <header>
+        <meta charset="utf-8" />
+        <title>Test playground</title>
+        <style>
+            .hover-class1 {
+                border: 4px dashed rgb(68, 68, 68);
+            }
+
+            .hover-class2 {
+                border: 4px dashed rgb(68, 68, 68);
+                border-radius: 5px;
+                background-color: crimson;
+            }
+
+            .green-item {
+                background-color: lime;
+            }
+
+            .blue-item {
+                background-color: blue;
+            }
+        </style>
+    </header>
+    <body>
+        <div bind-component="App">
+            <!-- <div bind-text="testProperty"></div>
+            <span bind-text="testProperty"></span>
+            <div>
+                <div bind-text="testProperty"></div>
+            </div>
+
+            <input type="text" bind-value="testProperty" />
+            <button bind-event="click:testClick">Change value</button> -->
+
+            <!-- <div bind-for="testArray;item;track">
+                <div bind="item.value" bind-event="click:testClick" bind-class="green-item:greenStyledItem"></div>
+                <div bind="item.testProp" bind-event="click:testClick" bind-class="blue-item:blueStyledItem"></div>
+            </div> -->
+            <div bind-for="testArray;item;track">
+                <div>
+                    <div>
+                        <div bind-class="green-item:greenStyledItem" bind="item.value" bind-event="click:testClick"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div bind-class="hover-class1:testHover,hover-class2:!testHover">
+                I am hovered
+            </div>
+            <button bind-event="mouseover:onMouseOver,mouseleave:onMouseLeft">
+                Hover me
+            </button> -->
+        </div>
+        <script src="dist/shark.js"></script>
+        <script>
+            class App {
+                testProperty;
+                testArray = [
+                    { key: 1, value: 'something' },
+                    { key: 2, value: 'something 2' },
+                    { key: 3, value: '', testProp: 5 },
+                ];
+
+                _iterator = 0;
+                get iterator() {
+                    return this._iterator;
+                }
+
+                set iterator(v) {
+                    this._iterator = v;
+                    if (v % 2 === 0) {
+                        this.testHover = !this.testHover;
+                        this.updateCss();
+                    }
+                }
+
+                greenStyledItem(e) {
+                    if (e.dataContext.value == 'something') {
+                        return true;
+                    }
+                    return false;
+                }
+
+                blueStyledItem(e) {
+                    if (e.dataContext.testProp == 5) {
+                        return true;
+                    }
+                    return false;
+                }
+
+                testHover = false;
+
+                constructor() {
+                    this.testProperty = 123;
+                }
+
+
+                testClick(e) {
+                    if (e.dataContext) {
+                        this.testProperty = e.dataContext.value;
+                    }
+                    this.testArray[2].value = 'updated mannyally' + this.iterator;
+                    this.iterator++;
+                    // mannually updated
+                    this.updateView();
+                }
+
+                onMouseOver(e) {
+                    this.testHover = true;
+                    this.updateCss();
+                }
+
+                onMouseLeft(e) {
+                    this.testHover = false;
+                    this.updateCss();
+                }
+            }
+
+            (() => { 
+                sharkJS.run('App', App);
+            })();
+        </script>
+    </body>
+</html>
