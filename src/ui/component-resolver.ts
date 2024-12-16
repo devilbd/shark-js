@@ -166,7 +166,6 @@ export class ComponentResolver extends Dependency {
 
                     if (typeof condition == 'function') {
                         const sharkJSConext = this.getSharkJSContextFromParent(binding as HTMLElement); // (<any>binding).sharkJS || (<any>binding).parentElement.sharkJS;
-                        console.log(sharkJSConext);
                         condition = condition(sharkJSConext);
                     }
 

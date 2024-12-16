@@ -14,7 +14,7 @@
             </div>
 
             <input type="text" bind-value="testProperty" />
-            <button bind-event="click:testClick">Change value</button> -->
+            <button bind-event="click:testClick">Change value</button>
 
             <div bind-for="testArray;item;track">
                 <div bind="item.value" bind-event="click:testClick" bind-class="green-item:greenStyledItem"></div>
@@ -34,8 +34,13 @@
                 Hover me
             </button>
         </div>
+        <div bind-component="DashboardComponent">
+            <div>Dashboard</div>
+            <div bind-text="myProperty1"></div>
+        </div>
     </body>
     <script src="dist/shark.js"></script>
+    <script src="app/dashboard-component/dashboard.component.js"></script>
     <script src="app/app.js"></script>
     <script src="app/app-boot.js"></script>
 </html>

@@ -9,7 +9,7 @@ export class AppCore {
     public appName: string;
     public appInstance: object;
 
-    constructor(appName: string, appInstance: Function) {
+    constructor(appName: string, appInstance: Function, components: any[]) {
         this.dependencyResolver.registerType(Configurations, 'Configurations', [], () => 'test');
         this.dependencyResolver.registerType(HttpClient, 'HttpClient', []);
         this.dependencyResolver.registerType(ComponentResolver, 'ComponentResolver', [], () => {
@@ -19,6 +19,10 @@ export class AppCore {
         this.componentResolver = this.dependencyResolver.getType('ComponentResolver') as ComponentResolver;
 
         const configurations = this.dependencyResolver.getType('Configurations') as Configurations;
+
+        components.forEach(component => {
+            this.dependencyResolver.registerType(component.type, component.name, []);
+        });
 
         this.dependencyResolver.registerType(appInstance, appName, []);
         this.appName = appName;

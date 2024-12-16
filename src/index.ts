@@ -1,7 +1,7 @@
 import { AppCore } from "./app";
 
-export function run(appName: string, appInstance: Function) {
-    const app = new AppCore(appName, appInstance);
+export function run(appName: string, appInstance: Function, components: object[]) {
+    const app = new AppCore(appName, appInstance, components);
     app.run();
 
     const result = {
