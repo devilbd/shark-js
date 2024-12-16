@@ -13,7 +13,7 @@
                 <div bind-text="testProperty"></div>
             </div>
 
-            <input type="text" bind-value="testProperty" />
+            <input type="text" bind-value="testProperty" bind-event="keyup:onValueChanged" />
             <button bind-event="click:testClick">Change value</button>
 
             <div bind-for="testArray;item;track">

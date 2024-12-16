@@ -39,6 +39,9 @@ class App {
         this.testProperty = 123;
     }
 
+    onValueChanged(e) {
+        this.updateView();
+    }
 
     testClick(e) {
         if (e.dataContext) {
