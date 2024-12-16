@@ -3,25 +3,7 @@
     <header>
         <meta charset="utf-8" />
         <title>Test playground</title>
-        <style>
-            .hover-class1 {
-                border: 4px dashed rgb(68, 68, 68);
-            }
-
-            .hover-class2 {
-                border: 4px dashed rgb(68, 68, 68);
-                border-radius: 5px;
-                background-color: crimson;
-            }
-
-            .green-item {
-                background-color: lime;
-            }
-
-            .blue-item {
-                background-color: blue;
-            }
-        </style>
+        <link rel="stylesheet" href="app/app.css">
     </header>
     <body>
         <div bind-component="App">
@@ -52,74 +34,8 @@
                 Hover me
             </button>
         </div>
-        <script src="dist/shark.js"></script>
-        <script>
-            class App {
-                testProperty;
-                testArray = [
-                    { key: 1, value: 'something' },
-                    { key: 2, value: 'something 2' },
-                    { key: 3, value: '', testProp: 5 },
-                ];
-
-                _iterator = 0;
-                get iterator() {
-                    return this._iterator;
-                }
-
-                set iterator(v) {
-                    this._iterator = v;
-                    if (v % 2 === 0) {
-                        this.testHover = !this.testHover;
-                        this.updateCss();
-                    }
-                }
-
-                greenStyledItem(e) {
-                    if (e.dataContext.value == 'something') {
-                        return true;
-                    }
-                    return false;
-                }
-
-                blueStyledItem(e) {
-                    if (e.dataContext.testProp == 5) {
-                        return true;
-                    }
-                    return false;
-                }
-
-                testHover = false;
-
-                constructor() {
-                    this.testProperty = 123;
-                }
-
-
-                testClick(e) {
-                    if (e.dataContext) {
-                        this.testProperty = e.dataContext.value;
-                    }
-                    this.testArray[2].value = 'updated mannyally' + this.iterator;
-                    this.iterator++;
-                    // mannually updated
-                    this.updateView();
-                }
-
-                onMouseOver(e) {
-                    this.testHover = true;
-                    this.updateCss();
-                }
-
-                onMouseLeft(e) {
-                    this.testHover = false;
-                    this.updateCss();
-                }
-            }
-
-            (() => { 
-                sharkJS.run('App', App);
-            })();
-        </script>
     </body>
+    <script src="dist/shark.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/app-boot.js"></script>
 </html>

@@ -1,0 +1,3 @@
+(() => { 
+    sharkJS.run('App', App);
+})();

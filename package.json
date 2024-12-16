@@ -1,5 +1,5 @@
 {
-  "name": "@webplatformteam_npm/widgetsenvironmentjs",
+  "name": "shark-js",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -7,7 +7,7 @@
     "build-watch": "webpack --watch",
     "serve": "http-server -p 8080"
   },
-  "author": "webplatformteam_npm",
+  "author": "Vladimir Parchev",
   "license": "ISC",
   "description": "",
   "dependencies": {
