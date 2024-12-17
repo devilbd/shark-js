@@ -1,4 +1,7 @@
-class App {
+import { AppCore } from "../framework/core/app-core/app-core";
+import { SharkJSContext } from "../framework/ui/component-resolver";
+
+export class App extends AppCore {
     testProperty;
     testArray = [
         { key: 1, value: 'something' },
@@ -19,14 +22,14 @@ class App {
         }
     }
 
-    greenStyledItem(e) {
+    greenStyledItem(e: SharkJSContext) {
         if (e.dataContext.value == 'something') {
             return true;
         }
         return false;
     }
 
-    blueStyledItem(e) {
+    blueStyledItem(e: SharkJSContext) {
         if (e.dataContext.testProp == 5) {
             return true;
         }
@@ -36,11 +39,12 @@ class App {
     testHover = false;
 
     constructor() {
+        super();
         this.testProperty = 123;
     }
 
     onValueChangedTimeout = 0;
-    onValueChanged(e) {
+    onValueChanged(e: any) {
         if (e.sharkJS) {
             let newValue = e.sharkJS.dataContext.value;
             this.testProperty = newValue;
@@ -48,7 +52,7 @@ class App {
         this.updateView();
     }
 
-    testClick(e) {
+    testClick(e: any) {
         if (e.sharkJS) {
             let newValue = e.sharkJS.dataContext.value;
             this.testProperty = newValue;
@@ -59,12 +63,12 @@ class App {
         this.updateView();
     }
 
-    onMouseOver(e) {
+    onMouseOver(e: any) {
         this.testHover = true;
         this.updateCss();
     }
 
-    onMouseLeft(e) {
+    onMouseLeft(e: any) {
         this.testHover = false;
         this.updateCss();
     }

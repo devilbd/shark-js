@@ -1,8 +1,11 @@
 const path = require('path');
-const { library } = require('webpack');
+// const { library } = require('webpack');
 
 module.exports = {
-  entry: './src/index.ts',
+  entry:  [
+    './src/app/app-boot.ts',
+    './src/app/app.scss'
+  ],
   devtool: 'inline-source-map',
   module: {
     rules: [
@@ -11,10 +14,21 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          // Creates `style` nodes from JS strings
+          "style-loader",
+          // Translates CSS into CommonJS
+          "css-loader",
+          // Compiles Sass to CSS
+          "sass-loader",
+        ],
+      },
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.ts', '.js', '.scss'],
   },
   output: {
     // filename: 'bundle.js',

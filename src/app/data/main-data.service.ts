@@ -1,4 +1,4 @@
-class MainDataService {
+export class MainDataService {
     constructor() {
 
     }

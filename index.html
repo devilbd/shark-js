@@ -3,15 +3,10 @@
     <header>
         <meta charset="utf-8" />
         <title>Test playground</title>
-        <link rel="stylesheet" href="app/app.css">
     </header>
     <body>
         <div bind-component="App">
             <div bind-text="testProperty"></div>
-            <span bind-text="testProperty"></span>
-            <div>
-                <div bind-text="testProperty"></div>
-            </div>
             <input type="text" bind-value="testProperty" bind-event="keydown:onValueChanged" />  
             <button bind-event="click:testClick">Change value</button>
             <div bind-for="testArray;item;track">
@@ -28,7 +23,7 @@
             <div bind-class="hover-class1:testHover,hover-class2:!testHover">
                 I am hovered
             </div>
-            <button bind-event="mouseover:onMouseOver,mouseleave:onMouseLeft">
+            <button bind-event="mouseenter:onMouseOver,mouseleave:onMouseLeft">
                 Hover me
             </button>
             <div bind-component="DashboardComponent">
@@ -38,9 +33,5 @@
             </div>
         </div>
     </body>
-    <script src="dist/shark.js"></script>
-    <script src="app/data/main-data.service.js"></script>
-    <script src="app/dashboard-component/dashboard.component.js"></script>
-    <script src="app/app.js"></script>
-    <script src="app/app-boot.js"></script>
+    <script type="module" src="dist/shark.js"></script>
 </html>

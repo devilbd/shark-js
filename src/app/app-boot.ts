@@ -1,4 +1,8 @@
-(() => { 
+import { App } from "./app";
+import { DashboardComponent } from "./dashboard-component/dashboard.component";
+import { MainDataService } from "./data/main-data.service";
+
+(() => {
     const components = [
         {
             name: 'DashboardComponent',
@@ -11,5 +15,5 @@
             type: MainDataService
         }
     ];
-    sharkJS.run('App', App, components, services);
+    const app = new App();
 })();
