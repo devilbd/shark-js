@@ -4,35 +4,12 @@ import { MainDataService } from "./data/main-data.service";
 import "./app.scss";
 
 (() => {
-    const components = [
-        {
-            name: 'DashboardComponent',
-            type: DashboardComponent
-        }
-    ];
-
-    const services = [
-        {
-            name: 'MainDataService',
-            type: MainDataService
-        }
-    ];
-    
     const app = new App();
     
+    // Register dependencies
     app.dependencyResolver.registerApp(app, 'App');
-
-    components.forEach(component => {
-        app.dependencyResolver.registerType(component.type, component.name, [], () => {
-            return app.dependencyResolver;
-        });
-    });
-
-    services.forEach(service => {
-        app.dependencyResolver.registerType(service.type, service.name, [], () => {
-            return app.dependencyResolver;
-        });
-    });
+    app.dependencyResolver.registerType(DashboardComponent, 'DashboardComponent', []);
+    app.dependencyResolver.registerType(MainDataService, 'MainDataService', []);
 
     app.run();
 })();

@@ -58,7 +58,11 @@ export class ComponentResolver extends Dependency {
             const bindingValue = binding.attributes.getNamedItem('bind-value')?.value;
             if (bindingValue) {
                 const newValue = (<any>binding).value;
+                if (componentInstance[bindingValue] != null) {
+                    (<any>binding).value = componentInstance[bindingValue];
+                }
                 componentInstance[bindingValue] = newValue;
+
             }
         });
     }
