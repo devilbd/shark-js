@@ -62,7 +62,6 @@ export class ComponentResolver extends Dependency {
                     (<any>binding).value = componentInstance[bindingValue];
                 }
                 componentInstance[bindingValue] = newValue;
-
             }
         });
     }
