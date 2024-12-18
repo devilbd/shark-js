@@ -19,25 +19,6 @@ export class AppCore {
         this.componentResolver = this.dependencyResolver.getType('ComponentResolver') as ComponentResolver;
 
         const configurations = this.dependencyResolver.getType('Configurations') as Configurations;
-
-        // components.forEach(component => {
-        //     this.dependencyResolver.registerType(component.type, component.name, [], () => {
-        //         return this.dependencyResolver;
-        //     });
-        // });
-
-        // services.forEach(service => {
-        //     this.dependencyResolver.registerType(service.type, service.name, [], () => {
-        //         return this.dependencyResolver;
-        //     });
-        // });
-
-        // this.dependencyResolver.registerType(appInstance, appName, []);
-        // this.appName = appName;
-        // this.appInstance = this.dependencyResolver.getType(appName);
-
-        // (<any>this.appInstance).updateView = () => this.updateView();
-        // (<any>this.appInstance).updateCss = () => this.updateCss();
     }
 
     run() {        

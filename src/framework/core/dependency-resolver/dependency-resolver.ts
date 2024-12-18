@@ -35,6 +35,10 @@ export class DependencyResolver {
         }
     }
 
+    public registerApp(appInstance: any, appName: string) {
+        this.container[appName] = appInstance;
+    }
+
     public getType(dependencyName: string) {
         const result = this.container[dependencyName];
 

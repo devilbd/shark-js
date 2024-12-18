@@ -3,8 +3,7 @@ const path = require('path');
 
 module.exports = {
   entry:  [
-    './src/app/app-boot.ts',
-    './src/app/app.scss'
+    './src/app/app-boot.ts'
   ],
   devtool: 'inline-source-map',
   module: {
