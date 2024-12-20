@@ -1,4 +1,4 @@
-import { Dependency, DependencyResolver } from "../core/dependency-resolver/dependency-resolver";
+import { DependencyResolver } from "../core/dependency-resolver/dependency-resolver";
 
 export class SharkJSContext {
     dataContext: any;
@@ -9,12 +9,10 @@ export class SharkJSContext {
     }
 }
 
-export class ComponentResolver extends Dependency {
-    dependencyResolver: DependencyResolver;
-
-    constructor(args: any) {
-        super('ComponentResolver');
-        this.dependencyResolver = args.injectedData as DependencyResolver;
+export class ComponentResolver {
+    private dependencyResolver!: DependencyResolver;
+    constructor() {
+        this.dependencyResolver = (<any>this).injectedData as DependencyResolver;
     }
 
     resolveComponents(phase: string = '') {
@@ -22,7 +20,7 @@ export class ComponentResolver extends Dependency {
         components.forEach(componentRef => {            
             const componentName = componentRef.attributes.getNamedItem('bind-component')?.value;
             if (componentName) {
-                const componentInstance = this.dependencyResolver.getType(componentName);
+                const componentInstance = this.dependencyResolver.getType(componentName) as any;
                 this.sharkJSConextFactory(componentRef, {...componentInstance});
                 switch(phase) {
                     case 'text-bindings':

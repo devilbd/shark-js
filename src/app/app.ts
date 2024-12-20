@@ -1,7 +1,6 @@
-import { AppCore } from "../framework/core/app-core/app-core";
 import { SharkJSContext } from "../framework/ui/component-resolver";
 
-export class App extends AppCore {
+export class App {
     testProperty;
     testArray = [
         { key: 1, value: 'something' },
@@ -18,7 +17,7 @@ export class App extends AppCore {
         this._iterator = v;
         if (v % 2 === 0) {
             this.testHover = !this.testHover;
-            this.updateCss();
+            // this.updateCss();
         }
     }
 
@@ -39,7 +38,7 @@ export class App extends AppCore {
     testHover = false;
 
     constructor() {
-        super();
+        // super();
         this.testProperty = 123;
     }
 
@@ -49,7 +48,7 @@ export class App extends AppCore {
             let newValue = e.sharkJS.dataContext.value;
             this.testProperty = newValue;
         }
-        this.updateView();
+        // this.updateView();
     }
 
     testClick(e: any) {
@@ -60,16 +59,16 @@ export class App extends AppCore {
         this.testArray[2].value = 'updated mannyally' + this.iterator;
         this.iterator++;
         // mannually updated
-        this.updateView();
+        // this.updateView();
     }
 
     onMouseOver(e: any) {
         this.testHover = true;
-        this.updateCss();
+        // this.updateCss();
     }
 
     onMouseLeft(e: any) {
         this.testHover = false;
-        this.updateCss();
+        // this.updateCss();
     }
 }

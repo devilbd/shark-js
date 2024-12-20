@@ -3,25 +3,26 @@ import { HttpClient } from "../communication/http-client";
 import { DependencyResolver } from "../dependency-resolver/dependency-resolver";
 import { ComponentResolver } from "../../ui/component-resolver";
 
-export class AppCore { 
+export class SharkCore { 
     public dependencyResolver = new DependencyResolver();
-    // public appName: string;
-    // public appInstance: object;
     private componentResolver: ComponentResolver;
+    public appName?: string;
 
     constructor() {
-        this.dependencyResolver.registerType(Configurations, 'Configurations', [], () => 'test');
-        this.dependencyResolver.registerType(HttpClient, 'HttpClient', []);
-        this.dependencyResolver.registerType(ComponentResolver, 'ComponentResolver', [], () => {
+        // should be refactored
+        this.dependencyResolver.registerType<SharkCore>('SharkCore', SharkCore);
+        this.dependencyResolver.registerType<Configurations>('Configurations', Configurations);
+        this.dependencyResolver.registerType<HttpClient>('HttpClient', HttpClient);
+        this.dependencyResolver.registerType<ComponentResolver>('ComponentResolver', ComponentResolver, [], () => {
             return this.dependencyResolver;
-        });
+        }); // need to pass dependencyresolver here as inject
 
-        this.componentResolver = this.dependencyResolver.getType('ComponentResolver') as ComponentResolver;
-
-        const configurations = this.dependencyResolver.getType('Configurations') as Configurations;
+        this.componentResolver = this.dependencyResolver.getType<ComponentResolver>('ComponentResolver');
+        const configurations = this.dependencyResolver.getType<Configurations>('Configurations');
     }
 
-    run() {        
+    runApp(appName: string) {
+        this.appName = appName;
         this.componentResolver.resolveComponents();
     }
 

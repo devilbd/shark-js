@@ -2,14 +2,15 @@ import { App } from "./app";
 import { DashboardComponent } from "./dashboard-component/dashboard.component";
 import { MainDataService } from "./data/main-data.service";
 import "./app.scss";
+import { SharkCore } from "../framework/core/shark-core/shark-core";
 
 (() => {
-    const app = new App();
+    const sharkCore = new SharkCore();
     
     // Register dependencies
-    app.dependencyResolver.registerApp(app, 'App');
-    app.dependencyResolver.registerType(DashboardComponent, 'DashboardComponent', []);
-    app.dependencyResolver.registerType(MainDataService, 'MainDataService', []);
+    sharkCore.dependencyResolver.registerType<App>('App', App);
+    sharkCore.dependencyResolver.registerType<MainDataService>('MainDataService', MainDataService);
+    sharkCore.dependencyResolver.registerType<DashboardComponent>('DashboardComponent', DashboardComponent, ['MainDataService']);
 
-    app.run();
+    sharkCore.runApp('App');
 })();

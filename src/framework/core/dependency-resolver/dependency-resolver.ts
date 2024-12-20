@@ -1,51 +1,25 @@
-export class Dependency {
-    name: string;
-    instance!: object;
-    constructor(dependencyName: string) {
-        this.name = dependencyName;
-    }
-}
-
 export class DependencyResolver {
-    private container: Record<string, Dependency> = { };
+    private container = new Map<string, { constructor: any, dependencies: string[] }>();
 
     constructor() {
 
     }
 
-    public registerType(instance: any, instanceName: string, dependencies: string[], injectionFactory?: Function, afterResolve?: Function) {
-        const dependencyExist = this.container[instanceName] != null ? true : false;
-        if (!dependencyExist) {
-            const deps: Record<string, Dependency> = { };
-
-            dependencies.forEach(dependencyName => {
-                const dependency = this.container[dependencyName] as Dependency;
-                if (dependency) {
-                    (<any>deps)[dependencyName] = dependency;
-                }
-            });
-
-            if (injectionFactory && typeof injectionFactory === 'function') {
-                deps['injectedData'] = injectionFactory();
-            }
-            instance = new instance(deps);
-            instance.name = instanceName;
-            this.container[instance.name] = instance;
-            if (afterResolve) afterResolve(instance);
+    registerType<T>(name: string, constructor: new (...args: any[]) => T, dependencies: string[] = [], injectionFactory?: Function) {
+        if (injectionFactory) {
+            constructor.prototype.injectedData = injectionFactory();
         }
+        this.container.set(name, { constructor, dependencies });
     }
 
-    public registerApp(appInstance: any, appName: string) {
-        this.container[appName] = appInstance;
-    }
-
-    public getType(dependencyName: string) {
-        const result = this.container[dependencyName];
-
-        if (result) {
-            return result;
+    getType<T>(name: string): T {
+        const target = this.container.get(name);
+        if (!target) {
+            throw new Error(`Service ${name} not found`);
         }
 
-        throw new Error('Dependency not found.');
+        const { constructor, dependencies } = target;
+        const args = dependencies.map(dep => this.getType(dep));
+        return new constructor(...args);
     }
 }

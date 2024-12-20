@@ -1,5 +1,4 @@
 import { Subject } from "rxjs";
-import { Dependency } from "../dependency-resolver/dependency-resolver";
 
 export enum HttpRequestType {
     GET = 1,
@@ -25,11 +24,7 @@ export interface HttpResponse {
     data: any;
 }
 
-export class HttpClient extends Dependency {
-    constructor() {
-        super('HttpClient');
-    }
-
+export class HttpClient {
     public createAndSend(httpRequestOptions: HttpRequestOptions) {
         const httpResponseSubject = new Subject<HttpResponse>();
         const httpRequest = new XMLHttpRequest();
