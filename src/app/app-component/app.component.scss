@@ -57,14 +57,19 @@ html, body, [bind-component="AppComponent"] {
     text-decoration: overline;
 
     &.small {
-        font-size: 18px!important;            
+        font-size: 18px!important; 
+        text-decoration: none;
+        color: rgb(255, 187, 0)!important;
     }
 
-    &.small {
+    &.medium {
         font-size: 25px!important;            
+        text-decoration: none;
+        color: rgb(255, 115, 0)!important;
     }
 
     &.big {
         font-size: 35px!important;
+        
     }
 }

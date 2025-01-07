@@ -1,5 +1,9 @@
 .repeatable-component-root {
-    .label {
-        color: rgb(255, 115, 0)!important;
+    .green-item {
+        background-color: limegreen;
+    }
+
+    .blue-item {
+        background-color: blue;
     }
 }

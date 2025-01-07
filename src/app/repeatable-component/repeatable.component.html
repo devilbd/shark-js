@@ -1,14 +1,20 @@
 <div class="repeatable-component-root">
     <div class="section-content">
         <label class="label medium">Repeating values example</label>
-        <div bind-for="testArray;item;track">
-            <div bind="item.value" bind-event="click:testClick" bind-class="green-item:greenStyledItem"></div>
-            <div bind="item.testProp" bind-event="click:testClick" bind-class="blue-item:blueStyledItem"></div>
+        <div>
+            <label class="label small">Simple repeater</label>
+            <div bind-for="testArray;item;track">
+                <div bind="item.value" bind-event="click:testClick" bind-class="green-item:greenStyledItem"></div>
+                <div bind="item.testProp" bind-event="click:testClick" bind-class="blue-item:blueStyledItem"></div>
+            </div>
         </div>
-        <div bind-for="testArray;item;track">
-            <div>
+        <div>
+            <label class="label small">Complex template repeater</label>
+            <div bind-for="testArray;item;track">
                 <div>
-                    <div bind-class="green-item:greenStyledItem" bind="item.value" bind-event="click:testClick"></div>
+                    <div>
+                        <div bind-class="green-item:greenStyledItem" bind="item.value" bind-event="click:testClick"></div>
+                    </div>
                 </div>
             </div>
         </div>

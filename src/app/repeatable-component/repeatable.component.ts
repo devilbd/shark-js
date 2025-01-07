@@ -10,6 +10,8 @@ import './repeatable.component.scss';
 })
 export class RepeatableComponent  {
 
+    increment = 0;
+
     testArray = [
         { key: 1, value: 'something' },
         { key: 2, value: 'something 2' },
@@ -20,6 +22,23 @@ export class RepeatableComponent  {
     }
 
     testClick(e: SharkJSContext) {
+        this.increment++;
         console.log(e);
+        this.testArray[1].value = this.testArray[1].value + this.increment;
+        this.changeDetector.updateView();
+    }
+
+    greenStyledItem(e: SharkJSContext) {
+        if (e.dataContext.value == 'something') {
+            return true;
+        }
+        return false;
+    }
+
+    blueStyledItem(e: SharkJSContext) {
+        if (e.dataContext.testProp == 5) {
+            return true;
+        }
+        return false;
     }
 }
