@@ -1,6 +1,14 @@
-import { SharkJSContext } from "../framework/ui/component-resolver";
+import { ChangeDetector } from "../../framework/ui/change-detector";
+import { Component } from "../../framework/ui/component";
+import { SharkJSContext } from "../../framework/ui/component-resolver";
+import html from './app.component.html';
+import './app.component.scss';
 
-export class App {
+@Component({
+    name: 'AppComponent',
+    html: html
+})
+export class AppComponent {
     testProperty;
     testArray = [
         { key: 1, value: 'something' },
@@ -17,7 +25,7 @@ export class App {
         this._iterator = v;
         if (v % 2 === 0) {
             this.testHover = !this.testHover;
-            // this.updateCss();
+            this.changeDetector.updateCss();
         }
     }
 
@@ -37,8 +45,7 @@ export class App {
 
     testHover = false;
 
-    constructor() {
-        // super();
+    constructor(private changeDetector: ChangeDetector) {
         this.testProperty = 123;
     }
 
@@ -48,7 +55,7 @@ export class App {
             let newValue = e.sharkJS.dataContext.value;
             this.testProperty = newValue;
         }
-        // this.updateView();
+        this.changeDetector.updateView();
     }
 
     testClick(e: any) {
@@ -58,17 +65,16 @@ export class App {
         }
         this.testArray[2].value = 'updated mannyally' + this.iterator;
         this.iterator++;
-        // mannually updated
-        // this.updateView();
+        this.changeDetector.updateView();
     }
 
     onMouseOver(e: any) {
         this.testHover = true;
-        // this.updateCss();
+        this.changeDetector.updateCss();
     }
 
     onMouseLeft(e: any) {
         this.testHover = false;
-        // this.updateCss();
+        this.changeDetector.updateCss();
     }
 }

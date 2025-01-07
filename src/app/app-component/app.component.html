@@ -1,0 +1,24 @@
+<div class="root">
+    <div bind-text="testProperty"></div>
+    <input type="text" bind-value="testProperty" bind-event="keydown:onValueChanged" />  
+    <button bind-event="click:testClick">Change value</button>
+    <div bind-for="testArray;item;track">
+        <div bind="item.value" bind-event="click:testClick" bind-class="green-item:greenStyledItem"></div>
+        <div bind="item.testProp" bind-event="click:testClick" bind-class="blue-item:blueStyledItem"></div>
+    </div>
+    <div bind-for="testArray;item;track">
+        <div>
+            <div>
+                <div bind-class="green-item:greenStyledItem" bind="item.value" bind-event="click:testClick"></div>
+            </div>
+        </div>
+    </div>
+    <div bind-class="hover-class1:testHover,hover-class2:!testHover">
+        I am hovered
+    </div>
+    <button bind-event="mouseenter:onMouseOver,mouseleave:onMouseLeft">
+        Hover me
+    </button>
+    <div bind-component="DashboardComponent">
+    </div>
+</div>
