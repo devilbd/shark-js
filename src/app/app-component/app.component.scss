@@ -33,20 +33,6 @@ html, body, [bind-component="AppComponent"] {
         flex: 10 auto;
     }
 
-    .label {
-        font-size: 20px;
-        display: inline-block;
-        &.small {
-            font-size: 18px!important;            
-        }
-        &.small {
-            font-size: 25px!important;            
-        }
-        &.big {
-            font-size: 32px!important;
-        }
-    }
-
     .shark-js-logo {
         background-image: url('../assets/shark_js_logo.png');
         background-position: center center;
@@ -65,20 +51,20 @@ html, body, [bind-component="AppComponent"] {
     }
 }
 
-.hover-class1 {
-    border: 4px dashed rgb(68, 68, 68);
-}
+.label {
+    font-size: 20px;
+    display: inline-block;
+    text-decoration: overline;
 
-.hover-class2 {
-    border: 4px dashed rgb(68, 68, 68);
-    border-radius: 5px;
-    background-color: crimson;
-}
+    &.small {
+        font-size: 18px!important;            
+    }
 
-.green-item {
-    background-color: lime;
-}
+    &.small {
+        font-size: 25px!important;            
+    }
 
-.blue-item {
-    background-color: blue;
+    &.big {
+        font-size: 35px!important;
+    }
 }

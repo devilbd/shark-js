@@ -1,0 +1,23 @@
+.events-sample-root {
+    .label {
+        color: rgb(255, 115, 0)!important;
+    }
+
+    .hover-class1 {
+        border: 4px dashed rgb(68, 68, 68);
+    }
+
+    .hover-class2 {
+        border: 4px dashed rgb(68, 68, 68);
+        border-radius: 5px;
+        background-color: crimson;
+    }
+
+    .green-item {
+        background-color: lime;
+    }
+
+    .blue-item {
+        background-color: blue;
+    }
+}

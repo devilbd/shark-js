@@ -114,9 +114,10 @@ export class ComponentResolver {
                 const indexedItem = bindingValueSplit[1];
                 const track = bindingValueSplit[2];
                 const template = (<any>binding).htmlTemplate || binding.innerHTML;
-                const arraySrc = componentInstance[arrSrc] as any[];
                 
-                if (bindingValue && (!(<any>binding).sharkJS || (<any>binding).sharkJS.state != 'resolved')) {
+                if (componentInstance[arrSrc] && (!(<any>binding).sharkJS || (<any>binding).sharkJS.state != 'resolved')) {
+                    const arraySrc = componentInstance[arrSrc] as any[];
+
                     this.sharkJSConextFactory(binding, arrSrc);
                     (<any>binding).htmlTemplate = template;
                     binding.innerHTML = '';
