@@ -15,7 +15,7 @@ export class SharkCore {
 
         this.dependencyResolver.registerType<Configurations>('Configurations', Configurations);
 
-        this.dependencyResolver.registerType<ChangeDetector>('ChangeDetector', ChangeDetector, [], () => {
+        this.dependencyResolver.registerSingletonType<ChangeDetector>('ChangeDetector', ChangeDetector, [], () => {
             return {
                 updateCss: () => this.updateCss(),
                 updateView: () => this.updateView()

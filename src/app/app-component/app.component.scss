@@ -1,3 +1,70 @@
+html, body, [bind-component="AppComponent"] {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+* {
+    color: rgb(0, 0, 0)!important;
+}
+
+.app-component-root {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: stretch;
+
+    .header {
+        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b5bdc8+0,828c95+36,28343b+100;Grey+Black+3D */
+        background: linear-gradient(to bottom,  #b5bdc8 0%,#828c95 36%,#28343b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        padding: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        flex: 1 auto;
+    }
+
+    .body {
+        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#28343b+0,828c95+36,b5bdc8+100 */
+        background: linear-gradient(to bottom,  #28343b 0%,#828c95 36%,#b5bdc8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        flex: 10 auto;
+    }
+
+    .label {
+        font-size: 20px;
+        display: inline-block;
+        &.small {
+            font-size: 18px!important;            
+        }
+        &.small {
+            font-size: 25px!important;            
+        }
+        &.big {
+            font-size: 32px!important;
+        }
+    }
+
+    .shark-js-logo {
+        background-image: url('../assets/shark_js_logo.png');
+        background-position: center center;
+        background-size: 64px 64px;
+        height: 64px;
+        width: 64px;
+        display: inline-block; 
+    }
+
+    .section-content {
+        border: 4px dashed rgb(0, 0, 0);
+        padding: 20px;
+        margin: 20px;
+        border-radius: 5px;
+        box-shadow: 8px 8px 12px black;
+    }
+}
+
 .hover-class1 {
     border: 4px dashed rgb(68, 68, 68);
 }

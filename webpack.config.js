@@ -30,6 +30,10 @@ module.exports = {
         options: {
           esModule: true,
         },
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
       }
     ],
   },

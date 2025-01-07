@@ -58,8 +58,8 @@ export class ComponentResolver {
                 const newValue = (<any>binding).value;
                 if (componentInstance[bindingValue] != null) {
                     (<any>binding).value = componentInstance[bindingValue];
+                    componentInstance[bindingValue] = newValue;
                 }
-                componentInstance[bindingValue] = newValue;
             }
         });
     }
@@ -94,9 +94,7 @@ export class ComponentResolver {
                     // Check for current binding is in current component context
                     if (componentInstance[eventSource]) {                        
                         binding.addEventListener(eventType, (e) => {
-                            setTimeout(() => {
-                                componentInstance[eventSource].apply(componentInstance, [{ event: e, sharkJS: sharkJS }]);
-                            });
+                            componentInstance[eventSource].apply(componentInstance, [{ event: e, sharkJS: sharkJS }]);
                         });
                     }
                 });
