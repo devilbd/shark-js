@@ -68,7 +68,7 @@ export class ComponentResolver {
         const textBindings = componentRef.querySelectorAll('[bind-text]');
         textBindings.forEach(textBinding => {
             const textBindingValue = textBinding.attributes.getNamedItem('bind-text')?.value;
-            if (textBindingValue) {
+            if (textBindingValue && componentInstance[textBindingValue] != null) {
                 textBinding.innerHTML = componentInstance[textBindingValue];
             }
         });

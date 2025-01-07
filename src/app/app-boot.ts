@@ -8,9 +8,9 @@ import { SharkCore } from "../framework/core/shark-core/shark-core";
     const sharkCore = new SharkCore();
     
     // Register dependencies
-    sharkCore.dependencyResolver.registerType<App>('App', App);
-    sharkCore.dependencyResolver.registerType<MainDataService>('MainDataService', MainDataService);
-    sharkCore.dependencyResolver.registerType<DashboardComponent>('DashboardComponent', DashboardComponent, ['MainDataService', 'ChangeDetector']);
+    sharkCore.dependencyResolver.registerSingletonType<App>('App', App);
+    sharkCore.dependencyResolver.registerSingletonType<MainDataService>('MainDataService', MainDataService);
+    sharkCore.dependencyResolver.registerSingletonType<DashboardComponent>('DashboardComponent', DashboardComponent, ['MainDataService', 'ChangeDetector']);
 
     sharkCore.runApp('App');
 })();

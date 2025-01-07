@@ -6,7 +6,7 @@ export class MainDataService {
 
     async getData() {
         let promiseResult = new Promise((resolve, reject) => {
-            resolve(this.testProp + 5);
+            resolve(this.testProp);
         });
         return promiseResult;
     }

@@ -12,6 +12,7 @@ export class SharkCore {
     constructor() {
         // should be refactored
         this.dependencyResolver.registerType<SharkCore>('SharkCore', SharkCore);
+
         this.dependencyResolver.registerType<Configurations>('Configurations', Configurations);
 
         this.dependencyResolver.registerType<ChangeDetector>('ChangeDetector', ChangeDetector, [], () => {

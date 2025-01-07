@@ -220,6 +220,9 @@ project.lock.json
 
 # UWP Projects
 AppPackages/
+dist
+dist/
+dist/shark.js
 
 #####
 # End of core ignore list, below put you custom 'per project' settings (patterns or path)
@@ -227,5 +230,3 @@ AppPackages/
 
 firebase-adminsdk.json
 google-services.json
-dist/
-dist/shark.js
