@@ -80,17 +80,25 @@ export class ComponentResolver {
             const bindingValue = binding.attributes.getNamedItem('bind-event')?.value;
             if (bindingValue) {
                 // bind-event="mouseover:onMouseOver,mouseleave:onMouseLeft"
-                const events = bindingValue.split(",");
+                let events: string[] = [];
+                if (bindingValue.indexOf(',') > 0) {
+                    events = bindingValue.split(",");
+                } else {
+                    events = [bindingValue];
+                }
                 events.forEach(event => {
                     const evetnSplitValue = event.split(':');
                     const eventType = evetnSplitValue[0];
                     const eventSource = evetnSplitValue[1];
                     const sharkJS = this.getSharkJSContextFromParent(binding as HTMLElement);
-                    binding.addEventListener(eventType, (e) => {
-                        setTimeout(() => {
-                            componentInstance[eventSource].apply(componentInstance, [{ event: e, sharkJS: sharkJS }]);
+                    // Check for current binding is in current component context
+                    if (componentInstance[eventSource]) {                        
+                        binding.addEventListener(eventType, (e) => {
+                            setTimeout(() => {
+                                componentInstance[eventSource].apply(componentInstance, [{ event: e, sharkJS: sharkJS }]);
+                            });
                         });
-                    });
+                    }
                 });
             }
         });

@@ -2,6 +2,7 @@ import { Configurations } from "../../common/configurations";
 import { HttpClient } from "../communication/http-client";
 import { DependencyResolver } from "../dependency-resolver/dependency-resolver";
 import { ComponentResolver } from "../../ui/component-resolver";
+import { ChangeDetector } from "../../ui/change-detector";
 
 export class SharkCore { 
     public dependencyResolver = new DependencyResolver();
@@ -12,6 +13,14 @@ export class SharkCore {
         // should be refactored
         this.dependencyResolver.registerType<SharkCore>('SharkCore', SharkCore);
         this.dependencyResolver.registerType<Configurations>('Configurations', Configurations);
+
+        this.dependencyResolver.registerType<ChangeDetector>('ChangeDetector', ChangeDetector, [], () => {
+            return {
+                updateCss: () => this.updateCss(),
+                updateView: () => this.updateView()
+            }
+        });
+
         this.dependencyResolver.registerType<HttpClient>('HttpClient', HttpClient);
         this.dependencyResolver.registerType<ComponentResolver>('ComponentResolver', ComponentResolver, [], () => {
             return this.dependencyResolver;

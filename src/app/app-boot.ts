@@ -10,7 +10,7 @@ import { SharkCore } from "../framework/core/shark-core/shark-core";
     // Register dependencies
     sharkCore.dependencyResolver.registerType<App>('App', App);
     sharkCore.dependencyResolver.registerType<MainDataService>('MainDataService', MainDataService);
-    sharkCore.dependencyResolver.registerType<DashboardComponent>('DashboardComponent', DashboardComponent, ['MainDataService']);
+    sharkCore.dependencyResolver.registerType<DashboardComponent>('DashboardComponent', DashboardComponent, ['MainDataService', 'ChangeDetector']);
 
     sharkCore.runApp('App');
 })();
