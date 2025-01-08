@@ -1,12 +1,18 @@
-
+// Core
 import { SharkCore } from "../framework/core/shark-core/shark-core";
-import { AppRootComponent } from "./views/app-root/app-root.component";
+
+// Styles
+import './styles/main.scss';
+
+// Services
 import { MainDataService } from "./data/main-data.service";
+
+// Components
+import { AppRootComponent } from "./views/app-root/app-root.component";
 import { DashboardComponent } from "./components/dashboard-component/dashboard.component";
 import { SimpleBindingSampleComponent } from "./views/simple-binding-sample/simple-binding-sample.component";
 import { RepeatableSampleComponent } from "./views/repeatable-sample/repeatable-sample.component";
 import { EventsSampleComponent } from "./views/events-sample/events-sample.component";
-import './styles/main.scss';
 
 (() => {
     const sharkCore = new SharkCore();

@@ -1,4 +1,5 @@
 import { DependencyResolver } from "../core/dependency-resolver/dependency-resolver";
+import { getDeepValue } from "../core/helpers/get-deep-value.helper";
 
 export class SharkJSContext {
     dataContext: any;
@@ -68,8 +69,19 @@ export class ComponentResolver {
         const textBindings = componentRef.querySelectorAll('[bind-text]');
         textBindings.forEach(textBinding => {
             const textBindingValue = textBinding.attributes.getNamedItem('bind-text')?.value;
-            if (textBindingValue && componentInstance[textBindingValue] != null) {
-                textBinding.innerHTML = componentInstance[textBindingValue];
+            
+            let newValue;
+            if (textBindingValue) {
+                if (textBindingValue && textBindingValue.indexOf('.') !== -1) {
+                    const v = getDeepValue(componentInstance, textBindingValue);
+                    console.log(v);
+                    newValue = v;
+                } else if(componentInstance[textBindingValue] != null) {
+                    newValue = componentInstance[textBindingValue];
+                }
+            }
+            if (newValue != null) {
+                textBinding.innerHTML = newValue;
             }
         });
     }

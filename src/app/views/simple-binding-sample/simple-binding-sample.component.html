@@ -2,6 +2,8 @@
     <div class="section-content">
         <label class="label medium">Simple binding example</label>
         <div bind-text="testProperty"></div>
+        <div bind-text="complexObject.property1"></div>
+        <div bind-text="complexObject.deepProperty.test"></div>
         <input type="text" bind-value="testProperty" bind-event="keydown:onValueChanged" />  
     </div>
 </div>

@@ -9,6 +9,13 @@ import './simple-binding-sample.component.scss';
 })
 export class SimpleBindingSampleComponent  {
     testProperty;
+    complexObject = {
+        property1: 'property 1 of complex object',
+        property2: 'Property 2 of complex object',
+        deepProperty: {
+            test: 'i am deep property'
+        }
+    };
 
     constructor(private changeDetector: ChangeDetector) {
         this.testProperty = 123;
