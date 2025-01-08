@@ -1,6 +1,6 @@
-import { ChangeDetector } from "../../framework/ui/change-detector";
-import { Component } from "../../framework/ui/component";
-import { MainDataService } from "../data/main-data.service";
+import { ChangeDetector } from "../../../framework/ui/change-detector";
+import { Component } from "../../../framework/ui/component";
+import { MainDataService } from "../../data/main-data.service";
 import html from './dashboard.component.html';
 import './dashboard.component.scss';
 

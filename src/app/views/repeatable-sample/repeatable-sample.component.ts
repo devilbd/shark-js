@@ -1,14 +1,14 @@
-import { ChangeDetector } from "../../framework/ui/change-detector";
-import { Component } from "../../framework/ui/component";
-import { SharkJSContext } from "../../framework/ui/component-resolver";
-import html from './repeatable.component.html';
-import './repeatable.component.scss';
+import { ChangeDetector } from "../../../framework/ui/change-detector";
+import { Component } from "../../../framework/ui/component";
+import { SharkJSContext } from "../../../framework/ui/component-resolver";
+import html from './repeatable-sample.component.html';
+import './repeatable-sample.component.scss';
 
 @Component({
-    name: 'RepeatableComponent',
+    name: 'RepeatableSampleComponent',
     html: html
 })
-export class RepeatableComponent  {
+export class RepeatableSampleComponent  {
 
     increment = 0;
 

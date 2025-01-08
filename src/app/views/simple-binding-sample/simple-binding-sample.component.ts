@@ -1,13 +1,13 @@
-import { ChangeDetector } from "../../framework/ui/change-detector";
-import { Component } from "../../framework/ui/component";
-import html from './simple-binding.component.html';
-import './simple-binding.component.scss';
+import { ChangeDetector } from "../../../framework/ui/change-detector";
+import { Component } from "../../../framework/ui/component";
+import html from './simple-binding-sample.component.html';
+import './simple-binding-sample.component.scss';
 
 @Component({
-    name: 'SimpleBindingComponent',
+    name: 'SimpleBindingSampleComponent',
     html: html
 })
-export class SimpleBindingComponent  {
+export class SimpleBindingSampleComponent  {
     testProperty;
 
     constructor(private changeDetector: ChangeDetector) {

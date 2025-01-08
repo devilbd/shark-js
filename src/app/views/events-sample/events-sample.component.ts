@@ -1,6 +1,6 @@
-import { ChangeDetector } from "../../framework/ui/change-detector";
-import { Component } from "../../framework/ui/component";
-import { SharkJSContext } from "../../framework/ui/component-resolver";
+import { ChangeDetector } from "../../../framework/ui/change-detector";
+import { Component } from "../../../framework/ui/component";
+import { SharkJSContext } from "../../../framework/ui/component-resolver";
 import html from './events-sample.component.html';
 import './events-sample.component.scss';
 
