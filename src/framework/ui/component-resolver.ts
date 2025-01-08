@@ -1,5 +1,5 @@
 import { DependencyResolver } from "../core/dependency-resolver/dependency-resolver";
-import { getDeepValue } from "../core/helpers/get-deep-value.helper";
+import { getDeepValue, setDeepValue } from "../core/helpers/deep-value.helper";
 
 export class SharkJSContext {
     dataContext: any;
@@ -51,14 +51,42 @@ export class ComponentResolver {
         });
     }
 
+    // rework needs
+    // increment indicates it is on initializing phase
     resolveInputBindings(componentRef: HTMLElement, componentInstance: any) {
         const bindings = componentRef.querySelectorAll('[bind-value]');
         bindings.forEach(binding => {
+            this.sharkJSConextFactory(binding, {...componentInstance});
             const bindingValue = binding.attributes.getNamedItem('bind-value')?.value;
             if (bindingValue) {
+                if (bindingValue.indexOf('.') !== -1) {
+                    const source = bindingValue.split('.');
+                    if (componentInstance[source[0]] == null) {
+                        return;
+                    }
+                } else {
+                    if (componentInstance[bindingValue] == null) {
+                        return;
+                    }
+                }
+
+                let oldValue;
+                if (bindingValue.indexOf('.') !== -1) {
+                    const v = getDeepValue(componentInstance, bindingValue);
+                    oldValue = v;
+                } else if(componentInstance[bindingValue] != null) {
+                    oldValue = componentInstance[bindingValue];
+                }
+
+                if (oldValue !== (<any>binding).value && (<any>binding).sharkJS.state != 'resolved') {
+                    (<any>binding).value = oldValue;
+                    (<any>binding).sharkJS.state = 'resolved';
+                }
+
                 const newValue = (<any>binding).value;
-                if (componentInstance[bindingValue] != null) {
-                    (<any>binding).value = componentInstance[bindingValue];
+                if (bindingValue.indexOf('.') !== -1) {
+                    setDeepValue(componentInstance, bindingValue, newValue);
+                } else if(componentInstance[bindingValue] != null) {
                     componentInstance[bindingValue] = newValue;
                 }
             }
@@ -209,10 +237,11 @@ export class ComponentResolver {
     }
 
     sharkJSConextFactory(elementRef: any, dataContext: any) {
-        elementRef.sharkJS = {
-            state: 'creating',
-            dataContext: dataContext
-        } as SharkJSContext;
+        if (elementRef.sharkJS == null)
+            elementRef.sharkJS = {
+                state: 'creating',
+                dataContext: dataContext
+            } as SharkJSContext;
     }
 
     getSharkJSContextFromParent(bindingRef: HTMLElement): any {

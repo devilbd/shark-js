@@ -28,4 +28,12 @@ export class SimpleBindingSampleComponent  {
             this.changeDetector.updateView();
         }, 250);
     }
+
+    onDeepValueChangedTimeout: any;
+    onDeepValueChanged(e: any) {
+        clearTimeout(this.onDeepValueChangedTimeout);
+        this.onDeepValueChangedTimeout = setTimeout(() => {
+            this.changeDetector.updateView();
+        }, 250);
+    }
 }

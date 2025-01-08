@@ -4,6 +4,7 @@
         <div bind-text="testProperty"></div>
         <div bind-text="complexObject.property1"></div>
         <div bind-text="complexObject.deepProperty.test"></div>
-        <input type="text" bind-value="testProperty" bind-event="keydown:onValueChanged" />  
+        <input type="text" bind-value="complexObject.deepProperty.test" bind-event="keydown:onDeepValueChanged" />
+        <input type="text" bind-value="testProperty" bind-event="keydown:onValueChanged" />
     </div>
 </div>
