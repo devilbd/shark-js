@@ -9,18 +9,16 @@ import './dashboard.component.scss';
     html: html
 })
 export class DashboardComponent {
-    myProperty1: any = 5;
+    myProperty1 = 5;
 
     constructor(private mainDataService: MainDataService, private changeDetector: ChangeDetector) {
-        console.log(html);
-        console.log(this.mainDataService);
+        
     }
 
     async getData() {
         const result = await this.mainDataService.getData();
-        this.myProperty1 = result;
+        this.myProperty1 = result as number;
         this.mainDataService.setData();
-        console.log(this.myProperty1);
         this.changeDetector.updateView();
     }
 }
