@@ -67,7 +67,6 @@ export class ComponentResolver {
                 }
 
                 this.sharkJSConextFactory(binding, {...componentInstance});
-                
 
                 let oldValue;
                 if (bindingValue.indexOf('.') !== -1) {
@@ -130,6 +129,7 @@ export class ComponentResolver {
                 if (!exist) {
                     return;
                 }
+
                 this.sharkJSConextFactory(binding, {...componentInstance});
 
                 // bind-event="mouseover:onMouseOver,mouseleave:onMouseLeft"
@@ -145,14 +145,15 @@ export class ComponentResolver {
                     const eventType = evetnSplitValue[0];
                     const eventSource = evetnSplitValue[1];
                     const sharkJS = this.getSharkJSContextFromParent(binding as HTMLElement);
+
                     // Check for current binding is in current component context
                     if (componentInstance[eventSource]) {
                         this.destroyEventsOnBindingRef(binding as HTMLElement);
                         function eventHandler(e: any) {
                             componentInstance[eventSource].apply(componentInstance, [{ event: e, sharkJS: sharkJS }]);
                         }
-                        const eventExist = (<any>binding).sharkJS.attachedEvents.get(eventType);
-                        if (eventExist == null) {
+                        const eventExist = (<any>binding).sharkJS.attachedEvents.get(eventType) != null;
+                        if (!eventExist) {
                             binding.addEventListener(eventType, eventHandler);
                             (<any>binding).sharkJS.attachedEvents.set(eventType, eventHandler);
                         }

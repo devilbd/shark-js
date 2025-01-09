@@ -25,5 +25,5 @@ import { EventsSampleComponent } from "./views/events-sample/events-sample.compo
     sharkCore.dependencyResolver.registerSingletonType<RepeatableSampleComponent>('RepeatableSampleComponent', RepeatableSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.registerSingletonType<EventsSampleComponent>('EventsSampleComponent', EventsSampleComponent, ['ChangeDetector']);
     
-    sharkCore.runApp('App');
+    sharkCore.runApp('AppRootComponent');
 })();
