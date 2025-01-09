@@ -12,7 +12,7 @@ export class RepeatableSampleComponent  {
 
     increment = 0;
 
-    testArray = [
+    itemsSource = [
         { key: 1, value: 'something' },
         { key: 2, value: 'something 2' },
         { key: 3, value: '', testProp: 5 },
@@ -21,11 +21,12 @@ export class RepeatableSampleComponent  {
     constructor(private changeDetector: ChangeDetector) {
     }
 
-    testClick(e: SharkJSContext) {
+    selectItem(e: SharkJSContext) {
         this.increment++;
         console.log(e);
-        this.testArray[1].value = this.testArray[1].value + this.increment;
+        this.itemsSource[1].value = this.itemsSource[1].value + this.increment;
         this.changeDetector.updateView();
+        this.changeDetector.updateCss();
     }
 
     greenStyledItem(e: SharkJSContext) {

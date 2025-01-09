@@ -22,7 +22,7 @@ export class ComponentResolver {
             const componentName = componentRef.attributes.getNamedItem('bind-component')?.value;
             if (componentName) {
                 const componentInstance = this.dependencyResolver.getType(componentName) as any;
-                this.sharkJSConextFactory(componentRef, {...componentInstance});
+                // this.sharkJSConextFactory(componentRef, {...componentInstance});
                 switch(phase) {
                     case 'text-bindings':
                         this.resolveTextBindings(componentRef as HTMLElement, componentInstance);
@@ -32,6 +32,7 @@ export class ComponentResolver {
                         break;
                     case 'repeatable-bindings':
                         this.resolveRepeatableBindings(componentRef as HTMLElement, componentInstance);
+                        this.resolveEventBindings(componentRef as HTMLElement, componentInstance);
                     case 'input-bindings':
                         this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
                         break;
@@ -46,29 +47,27 @@ export class ComponentResolver {
                         this.resolveEventBindings(componentRef as HTMLElement, componentInstance);
                         break;
                 }
-                (<any>componentRef).sharkJS.state = 'resolved';
+                // (<any>componentRef).sharkJS.state = 'resolved';
             }
         });
     }
 
-    // rework needs
-    // increment indicates it is on initializing phase
     resolveInputBindings(componentRef: HTMLElement, componentInstance: any) {
         const bindings = componentRef.querySelectorAll('[bind-value]');
         bindings.forEach(binding => {
-            this.sharkJSConextFactory(binding, {...componentInstance});
             const bindingValue = binding.attributes.getNamedItem('bind-value')?.value;
             if (bindingValue) {
-                if (bindingValue.indexOf('.') !== -1) {
-                    const source = bindingValue.split('.');
-                    if (componentInstance[source[0]] == null) {
-                        return;
-                    }
-                } else {
-                    if (componentInstance[bindingValue] == null) {
-                        return;
-                    }
+                const exist = this.checkExistingSourceForBinding(componentInstance, bindingValue);
+                if (!exist) {
+                    return;
                 }
+
+                if ((<any>binding).sharkJS != null) {
+                    (<any>binding).sharkJS.state = 'updating';
+                }
+
+                this.sharkJSConextFactory(binding, {...componentInstance});
+                
 
                 let oldValue;
                 if (bindingValue.indexOf('.') !== -1) {
@@ -78,38 +77,46 @@ export class ComponentResolver {
                     oldValue = componentInstance[bindingValue];
                 }
 
-                if (oldValue !== (<any>binding).value && (<any>binding).sharkJS.state != 'resolved') {
+                if ((<any>binding).sharkJS.state == 'updating') {
+                    const newValue = (<any>binding).value;
+                    if (bindingValue.indexOf('.') !== -1) {
+                        setDeepValue(componentInstance, bindingValue, newValue);
+                    } else if(componentInstance[bindingValue] != null) {
+                        componentInstance[bindingValue] = newValue;
+                    }
+                } else if (oldValue !== (<any>binding).value && (<any>binding).sharkJS.state == 'creating') {
                     (<any>binding).value = oldValue;
-                    (<any>binding).sharkJS.state = 'resolved';
                 }
 
-                const newValue = (<any>binding).value;
-                if (bindingValue.indexOf('.') !== -1) {
-                    setDeepValue(componentInstance, bindingValue, newValue);
-                } else if(componentInstance[bindingValue] != null) {
-                    componentInstance[bindingValue] = newValue;
-                }
+                (<any>binding).sharkJS.state = 'resolved';
             }
         });
     }
 
     resolveTextBindings(componentRef: HTMLElement, componentInstance: any) {
-        const textBindings = componentRef.querySelectorAll('[bind-text]');
-        textBindings.forEach(textBinding => {
-            const textBindingValue = textBinding.attributes.getNamedItem('bind-text')?.value;
-            
+        const bindings = componentRef.querySelectorAll('[bind-text]');
+        bindings.forEach(binding => {
+            const bindingValue = binding.attributes.getNamedItem('bind-text')?.value;
             let newValue;
-            if (textBindingValue) {
-                if (textBindingValue && textBindingValue.indexOf('.') !== -1) {
-                    const v = getDeepValue(componentInstance, textBindingValue);
-                    console.log(v);
-                    newValue = v;
-                } else if(componentInstance[textBindingValue] != null) {
-                    newValue = componentInstance[textBindingValue];
+            if (bindingValue) {
+                const exist = this.checkExistingSourceForBinding(componentInstance, bindingValue);
+                // console.log(`${exist} - component instance - ${componentInstance.name} - ${bindingValue}`)
+                if (!exist) {
+                    return;
                 }
-            }
-            if (newValue != null) {
-                textBinding.innerHTML = newValue;
+                this.sharkJSConextFactory(binding, {...componentInstance});
+                // console.log(`component instance - ${componentInstance.name} - ${bindingValue}`);
+                // console.log(componentInstance);
+                if (bindingValue && bindingValue.indexOf('.') !== -1) {
+                    const v = getDeepValue(componentInstance, bindingValue);
+                    newValue = v;
+                } else if(componentInstance[bindingValue] != null) {
+                    newValue = componentInstance[bindingValue];
+                }
+                if (newValue != null) {
+                    binding.innerHTML = newValue;
+                }
+                (<any>binding).sharkJS.state = 'resolved';
             }
         });
     }
@@ -119,6 +126,12 @@ export class ComponentResolver {
         bindings.forEach(binding => {
             const bindingValue = binding.attributes.getNamedItem('bind-event')?.value;
             if (bindingValue) {
+                const exist = this.checkExistingSourceForBinding(componentInstance, bindingValue);
+                if (!exist) {
+                    return;
+                }
+                this.sharkJSConextFactory(binding, {...componentInstance});
+
                 // bind-event="mouseover:onMouseOver,mouseleave:onMouseLeft"
                 let events: string[] = [];
                 if (bindingValue.indexOf(',') > 0) {
@@ -126,27 +139,57 @@ export class ComponentResolver {
                 } else {
                     events = [bindingValue];
                 }
+                (<any>binding).sharkJS.attachedEvents = new Map<string, Function>();
                 events.forEach(event => {
                     const evetnSplitValue = event.split(':');
                     const eventType = evetnSplitValue[0];
                     const eventSource = evetnSplitValue[1];
                     const sharkJS = this.getSharkJSContextFromParent(binding as HTMLElement);
                     // Check for current binding is in current component context
-                    if (componentInstance[eventSource]) {                        
-                        binding.addEventListener(eventType, (e) => {
+                    if (componentInstance[eventSource]) {
+                        this.destroyEventsOnBindingRef(binding as HTMLElement);
+                        function eventHandler(e: any) {
                             componentInstance[eventSource].apply(componentInstance, [{ event: e, sharkJS: sharkJS }]);
-                        });
+                        }
+                        const eventExist = (<any>binding).sharkJS.attachedEvents.get(eventType);
+                        if (eventExist == null) {
+                            binding.addEventListener(eventType, eventHandler);
+                            (<any>binding).sharkJS.attachedEvents.set(eventType, eventHandler);
+                        }
                     }
                 });
+                (<any>binding).sharkJS.destroyEvents = () => {
+                    for(const [eventType, eventHandler] of (<any>binding).sharkJS.attachedEvents) {
+                        binding.removeEventListener(eventType, eventHandler);
+                    }
+                    (<any>binding).sharkJS.attachedEvents.clear();
+                }
+                (<any>binding).sharkJS.state = 'resolved';
+            }
+        });
+    }
+
+    destroyEventsOnBindingRef(bindingRef: HTMLElement) {
+        const bindings = bindingRef.querySelectorAll('[bind-event]');
+        bindings.forEach(binding => {
+            if ((<any>binding).sharkJS.attachedEvents.size > 0 && (<any>binding).sharkJS.destroyEvents != null) {
+                (<any>binding).sharkJS.destroyEvents();
             }
         });
     }
 
     resolveRepeatableBindings(componentRef: HTMLElement, componentInstance: any) {
-        const resolveRepeatableBindings = componentRef.querySelectorAll('[bind-for]');
-        resolveRepeatableBindings.forEach(binding => {
+        const bindings = componentRef.querySelectorAll('[bind-for]');
+        bindings.forEach(binding => {
             const bindingValue = binding.attributes.getNamedItem('bind-for')?.value;
             if (bindingValue) {
+                const exist = this.checkExistingSourceForBinding(componentInstance, bindingValue);
+                if (!exist) {
+                    return;
+                }
+                
+                this.sharkJSConextFactory(binding, {...componentInstance});
+
                 // bind-for="arrSource;item"
                 // bind="item.key"
                 const bindingValueSplit = bindingValue.split(";");
@@ -155,43 +198,44 @@ export class ComponentResolver {
                 const track = bindingValueSplit[2];
                 const template = (<any>binding).htmlTemplate || binding.innerHTML;
                 
-                if (componentInstance[arrSrc] && (!(<any>binding).sharkJS || (<any>binding).sharkJS.state != 'resolved')) {
-                    const arraySrc = componentInstance[arrSrc] as any[];
+                const arraySrc = componentInstance[arrSrc] as any[];
 
-                    this.sharkJSConextFactory(binding, arrSrc);
-                    (<any>binding).htmlTemplate = template;
-                    binding.innerHTML = '';
+                this.sharkJSConextFactory(binding, arrSrc);
+                (<any>binding).htmlTemplate = template;
 
-                    arraySrc.forEach((item, idx) => {
-                        const elNode = document.createElement('div');
-                        this.sharkJSConextFactory(elNode, item);
+                this.destroyEventsOnBindingRef(binding as HTMLElement);
 
-                        elNode.innerHTML = template;
-                        if (track) {
-                            elNode.setAttribute(`data-idx-${idx}`, '');
-                        }
-                        binding.appendChild(elNode);
-                    });
-    
-                    this.resolveSimpleBind(binding as HTMLElement);
-                    (<any>binding).sharkJS.state = 'resolved';
-                } else if ((<any>binding).sharkJS && (<any>binding).sharkJS.state == 'resolved') {
-                    this.resolveSimpleBind(binding as HTMLElement);
-                }
+                binding.innerHTML = '';
+
+                arraySrc.forEach((item, idx) => {
+                    const elNode = document.createElement('div');
+                    this.sharkJSConextFactory(elNode, item);
+
+                    elNode.innerHTML = template;
+                    if (track) {
+                        elNode.setAttribute(`data-idx-${idx}`, '');
+                    }
+                    binding.appendChild(elNode);
+                });
+
+                this.resolveSimpleBind(binding as HTMLElement);
+                (<any>binding).sharkJS.state = 'resolved';
             }
         });
     }
 
     resolveSimpleBind(componentRef: HTMLElement) {
-        const simpleBindings = componentRef.querySelectorAll('[bind]');
-        simpleBindings.forEach(binding => {
+        const bindings = componentRef.querySelectorAll('[bind]');
+        bindings.forEach(binding => {
             const bindingValue = binding.attributes.getNamedItem('bind')?.value;
             if (bindingValue) {
+                
                 const bindingValueSplit = bindingValue.split(".");
                 // item.key
                 // const item = bindingValueSplit[0];
                 const itemKey = bindingValueSplit[1];
-                const dataContext = this.getDataContextFromParent(binding as HTMLElement); // (<any>binding.parentElement).sharkJS.dataContext;
+                const dataContext = this.getDataContextFromParent(binding as HTMLElement);
+                this.sharkJSConextFactory(binding, {...dataContext});
                 if (dataContext != null && dataContext.hasOwnProperty(itemKey)) {
                     const value = dataContext[itemKey];
                     if (value != null) {
@@ -200,6 +244,7 @@ export class ComponentResolver {
                         binding.innerHTML = '';
                     }
                 }
+                (<any>binding).sharkJS.state = 'resolved';
             }
         });
     }
@@ -209,6 +254,12 @@ export class ComponentResolver {
         bindings.forEach(binding => {
             const bindingValue = binding.attributes.getNamedItem('bind-class')?.value;
             if (bindingValue) {
+                const exist = this.checkExistingSourceForBinding(componentInstance, bindingValue);
+                if (!exist) {
+                    return;
+                }
+                this.sharkJSConextFactory(binding, {...componentInstance});
+
                 // bind-class="hover-class1:testHover,hover-class2:!testHover"
                 // bind-class="class-name:conditionBasedOnDataContext(dataContext)"
                 const bindingValueSplit = bindingValue.split(',');
@@ -232,6 +283,7 @@ export class ComponentResolver {
                         binding.classList.remove(cssClass);
                     }
                 });
+                (<any>binding).sharkJS.state = 'resolved';
             }
         });
     }
@@ -264,5 +316,43 @@ export class ComponentResolver {
                 return sharkJS.dataContext;
             }
         }
+    }
+
+    checkExistingSourceForBinding(componentInstance: any, bindingValue: string) {
+        if (bindingValue.indexOf('.') !== -1) {
+            // bind-text="source.sampleProperty"
+            const source = bindingValue.split('.');
+            if (componentInstance[source[0]] == null) {
+                return false;
+            }
+        } else if (bindingValue.indexOf(":") !== -1) {
+            // bind-event="click:sampleEvent,mouseover:sampleEvent1"
+            if (bindingValue.indexOf(',')) {
+                const sources = bindingValue.split(',');
+                sources.forEach(source => {
+                    const s = source.split(':');
+                    if (componentInstance[s[1]] == null) {
+                        return false;
+                    }
+                });
+            } else {
+                const source = bindingValue.split(':');
+                if (componentInstance[source[1]] == null) {
+                    return false;
+                }
+            }
+        } else if (bindingValue.indexOf(';') !== -1) { 
+            // bind-for="arrSrc;item;track"
+            const source = bindingValue.split(';');
+            if (componentInstance[source[0]] == null) {
+                return false;
+            }
+        }
+        else {
+            if (componentInstance[bindingValue] == null) {
+                return false;
+            }
+        }
+        return true;
     }
 }

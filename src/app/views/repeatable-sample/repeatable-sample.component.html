@@ -3,17 +3,17 @@
         <label class="label medium">Repeating values example</label>
         <div>
             <label class="label small">Simple repeater</label>
-            <div bind-for="testArray;item;track">
-                <div bind="item.value" bind-event="click:testClick" bind-class="green-item:greenStyledItem"></div>
-                <div bind="item.testProp" bind-event="click:testClick" bind-class="blue-item:blueStyledItem"></div>
+            <div bind-for="itemsSource;item;track">
+                <div bind="item.value" bind-event="click:selectItem" bind-class="green-item:greenStyledItem"></div>
+                <div bind="item.testProp" bind-event="click:selectItem" bind-class="blue-item:blueStyledItem"></div>
             </div>
         </div>
         <div>
             <label class="label small">Complex template repeater</label>
-            <div bind-for="testArray;item;track">
+            <div bind-for="itemsSource;item;track">
                 <div>
                     <div>
-                        <div bind-class="green-item:greenStyledItem" bind="item.value" bind-event="click:testClick"></div>
+                        <div bind-class="green-item:greenStyledItem" bind="item.value" bind-event="click:selectItem"></div>
                     </div>
                 </div>
             </div>

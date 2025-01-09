@@ -16,9 +16,9 @@ export class DashboardComponent {
     }
 
     async getData() {
+        this.mainDataService.setData();
         const result = await this.mainDataService.getData();
         this.myProperty1 = result as number;
-        this.mainDataService.setData();
         this.changeDetector.updateView();
     }
 }
