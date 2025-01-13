@@ -228,6 +228,4 @@ AppPackages/
 firebase-adminsdk.json
 google-services.json
 
-dist
 dist/
-dist/shark.js
