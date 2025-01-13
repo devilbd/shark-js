@@ -52,6 +52,19 @@ export class ComponentResolver {
         });
     }
 
+    resolveBindings(component: any) {
+        const componentName = component.name;
+        const componentRef = document.querySelector(`[bind-component="${componentName}"]`);
+        if (componentRef != null) {
+            const componentInstance = this.dependencyResolver.getType(componentName) as any;
+            this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
+            this.resolveTextBindings(componentRef as HTMLElement, componentInstance);            
+            this.resolveRepeatableBindings(componentRef as HTMLElement, componentInstance);
+            this.resolveCssClassBindings(componentRef as HTMLElement, componentInstance);
+            this.resolveEventBindings(componentRef as HTMLElement, componentInstance);
+        }
+    }
+
     resolveInputBindings(componentRef: HTMLElement, componentInstance: any) {
         const bindings = componentRef.querySelectorAll('[bind-value]');
         bindings.forEach(binding => {
@@ -139,7 +152,11 @@ export class ComponentResolver {
                 } else {
                     events = [bindingValue];
                 }
-                (<any>binding).sharkJS.attachedEvents = new Map<string, Function>();
+
+                if ((<any>binding).sharkJS.attachedEvents == null) {
+                    (<any>binding).sharkJS.attachedEvents = new Map<string, Function>();
+                }
+
                 events.forEach(event => {
                     const evetnSplitValue = event.split(':');
                     const eventType = evetnSplitValue[0];
@@ -153,7 +170,10 @@ export class ComponentResolver {
                             componentInstance[eventSource].apply(componentInstance, [{ event: e, sharkJS: sharkJS }]);
                         }
                         const eventExist = (<any>binding).sharkJS.attachedEvents.get(eventType) != null;
+                        // console.log(eventExist);
+                        // console.log((<any>binding).sharkJS.attachedEvents);
                         if (!eventExist) {
+                            // console.log('event added');
                             binding.addEventListener(eventType, eventHandler);
                             (<any>binding).sharkJS.attachedEvents.set(eventType, eventHandler);
                         }

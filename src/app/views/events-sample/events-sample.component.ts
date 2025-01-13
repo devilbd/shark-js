@@ -20,7 +20,6 @@ export class EventsSampleComponent  {
         this._iterator = v;
         if (v % 2 === 0) {
             this.testHover = !this.testHover;
-            this.changeDetector.updateCss();
         }
     }
 
@@ -29,25 +28,11 @@ export class EventsSampleComponent  {
 
     onMouseOver(e: any) {
         this.testHover = true;
-        this.changeDetector.updateCss();
+        this.changeDetector.updateView(this);
     }
 
     onMouseLeft(e: any) {
         this.testHover = false;
-        this.changeDetector.updateCss();
-    }
-
-    greenStyledItem(e: SharkJSContext) {
-        if (e.dataContext.value == 'something') {
-            return true;
-        }
-        return false;
-    }
-
-    blueStyledItem(e: SharkJSContext) {
-        if (e.dataContext.testProp == 5) {
-            return true;
-        }
-        return false;
+        this.changeDetector.updateView(this);
     }
 }

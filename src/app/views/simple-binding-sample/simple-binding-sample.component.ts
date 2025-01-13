@@ -25,7 +25,7 @@ export class SimpleBindingSampleComponent  {
     onValueChanged(e: any) {
         clearTimeout(this.onValueChangedTimeout);
         this.onValueChangedTimeout = setTimeout(() => {
-            this.changeDetector.updateView();
+            this.changeDetector.updateView(this);
         }, 250);
     }
 
@@ -33,7 +33,7 @@ export class SimpleBindingSampleComponent  {
     onDeepValueChanged(e: any) {
         clearTimeout(this.onDeepValueChangedTimeout);
         this.onDeepValueChangedTimeout = setTimeout(() => {
-            this.changeDetector.updateView();
+            this.changeDetector.updateView(this);
         }, 250);
     }
 }

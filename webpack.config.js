@@ -43,6 +43,7 @@ module.exports = {
   output: {
     // filename: 'bundle.js',
     // path: path.resolve(__dirname, 'dist'),
+    // filename: 'shark.[contenthash].js',
     filename: 'shark.js',
     library: "sharkJS",
     path: path.resolve(__dirname, 'dist'),

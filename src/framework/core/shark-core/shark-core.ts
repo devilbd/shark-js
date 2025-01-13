@@ -17,8 +17,7 @@ export class SharkCore {
 
         this.dependencyResolver.registerSingletonType<ChangeDetector>('ChangeDetector', ChangeDetector, [], () => {
             return {
-                updateCss: () => this.updateCss(),
-                updateView: () => this.updateView()
+                updateView: (component: any) => this.updateView(component)
             }
         });
 
@@ -36,13 +35,7 @@ export class SharkCore {
         this.componentResolver.resolveComponents();
     }
 
-    updateView() {
-        this.componentResolver.resolveComponents('input-bindings');
-        this.componentResolver.resolveComponents('text-bindings');
-        this.componentResolver.resolveComponents('repeatable-bindings');
-    }
-
-    updateCss() {
-        this.componentResolver.resolveComponents('css-class-bindings');
+    updateView(component: any) {
+        this.componentResolver.resolveBindings(component);
     }
 }

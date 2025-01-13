@@ -25,8 +25,7 @@ export class RepeatableSampleComponent  {
         this.increment++;
         console.log(e);
         this.itemsSource[1].value = this.itemsSource[1].value + this.increment;
-        this.changeDetector.updateView();
-        this.changeDetector.updateCss();
+        this.changeDetector.updateView(this);
     }
 
     greenStyledItem(e: SharkJSContext) {
