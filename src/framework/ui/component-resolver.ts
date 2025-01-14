@@ -26,11 +26,19 @@ export class ComponentResolver {
     }
 
     resolveComponents(componentRef?: HTMLElement) {
-        const components = componentRef != null ? componentRef.querySelectorAll('[bind-component]') : document.querySelectorAll('[bind-component]');
+        let components;
+        // app root
+        if (componentRef == null) {
+            components = document.querySelectorAll('[bind-component]');
+        } else {
+            components = componentRef.querySelectorAll('[bind-component]');
+        }
+        
         components.forEach(component => {            
             const componentName = component.attributes.getNamedItem('bind-component')?.value;
             if (componentName) {
                 const componentInstance = this.dependencyResolver.getType(componentName) as any;
+                component.innerHTML = (<any>componentInstance).componentHtml;
                 this.sharkJSConextFactory(component, {...componentInstance});
                 this.resolveBindings(componentInstance);
                 (<any>component).sharkJS.state = 'resolved';
@@ -39,17 +47,19 @@ export class ComponentResolver {
     }
 
     resolveBindings(component: any) {
-        const componentRef = document.querySelector(`[bind-component="${component.name}"]`);
-        if (componentRef != null) {
-            const componentInstance = this.dependencyResolver.getType(component.name) as any;
-            this.resolveComponents(componentRef as HTMLElement);
-            this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
-            this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
-            this.resolveTextBindings(componentRef as HTMLElement, componentInstance);            
-            this.resolveRepeatableBindings(componentRef as HTMLElement, componentInstance);
-            this.resolveCssClassBindings(componentRef as HTMLElement, componentInstance);
-            this.resolveEventBindings(componentRef as HTMLElement, componentInstance);
-        }
+        const componentsRefs = document.querySelectorAll(`[bind-component="${component.name}"]`);
+        componentsRefs.forEach(componentRef => {
+            if (componentRef != null) {
+                const componentInstance = this.dependencyResolver.getType(component.name) as any;
+                this.resolveComponents(componentRef as HTMLElement);
+                this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
+                this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
+                this.resolveTextBindings(componentRef as HTMLElement, componentInstance);            
+                this.resolveRepeatableBindings(componentRef as HTMLElement, componentInstance);
+                this.resolveCssClassBindings(componentRef as HTMLElement, componentInstance);
+                this.resolveEventBindings(componentRef as HTMLElement, componentInstance);
+            }
+        });
     }
 
     resolveInputBindings(componentRef: HTMLElement, componentInstance: any) {
@@ -222,7 +232,7 @@ export class ComponentResolver {
     destroyEventsOnBindingRef(bindingRef: HTMLElement) {
         const bindings = bindingRef.querySelectorAll('[bind-event]');
         bindings.forEach(binding => {
-            if ((<any>binding).sharkJS.attachedEvents.size > 0 && (<any>binding).sharkJS.destroyEvents != null) {
+            if ((<any>binding).sharkJS != null && (<any>binding).sharkJS.attachedEvents.size > 0 && (<any>binding).sharkJS.destroyEvents != null) {
                 (<any>binding).sharkJS.destroyEvents();
             }
         });

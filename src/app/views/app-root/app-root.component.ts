@@ -8,6 +8,8 @@ import './app-root.component.scss';
     html: html
 })
 export class AppRootComponent {
+    myVariable = 5;
+    
     constructor(private changeDetector: ChangeDetector) {
         
     }
