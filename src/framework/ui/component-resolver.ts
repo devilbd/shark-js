@@ -25,48 +25,24 @@ export class ComponentResolver {
         this.ifBindings = [];
     }
 
-    resolveComponents(phase: string = '') {
-        const components = document.querySelectorAll('[bind-component]');
-        components.forEach(componentRef => {            
-            const componentName = componentRef.attributes.getNamedItem('bind-component')?.value;
+    resolveComponents(componentRef?: HTMLElement) {
+        const components = componentRef != null ? componentRef.querySelectorAll('[bind-component]') : document.querySelectorAll('[bind-component]');
+        components.forEach(component => {            
+            const componentName = component.attributes.getNamedItem('bind-component')?.value;
             if (componentName) {
                 const componentInstance = this.dependencyResolver.getType(componentName) as any;
-                // this.sharkJSConextFactory(componentRef, {...componentInstance});
-                switch(phase) {
-                    case 'text-bindings':
-                        this.resolveTextBindings(componentRef as HTMLElement, componentInstance);
-                        break;
-                    case 'event-bindings':
-                        this.resolveEventBindings(componentRef as HTMLElement, componentInstance);
-                        break;
-                    case 'repeatable-bindings':
-                        this.resolveRepeatableBindings(componentRef as HTMLElement, componentInstance);
-                        this.resolveEventBindings(componentRef as HTMLElement, componentInstance);
-                    case 'input-bindings':
-                        this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
-                        break;
-                    case 'css-class-bindings':
-                        this.resolveCssClassBindings(componentRef as HTMLElement, componentInstance);
-                        break;
-                    default:
-                        this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
-                        this.resolveTextBindings(componentRef as HTMLElement, componentInstance);
-                        this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
-                        this.resolveRepeatableBindings(componentRef as HTMLElement, componentInstance);
-                        this.resolveCssClassBindings(componentRef as HTMLElement, componentInstance);
-                        this.resolveEventBindings(componentRef as HTMLElement, componentInstance);
-                        break;
-                }
-                // (<any>componentRef).sharkJS.state = 'resolved';
+                this.sharkJSConextFactory(component, {...componentInstance});
+                this.resolveBindings(componentInstance);
+                (<any>component).sharkJS.state = 'resolved';
             }
         });
     }
 
     resolveBindings(component: any) {
-        const componentName = component.name;
-        const componentRef = document.querySelector(`[bind-component="${componentName}"]`);
+        const componentRef = document.querySelector(`[bind-component="${component.name}"]`);
         if (componentRef != null) {
-            const componentInstance = this.dependencyResolver.getType(componentName) as any;
+            const componentInstance = this.dependencyResolver.getType(component.name) as any;
+            this.resolveComponents(componentRef as HTMLElement);
             this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
             this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
             this.resolveTextBindings(componentRef as HTMLElement, componentInstance);            
