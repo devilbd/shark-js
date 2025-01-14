@@ -348,7 +348,7 @@ export class ComponentResolver {
             }
         } else if (bindingValue.indexOf(":") !== -1) {
             // bind-event="click:sampleEvent,mouseover:sampleEvent1"
-            if (bindingValue.indexOf(',')) {
+            if (bindingValue.indexOf(',') !== -1) {
                 const sources = bindingValue.split(',');
                 sources.forEach(source => {
                     const s = source.split(':');
