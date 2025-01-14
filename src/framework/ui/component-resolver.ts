@@ -10,10 +10,19 @@ export class SharkJSContext {
     }
 }
 
+export interface IfBinding {
+    bindingRef: HTMLElement;
+    bindingHtml: string;
+    state: boolean;
+}
+
 export class ComponentResolver {
     private dependencyResolver!: DependencyResolver;
+    ifBindings: IfBinding[];
+
     constructor() {
         this.dependencyResolver = (<any>this).injectedData as DependencyResolver;
+        this.ifBindings = [];
     }
 
     resolveComponents(phase: string = '') {
@@ -40,6 +49,7 @@ export class ComponentResolver {
                         this.resolveCssClassBindings(componentRef as HTMLElement, componentInstance);
                         break;
                     default:
+                        this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
                         this.resolveTextBindings(componentRef as HTMLElement, componentInstance);
                         this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
                         this.resolveRepeatableBindings(componentRef as HTMLElement, componentInstance);
@@ -57,6 +67,7 @@ export class ComponentResolver {
         const componentRef = document.querySelector(`[bind-component="${componentName}"]`);
         if (componentRef != null) {
             const componentInstance = this.dependencyResolver.getType(componentName) as any;
+            this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
             this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
             this.resolveTextBindings(componentRef as HTMLElement, componentInstance);            
             this.resolveRepeatableBindings(componentRef as HTMLElement, componentInstance);
@@ -129,6 +140,48 @@ export class ComponentResolver {
                     binding.innerHTML = newValue;
                 }
                 (<any>binding).sharkJS.state = 'resolved';
+            }
+        });
+    }
+    
+    resolveIfBindings(componentRef: HTMLElement, componentInstance: any) {
+        // Resolve true state of bindings
+        this.ifBindings.forEach(binding => {
+            if (!binding.state) {
+                binding.bindingRef.innerHTML = binding.bindingHtml;
+                this.ifBindings.splice(this.ifBindings.indexOf(binding), 1);
+            }
+        });
+
+        // Resolve bindings with false state
+        const bindings = componentRef.querySelectorAll('[bind-if]');
+        bindings.forEach(binding => {
+            const bindingValue = binding.attributes.getNamedItem('bind-if')?.value;
+            let newValue;
+            if (bindingValue) {
+                const exist = this.checkExistingSourceForBinding(componentInstance, bindingValue);
+                // console.log(`${exist} - component instance - ${componentInstance.name} - ${bindingValue}`)
+                if (!exist) {
+                    return;
+                }
+                this.sharkJSConextFactory(binding, {...componentInstance});
+                if (bindingValue && bindingValue.indexOf('.') !== -1) {
+                    const v = getDeepValue(componentInstance, bindingValue);
+                    newValue = v;
+                } else if(componentInstance[bindingValue] != null) {
+                    newValue = componentInstance[bindingValue];
+                }
+
+                newValue = Boolean(newValue);
+                if (!newValue) {
+                    this.ifBindings.push({
+                        bindingRef: binding as HTMLElement,
+                        bindingHtml: binding.innerHTML,
+                        state: newValue
+                    });
+                    this.destroyEventsOnBindingRef(binding as HTMLElement);
+                    binding.innerHTML = '';
+                }
             }
         });
     }

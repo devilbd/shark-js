@@ -13,12 +13,14 @@ import { DashboardComponent } from "./components/dashboard-component/dashboard.c
 import { SimpleBindingSampleComponent } from "./views/simple-binding-sample/simple-binding-sample.component";
 import { RepeatableSampleComponent } from "./views/repeatable-sample/repeatable-sample.component";
 import { EventsSampleComponent } from "./views/events-sample/events-sample.component";
+import { ConditionsSampleComponent } from "./views/conditions-sample/conditions-sample.component";
 
 (() => {
     const sharkCore = new SharkCore();
     
     // Register dependencies
     sharkCore.dependencyResolver.registerSingletonType<AppRootComponent>('AppRootComponent', AppRootComponent, ['ChangeDetector']);
+    sharkCore.dependencyResolver.registerSingletonType<ConditionsSampleComponent>('ConditionsSampleComponent', ConditionsSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.registerSingletonType<MainDataService>('MainDataService', MainDataService);
     sharkCore.dependencyResolver.registerSingletonType<DashboardComponent>('DashboardComponent', DashboardComponent, ['MainDataService', 'ChangeDetector']);
     sharkCore.dependencyResolver.registerSingletonType<SimpleBindingSampleComponent>('SimpleBindingSampleComponent', SimpleBindingSampleComponent, ['ChangeDetector']);
