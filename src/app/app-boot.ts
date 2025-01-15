@@ -25,7 +25,7 @@ import { EventsSampleComponent } from "./views/events-sample/events-sample.compo
     sharkCore.dependencyResolver.registerSingletonType<MainDataService>('MainDataService', MainDataService);
     sharkCore.dependencyResolver.registerSingletonType<ConditionsSampleComponent>('ConditionsSampleComponent', ConditionsSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.registerSingletonType<DashboardComponent>('DashboardComponent', DashboardComponent, ['MainDataService', 'ChangeDetector']);
-    sharkCore.dependencyResolver.registerType<SimpleBindingSampleComponent>('SimpleBindingSampleComponent', SimpleBindingSampleComponent, ['ChangeDetector']);
+    sharkCore.dependencyResolver.registerSingletonType<SimpleBindingSampleComponent>('SimpleBindingSampleComponent', SimpleBindingSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.registerSingletonType<RepeatableSampleComponent>('RepeatableSampleComponent', RepeatableSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.registerSingletonType<EventsSampleComponent>('EventsSampleComponent', EventsSampleComponent, ['ChangeDetector']);
     

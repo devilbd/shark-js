@@ -6,5 +6,10 @@
         <div bind-text="complexObject.deepProperty.test"></div>
         <input type="text" bind-value="complexObject.deepProperty.test" bind-event="keydown:onDeepValueChanged" />
         <input type="text" bind-value="testProperty" bind-event="keydown:onValueChanged" />
+
+        <div>
+            <label class="label small">Component property bindings from outside</label>
+            <div bind-text="isVisibleProperty"></div>
+        </div>
     </div>
 </div>

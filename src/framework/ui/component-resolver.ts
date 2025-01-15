@@ -51,7 +51,11 @@ export class ComponentResolver {
         componentsRefs.forEach(componentRef => {
             if (componentRef != null) {
                 const componentInstance = this.dependencyResolver.getType(component.name) as any;
+                this.resolveComponentPropertyBindings(componentRef as HTMLElement, componentInstance);
+                
                 this.resolveComponents(componentRef as HTMLElement);
+                
+
                 this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveTextBindings(componentRef as HTMLElement, componentInstance);            
@@ -125,6 +129,42 @@ export class ComponentResolver {
                 if (newValue != null) {
                     binding.innerHTML = newValue;
                 }
+                (<any>binding).sharkJS.state = 'resolved';
+            }
+        });
+    }
+
+    resolveComponentPropertyBindings(componentRef: HTMLElement, componentInstance: any) {
+        const bindings = componentRef.querySelectorAll('[bind-property]');
+        bindings.forEach(binding => {
+            const bindingValue = binding.attributes.getNamedItem('bind-property')?.value;            
+            // bind-property="isVisibleProperty->visible"
+            // isVisibleProperty - component bound property
+            // visible - current context value of property in which isVisibleProperty owner is living
+            let value;
+            if (bindingValue) {
+                const exist = this.checkExistingSourceForBinding(componentInstance, bindingValue);
+                // console.log(`${exist} - component instance - ${componentInstance.name} - ${bindingValue}`)
+                if (!exist) {
+                    return;
+                }
+                this.sharkJSConextFactory(binding, {...componentInstance});
+                // console.log(`component instance - ${componentInstance.name} - ${bindingValue}`);
+                // console.log(componentInstance);
+
+                const bindingValueSplit = bindingValue.split('->');
+                const componentOfProperty = binding.attributes.getNamedItem('bind-component')?.value;      
+                if (componentOfProperty != null) {
+                    const dataContextValue = componentInstance[bindingValueSplit[1]];
+                    const sourceToBind = this.dependencyResolver.getType(componentOfProperty) as any;
+
+                    console.log(`dataContextValue after value change - ${sourceToBind[bindingValueSplit[0]]}`);
+
+                    sourceToBind[bindingValueSplit[0]] = dataContextValue;
+
+                    console.log(`dataContextValue after value change - ${sourceToBind[bindingValueSplit[0]]}`);
+                }
+                
                 (<any>binding).sharkJS.state = 'resolved';
             }
         });
@@ -248,7 +288,7 @@ export class ComponentResolver {
                     return;
                 }
                 
-                this.sharkJSConextFactory(binding, {...componentInstance});
+                // this.sharkJSConextFactory(binding, {...componentInstance});
 
                 // bind-for="arrSource;item"
                 // bind="item.key"
@@ -349,11 +389,12 @@ export class ComponentResolver {
     }
 
     sharkJSConextFactory(elementRef: any, dataContext: any) {
-        if (elementRef.sharkJS == null)
+        if (elementRef.sharkJS == null) {
             elementRef.sharkJS = {
                 state: 'creating',
                 dataContext: dataContext
             } as SharkJSContext;
+        }
     }
 
     getSharkJSContextFromParent(bindingRef: HTMLElement): any {
@@ -405,6 +446,12 @@ export class ComponentResolver {
             // bind-for="arrSrc;item;track"
             const source = bindingValue.split(';');
             if (componentInstance[source[0]] == null) {
+                return false;
+            }
+        } 
+        else if (bindingValue.indexOf('->') !== -1) {
+            const source = bindingValue.split('->');
+            if (componentInstance[source[1]] == null) {
                 return false;
             }
         }

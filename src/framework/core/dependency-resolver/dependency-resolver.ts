@@ -1,3 +1,5 @@
+import { generateGUID } from "../helpers/guid-generator.helper";
+
 export class DependencyResolver {
     private container = new Map<string, { constructor: any, dependencies: string[] | undefined }>();
 
@@ -22,6 +24,21 @@ export class DependencyResolver {
 
         this.container.set(name, { constructor: instance, dependencies: undefined });
     }
+
+    // declareComponent<T>(name: string, constructor: new (...args: any[]) => T, dependencies: string[] = [], injectionFactory?: Function) {
+    //     if (injectionFactory) {
+    //         constructor.prototype.injectedData = injectionFactory();
+    //     }
+
+    //     const args = dependencies.map(dep => this.getType(dep));
+
+    //     const guid = generateGUID();
+    //     const componentName = `${name}__${guid}`
+    //     const instance = new constructor(...args) as any;
+    //     instance.name = componentName;
+
+    //     this.container.set(componentName, { constructor: instance, dependencies: undefined });
+    // }
 
     getType<T>(name: string): T {
         const target = this.container.get(name);

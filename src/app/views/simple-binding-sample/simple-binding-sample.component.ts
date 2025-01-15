@@ -8,6 +8,7 @@ import './simple-binding-sample.component.scss';
     html: html
 })
 export class SimpleBindingSampleComponent  {
+    isVisibleProperty!: boolean;
     testProperty;
     complexObject = {
         property1: 'property 1 of complex object',

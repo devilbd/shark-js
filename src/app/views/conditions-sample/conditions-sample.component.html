@@ -1,10 +1,13 @@
 <div class="conditions-sample-root">
     <div class="section-content">
-        <label class="label medium">Conditions sample</label>
+        <label class="label medium">Conditions sample and nested components</label>
         <div bind-if="visible">
             Content for hide/show
         </div>
-        <div bind-component="SimpleBindingSampleComponent" bind-if="visible"></div>
+        <div bind-if="visible"
+             bind-component="SimpleBindingSampleComponent"  
+             bind-property="isVisibleProperty->visible">
+        </div>
         <button bind-event="click:onShow">
             Show
         </button>

@@ -9,11 +9,6 @@ export function Component(componentOptions: ComponentOptions) {
             name = componentOptions.name;
             componentHtml = componentOptions.html;
         }
-        // const el = document.querySelector(`[bind-component="${componentOptions.name}"]`) as HTMLElement;
-        // console.log(componentOptions.html);
-        // if (el && componentOptions.html) {
-        //     el.innerHTML = componentOptions.html;
-        // }
         return result;
     }
 }
