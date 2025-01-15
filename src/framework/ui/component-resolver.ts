@@ -51,11 +51,10 @@ export class ComponentResolver {
         componentsRefs.forEach(componentRef => {
             if (componentRef != null) {
                 const componentInstance = this.dependencyResolver.getType(component.name) as any;
+                this.resolveComponentPropertyChangedBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveComponentPropertyBindings(componentRef as HTMLElement, componentInstance);
-                
-                this.resolveComponents(componentRef as HTMLElement);
-                
 
+                this.resolveComponents(componentRef as HTMLElement);
                 this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveTextBindings(componentRef as HTMLElement, componentInstance);            
@@ -158,11 +157,51 @@ export class ComponentResolver {
                     const dataContextValue = componentInstance[bindingValueSplit[1]];
                     const sourceToBind = this.dependencyResolver.getType(componentOfProperty) as any;
 
-                    console.log(`dataContextValue after value change - ${sourceToBind[bindingValueSplit[0]]}`);
+                    console.log(`dataContextValue before value change - ${sourceToBind[bindingValueSplit[0]]}`);
 
                     sourceToBind[bindingValueSplit[0]] = dataContextValue;
 
                     console.log(`dataContextValue after value change - ${sourceToBind[bindingValueSplit[0]]}`);
+                }
+                
+                (<any>binding).sharkJS.state = 'resolved';
+            }
+        });
+    }
+
+    resolveComponentPropertyChangedBindings(componentRef: HTMLElement, componentInstance: any) {
+        const bindings = componentRef.querySelectorAll('[bind-property-changed]');
+        bindings.forEach(binding => {
+            const bindingValue = binding.attributes.getNamedItem('bind-property-changed')?.value;            
+            // bind-property-changed="isVisiblePropertyChanged->onVisiblePropertyChanged"
+            // isVisiblePropertyChanged - property changed from inside component handler
+            // visible - onVisiblePropertyChanged handler which should be called after isVisiblePropertyChanged is called
+            let value;
+            if (bindingValue) {
+                const exist = this.checkExistingSourceForBinding(componentInstance, bindingValue);
+                // console.log(`${exist} - component instance - ${componentInstance.name} - ${bindingValue}`)
+                if (!exist) {
+                    return;
+                }
+                this.sharkJSConextFactory(binding, {...componentInstance});
+                // console.log(`component instance - ${componentInstance.name} - ${bindingValue}`);
+                // console.log(componentInstance);
+
+                const bindingValueSplit = bindingValue.split('->');
+                const componentOfProperty = binding.attributes.getNamedItem('bind-component')?.value;      
+                if (componentOfProperty != null) {
+                    const dataContextValue = componentInstance[bindingValueSplit[1]];
+                    const sourceToBind = this.dependencyResolver.getType(componentOfProperty) as any;
+                    const newValueSource = bindingValueSplit[0].split('Changed')[0];
+                    const newValue = sourceToBind[newValueSource];
+
+                    console.log(newValue);
+
+                    function handler() {
+                        dataContextValue.apply(componentInstance, [newValue]); 
+                    }
+
+                    sourceToBind[bindingValueSplit[0]] = handler;
                 }
                 
                 (<any>binding).sharkJS.state = 'resolved';

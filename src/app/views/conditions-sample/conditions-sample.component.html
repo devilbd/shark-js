@@ -6,7 +6,8 @@
         </div>
         <div bind-if="visible"
              bind-component="SimpleBindingSampleComponent"  
-             bind-property="isVisibleProperty->visible">
+             bind-property="isVisibleProperty->visible"
+             bind-property-changed="isVisiblePropertyChanged->onVisiblePropertyChanged">
         </div>
         <button bind-event="click:onShow">
             Show
@@ -14,5 +15,9 @@
         <button bind-event="click:onHide">
             Hide
         </button>
+    
+        <div>
+            <label class="label small">visible as property of this context is <span bind-text="visible"></span></label>
+        </div>
     </div>
 </div>

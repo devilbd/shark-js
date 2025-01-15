@@ -23,4 +23,9 @@ export class ConditionsSampleComponent  {
         this.visible = false;
         this.changeDetector.updateView(this);
     }
+
+    onVisiblePropertyChanged(newValue: any) {
+        this.visible = newValue;
+        this.changeDetector.updateView(this);
+    }
 }
