@@ -21,7 +21,7 @@ import { EventsSampleComponent } from "./views/events-sample/events-sample.compo
     const sharkCore = new SharkCore();
     
     // Register dependencies
-    sharkCore.dependencyResolver.registerSingletonType<AppRootComponent>('AppRootComponent', AppRootComponent, ['ChangeDetector']);
+    sharkCore.dependencyResolver.registerSingletonType<AppRootComponent>('AppRootComponent', AppRootComponent);
     sharkCore.dependencyResolver.registerSingletonType<MainDataService>('MainDataService', MainDataService);
     sharkCore.dependencyResolver.registerSingletonType<ConditionsSampleComponent>('ConditionsSampleComponent', ConditionsSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.registerSingletonType<DashboardComponent>('DashboardComponent', DashboardComponent, ['MainDataService', 'ChangeDetector']);

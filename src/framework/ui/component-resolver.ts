@@ -51,8 +51,11 @@ export class ComponentResolver {
         componentsRefs.forEach(componentRef => {
             if (componentRef != null) {
                 const componentInstance = this.dependencyResolver.getType(component.name) as any;
+                
+                // Rework needs to set the right value first and just detect when to update the property
                 this.resolveComponentPropertyChangedBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveComponentPropertyBindings(componentRef as HTMLElement, componentInstance);
+                
 
                 this.resolveComponents(componentRef as HTMLElement);
                 this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
@@ -159,7 +162,9 @@ export class ComponentResolver {
 
                     console.log(`dataContextValue before value change - ${sourceToBind[bindingValueSplit[0]]}`);
 
-                    sourceToBind[bindingValueSplit[0]] = dataContextValue;
+                    if (sourceToBind[bindingValueSplit[0]] != dataContextValue) {
+                        sourceToBind[bindingValueSplit[0]] = dataContextValue;
+                    }
 
                     console.log(`dataContextValue after value change - ${sourceToBind[bindingValueSplit[0]]}`);
                 }
@@ -198,7 +203,7 @@ export class ComponentResolver {
                     console.log(newValue);
 
                     function handler() {
-                        dataContextValue.apply(componentInstance, [newValue]); 
+                        dataContextValue.apply(componentInstance, [newValue]);
                     }
 
                     sourceToBind[bindingValueSplit[0]] = handler;
