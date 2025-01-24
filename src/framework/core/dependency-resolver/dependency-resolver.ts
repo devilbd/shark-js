@@ -25,20 +25,20 @@ export class DependencyResolver {
         this.container.set(name, { constructor: instance, dependencies: undefined });
     }
 
-    // declareComponent<T>(name: string, constructor: new (...args: any[]) => T, dependencies: string[] = [], injectionFactory?: Function) {
-    //     if (injectionFactory) {
-    //         constructor.prototype.injectedData = injectionFactory();
-    //     }
+    declareComponent<T>(name: string, constructor: new (...args: any[]) => T, dependencies: string[] = [], injectionFactory?: Function) {
+        if (injectionFactory) {
+            constructor.prototype.injectedData = injectionFactory();
+        }
 
-    //     const args = dependencies.map(dep => this.getType(dep));
+        const guid = generateGUID();
+        const args = dependencies.map(dep => this.getType(dep));
+        
+        const componentName = `${name}__${guid}`
+        const instance = new constructor({...args, ...{ contextId: guid }}) as any;
+        instance.name = componentName;
 
-    //     const guid = generateGUID();
-    //     const componentName = `${name}__${guid}`
-    //     const instance = new constructor(...args) as any;
-    //     instance.name = componentName;
-
-    //     this.container.set(componentName, { constructor: instance, dependencies: undefined });
-    // }
+        this.container.set(componentName, { constructor: instance, dependencies: undefined });
+    }
 
     getType<T>(name: string): T {
         const target = this.container.get(name);

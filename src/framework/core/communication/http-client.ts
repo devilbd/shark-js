@@ -28,24 +28,8 @@ export class HttpClient {
     public createAndSend(httpRequestOptions: HttpRequestOptions) {
         const httpResponseSubject = new Subject<HttpResponse>();
         const httpRequest = new XMLHttpRequest();
-        
-        switch(httpRequestOptions.type) {
-            case HttpRequestType.GET:
-                httpRequest.open('GET', httpRequestOptions.url, true);
-                break;
-            case HttpRequestType.POST:
-                httpRequest.open('POST', httpRequestOptions.url, true);
-                break;
-            case HttpRequestType.PUT:
-                httpRequest.open('PUT', httpRequestOptions.url, true);
-                break;
-            case HttpRequestType.PATCH:
-                httpRequest.open('PATCH', httpRequestOptions.url, true);
-                break;
-            case HttpRequestType.DELETE:
-                httpRequest.open('DELETE', httpRequestOptions.url, true);
-                break;
-        }
+
+        httpRequest.open(httpRequestOptions.type.toString(), httpRequestOptions.url, true);
 
         httpRequestOptions.headers?.forEach(header => {
             httpRequest.setRequestHeader(header.name, header.value);    
