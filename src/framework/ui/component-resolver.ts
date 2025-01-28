@@ -37,7 +37,7 @@ export class ComponentResolver {
         components.forEach(component => {            
             const componentName = component.attributes.getNamedItem('bind-component')?.value;
             if (componentName) {
-                const componentInstance = this.dependencyResolver.getType(componentName) as any;
+                const componentInstance = this.dependencyResolver.getComponent(componentName) as any;
                 component.innerHTML = (<any>componentInstance).componentHtml;
                 this.sharkJSConextFactory(component, {...componentInstance});
                 this.resolveBindings(componentInstance);
@@ -50,12 +50,10 @@ export class ComponentResolver {
         const componentsRefs = document.querySelectorAll(`[bind-component="${component.name}"]`);
         componentsRefs.forEach(componentRef => {
             if (componentRef != null) {
-                const componentInstance = this.dependencyResolver.getType(component.name) as any;
-                
+                const componentInstance = this.dependencyResolver.getComponent(component.name) as any;
                 // Rework needs to set the right value first and just detect when to update the property
                 this.resolveComponentPropertyChangedBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveComponentPropertyBindings(componentRef as HTMLElement, componentInstance);
-                
 
                 this.resolveComponents(componentRef as HTMLElement);
                 this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
@@ -158,7 +156,7 @@ export class ComponentResolver {
                 const componentOfProperty = binding.attributes.getNamedItem('bind-component')?.value;      
                 if (componentOfProperty != null) {
                     const dataContextValue = componentInstance[bindingValueSplit[1]];
-                    const sourceToBind = this.dependencyResolver.getType(componentOfProperty) as any;
+                    const sourceToBind = this.dependencyResolver.getComponent(componentOfProperty) as any;
 
                     console.log(`dataContextValue before value change - ${sourceToBind[bindingValueSplit[0]]}`);
 
@@ -196,7 +194,7 @@ export class ComponentResolver {
                 const componentOfProperty = binding.attributes.getNamedItem('bind-component')?.value;      
                 if (componentOfProperty != null) {
                     const dataContextValue = componentInstance[bindingValueSplit[1]];
-                    const sourceToBind = this.dependencyResolver.getType(componentOfProperty) as any;
+                    const sourceToBind = this.dependencyResolver.getComponent(componentOfProperty) as any;
                     const newValueSource = bindingValueSplit[0].split('Changed')[0];
                     const newValue = sourceToBind[newValueSource];
 

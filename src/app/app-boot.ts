@@ -21,13 +21,14 @@ import { EventsSampleComponent } from "./views/events-sample/events-sample.compo
     const sharkCore = new SharkCore();
     
     // Register dependencies
-    sharkCore.dependencyResolver.registerSingletonType<AppRootComponent>('AppRootComponent', AppRootComponent);
+    sharkCore.dependencyResolver.declareComponent<AppRootComponent>('AppRootComponent', AppRootComponent);
+    // sharkCore.dependencyResolver.registerSingletonType<AppRootComponent>('AppRootComponent', AppRootComponent);
     sharkCore.dependencyResolver.registerSingletonType<MainDataService>('MainDataService', MainDataService);
-    sharkCore.dependencyResolver.registerSingletonType<ConditionsSampleComponent>('ConditionsSampleComponent', ConditionsSampleComponent, ['ChangeDetector']);
-    sharkCore.dependencyResolver.registerSingletonType<DashboardComponent>('DashboardComponent', DashboardComponent, ['MainDataService', 'ChangeDetector']);
-    sharkCore.dependencyResolver.registerSingletonType<SimpleBindingSampleComponent>('SimpleBindingSampleComponent', SimpleBindingSampleComponent, ['ChangeDetector']);
-    sharkCore.dependencyResolver.registerSingletonType<RepeatableSampleComponent>('RepeatableSampleComponent', RepeatableSampleComponent, ['ChangeDetector']);
-    sharkCore.dependencyResolver.registerSingletonType<EventsSampleComponent>('EventsSampleComponent', EventsSampleComponent, ['ChangeDetector']);
+    sharkCore.dependencyResolver.declareComponent<ConditionsSampleComponent>('ConditionsSampleComponent', ConditionsSampleComponent, ['ChangeDetector']);
+    sharkCore.dependencyResolver.declareComponent<DashboardComponent>('DashboardComponent', DashboardComponent, ['MainDataService', 'ChangeDetector']);
+    sharkCore.dependencyResolver.declareComponent<SimpleBindingSampleComponent>('SimpleBindingSampleComponent', SimpleBindingSampleComponent, ['ChangeDetector']);
+    sharkCore.dependencyResolver.declareComponent<RepeatableSampleComponent>('RepeatableSampleComponent', RepeatableSampleComponent, ['ChangeDetector']);
+    sharkCore.dependencyResolver.declareComponent<EventsSampleComponent>('EventsSampleComponent', EventsSampleComponent, ['ChangeDetector']);
     
     sharkCore.runApp('AppRootComponent');
 })();

@@ -8,7 +8,7 @@ import './app-root.component.scss';
     html: html
 })
 export class AppRootComponent {
-    constructor() {
-        
+    constructor(private contextId: string) {
+        console.log(contextId);
     }
 }
