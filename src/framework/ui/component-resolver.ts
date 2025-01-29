@@ -34,12 +34,13 @@ export class ComponentResolver {
             components = componentRef.querySelectorAll('[bind-component]');
         }
         
-        components.forEach(component => {            
+        components.forEach(component => {
             const componentName = component.attributes.getNamedItem('bind-component')?.value;
             if (componentName) {
                 const componentInstance = this.dependencyResolver.getComponent(componentName) as any;
                 component.innerHTML = (<any>componentInstance).componentHtml;
                 this.sharkJSConextFactory(component, {...componentInstance});
+                component.setAttribute('context-id', componentInstance.contextId);
                 this.resolveBindings(componentInstance);
                 (<any>component).sharkJS.state = 'resolved';
             }
@@ -51,6 +52,7 @@ export class ComponentResolver {
         componentsRefs.forEach(componentRef => {
             if (componentRef != null) {
                 const componentInstance = this.dependencyResolver.getComponent(component.name) as any;
+
                 // Rework needs to set the right value first and just detect when to update the property
                 this.resolveComponentPropertyChangedBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveComponentPropertyBindings(componentRef as HTMLElement, componentInstance);

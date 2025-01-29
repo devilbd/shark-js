@@ -9,6 +9,16 @@
              bind-property="isVisibleProperty->visible"
              bind-property-changed="isVisiblePropertyChanged->onVisiblePropertyChanged">
         </div>
+        <div bind-if="visible"
+             bind-component="SimpleBindingSampleComponent"  
+             bind-property="isVisibleProperty->visible"
+             bind-property-changed="isVisiblePropertyChanged->onVisiblePropertyChanged">
+        </div>
+        <div bind-if="visible"
+             bind-component="SimpleBindingSampleComponent"  
+             bind-property="isVisibleProperty->visible"
+             bind-property-changed="isVisiblePropertyChanged->onVisiblePropertyChanged">
+        </div>
         <button bind-event="click:onShow">
             Show
         </button>
