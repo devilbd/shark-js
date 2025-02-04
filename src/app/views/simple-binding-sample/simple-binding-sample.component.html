@@ -8,7 +8,7 @@
         <input type="text" bind-value="testProperty" bind-event="keydown:onValueChanged" />
 
         <div>
-            <label class="label small">Component property bindings from outside</label>
+            <label bind-if="isVisibleProperty" class="label small">Component property bindings from outside</label>
             <div>
                 <span>isVisibleProperty value - </span>
                 <span bind-text="isVisibleProperty"></span>

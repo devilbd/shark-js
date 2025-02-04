@@ -45,5 +45,6 @@ export class SimpleBindingSampleComponent  {
     changeVisibleProperty() {
         this.isVisibleProperty = !this.isVisibleProperty;
         this.isVisiblePropertyChanged();
+        this.changeDetector.updateView(this);
     }
 }

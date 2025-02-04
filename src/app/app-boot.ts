@@ -9,9 +9,10 @@ import { MainDataService } from "./data/main-data.service";
 
 // Components
 import { AppRootComponent } from "./views/app-root/app-root.component";
-import { DashboardComponent } from "./components/dashboard-component/dashboard.component";
 
 // Parent component needs be imported before child's one
+import { DashboardComponent } from "./components/dashboard-component/dashboard.component";
+import { MonacoEditorComponent } from "./components/monaco-editor-component/monaco-editor.component";
 import { ConditionsSampleComponent } from "./views/conditions-sample/conditions-sample.component";
 
 import { SimpleBindingSampleComponent } from "./views/simple-binding-sample/simple-binding-sample.component";
@@ -27,7 +28,8 @@ import { EventsSampleComponent } from "./views/events-sample/events-sample.compo
     sharkCore.dependencyResolver.declareComponent<AppRootComponent>('AppRootComponent', AppRootComponent);
     sharkCore.dependencyResolver.declareComponent<SimpleBindingSampleComponent>('SimpleBindingSampleComponent', SimpleBindingSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<ConditionsSampleComponent>('ConditionsSampleComponent', ConditionsSampleComponent, ['ChangeDetector']);
-    sharkCore.dependencyResolver.declareComponent<DashboardComponent>('DashboardComponent', DashboardComponent, ['MainDataService', 'ChangeDetector']);    
+    sharkCore.dependencyResolver.declareComponent<DashboardComponent>('DashboardComponent', DashboardComponent, ['MainDataService', 'ChangeDetector']);
+    sharkCore.dependencyResolver.declareComponent<MonacoEditorComponent>('MonacoEditorComponent', MonacoEditorComponent, ['ChangeDetector']);    
     sharkCore.dependencyResolver.declareComponent<RepeatableSampleComponent>('RepeatableSampleComponent', RepeatableSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<EventsSampleComponent>('EventsSampleComponent', EventsSampleComponent, ['ChangeDetector']);
     

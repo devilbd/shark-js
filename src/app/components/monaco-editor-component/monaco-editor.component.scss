@@ -1,0 +1,35 @@
+.editors {
+    .first-container,
+    .middle-container,
+    .third-container {
+        display: inline-block;
+        height: 800px;
+        width: 1000px;
+    }
+
+    .third-container {
+        overflow: auto auto;
+    }
+    
+    .monaco-editor {
+        width: 100%!important;
+        height: 100%!important;
+    }
+
+    .editor-height {
+        height: 800px;
+    }
+
+    .editor-html {
+        @extend .editor-height;
+    }
+
+    .editor-ts {
+        @extend .editor-height;
+    }
+
+    .render-container {
+        @extend .editor-height;
+        background-color: rgb(97, 119, 119);
+    }
+}
