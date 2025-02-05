@@ -14,6 +14,13 @@ export class AppRootComponent {
     // TODO - needs to implement if condition during resolving of components into component resolver
     selectedPage: string = '';
 
+    get codingSectionVisible() {
+        if (this.selectedComponentData != null) {
+            return true;
+        }
+        return false;
+    }
+
     components: any = [
         {
             title: 'Simple binding',

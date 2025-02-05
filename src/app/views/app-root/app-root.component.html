@@ -20,15 +20,16 @@
             <div bind-if="components[2].visible" bind-component="EventsSampleComponent"></div>
             <div bind-if="components[3].visible" bind-component="ConditionsSampleComponent"></div>
             
-            <div class="section-content">
-                <label class="label medium">HTML</label>
-                <code id="highlight-container-html" bind-text="selectedComponentData.html"></code>
+            <div bind-if="codingSectionVisible">
+                <div class="section-content">
+                    <label class="label medium">HTML</label>
+                    <code id="highlight-container-html" bind-text="selectedComponentData.html"></code>
+                </div>
+                <div class="section-content">
+                    <label class="label medium">TypeScript</label>
+                    <code id="highlight-container-ts" bind-text="selectedComponentData.ts"></code>
+                </div>
             </div>
-            <div class="section-content">
-                <label class="label medium">TypeScript</label>
-                <code id="highlight-container-ts" bind-text="selectedComponentData.ts"></code>
-            </div>
-
         </div>
     </div>
 </div>
