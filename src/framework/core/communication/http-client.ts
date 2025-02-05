@@ -27,26 +27,36 @@ export interface HttpResponse {
 export class HttpClient {
     public createAndSend(httpRequestOptions: HttpRequestOptions) {
         const httpResponseSubject = new Subject<HttpResponse>();
-        const httpRequest = new XMLHttpRequest();
+        try {
+            const httpRequest = new XMLHttpRequest();
 
-        httpRequest.open(httpRequestOptions.type.toString(), httpRequestOptions.url, true);
+            httpRequest.open(httpRequestOptions.type.toString(), httpRequestOptions.url, true);
 
-        httpRequestOptions.headers?.forEach(header => {
-            httpRequest.setRequestHeader(header.name, header.value);    
-        });
-        
-        httpRequest.onreadystatechange = () => {
-            if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
-                httpResponseSubject.next({ 
-                    data: JSON.parse(httpRequest.response)
-                } as HttpResponse);
-                httpResponseSubject.complete();
-            } else if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status !== 200) {
-                httpResponseSubject.error(httpRequest.status);
+            httpRequestOptions.headers?.forEach(header => {
+                httpRequest.setRequestHeader(header.name, header.value);    
+            });
+
+            httpRequest.onreadystatechange = () => {
+                if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
+                    httpResponseSubject.next({ 
+                        data: JSON.parse(httpRequest.response)
+                    } as HttpResponse);
+                    httpResponseSubject.complete();
+                } else if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status !== 200) {
+                    httpResponseSubject.error(httpRequest.status);
+                }
             }
+            
+            let data;
+            if (httpRequestOptions.body) {
+                data = JSON.stringify(httpRequestOptions.body);
+            }
+            httpRequest.send(data);
+        }
+        catch (error) { 
+            console.error(error);
         }
 
-        httpRequest.send(JSON.stringify(httpRequestOptions.body));
         return httpResponseSubject.asObservable();
     }
 }

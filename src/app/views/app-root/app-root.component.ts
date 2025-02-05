@@ -46,7 +46,12 @@ export class AppRootComponent {
             title: 'Condition bindings',
             visible: false,
             name: 'ConditionsSampleComponent',
-        }        
+        },
+        {
+            title: 'Http client',
+            visibile: false,
+            name: 'HttpClientSampleComponent'
+        }
     ];
 
     componentsSamplesData: any;
