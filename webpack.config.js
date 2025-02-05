@@ -1,10 +1,10 @@
 const path = require('path');
 // const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-// const CompressionPlugin = require('compression-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 // const { library } = require('webpack');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: [
     './src/app/app-boot.ts'
   ],
@@ -67,9 +67,9 @@ module.exports = {
     // new MonacoWebpackPlugin({
     //   languages: ['json', 'typescript', 'html', 'scss']
     // }),
-    // new CompressionPlugin({
-    //   algorithm: 'gzip',
-    // })
+    new CompressionPlugin({
+      algorithm: 'gzip',
+    })
   ],
   resolve: {
     extensions: ['.ts', '.js', '.scss', '.css'],

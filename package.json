@@ -5,6 +5,7 @@
   "scripts": {
     "build": "webpack",
     "build-watch": "webpack --watch",
+    "deploy": "firebase deploy",
     "serve": "http-server -p 8080"
   },
   "author": "Vladimir Parchev",

@@ -157,18 +157,6 @@ export class MainDataService {
             })
             export class EventsSampleComponent  {
                 testHover = false;
-                _iterator = 0;
-
-                get iterator() {
-                    return this._iterator;
-                }
-
-                set iterator(v) {
-                    this._iterator = v;
-                    if (v % 2 === 0) {
-                        this.testHover = !this.testHover;
-                    }
-                }
 
                 constructor(private changeDetector: ChangeDetector) {
                 }
