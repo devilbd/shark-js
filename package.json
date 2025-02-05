@@ -10,9 +10,8 @@
   "author": "Vladimir Parchev",
   "license": "ISC",
   "description": "",
-  "dependencies": {
-    "monaco-editor": "^0.52.2",
-    "monaco-editor-webpack-plugin": "^7.1.0",
+  "dependencies": { 
+    "highlight.js": "^11.11.1",  
     "http-server": "^14.1.1",
     "rxjs": "^7.8.1"
   },

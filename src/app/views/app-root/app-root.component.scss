@@ -20,6 +20,11 @@
         /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#28343b+0,828c95+36,b5bdc8+100 */
         background: linear-gradient(to bottom,  #28343b 0%,#828c95 36%,#b5bdc8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         flex: 10 auto;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: stretch;
+        align-items: stretch;
     }
 
     .shark-js-logo {
@@ -37,6 +42,87 @@
         margin: 20px;
         border-radius: 5px;
         box-shadow: 8px 8px 12px black;
+        // background-color: #323b4760;
+    }
+
+    .navigation-panel {
+        flex: 1 auto;
+        background-color: rgba(58, 74, 99, 0.63);
+        height: 100%;
+    }
+
+    .selected-page-content {
+        flex: 1 auto;
+        flex-grow: 10;
+        background-color: rgba(0, 66, 165, 0.411);
+        height: 100%;
+    }
+
+    .samples-title {
+        border-bottom: 2px dashed #ffffff;
+        padding: 8px 12px;
+        margin: 8px 12px;
+        display: block;
+        text-align: center;
+        box-shadow: 3px 3px 8px black;
+        color: white;
+    }
+
+    .navigation-panel {
+
+
+        .navigation-btn {
+            background-color: rgba(0, 0, 0, 0.63);
+            color: white;
+            border-bottom: 2px dashed transparent;
+            padding: 8px 12px;
+            margin: 8px 12px;
+            box-shadow: 3px 3px 8px black;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+
+            .gear-icon {
+                display: inline-block;
+                background-image: url('../../assets/gear_settings.png');
+                background-position: center center;
+                background-size: 32px 32px;
+                height: 32px;
+                width: 32px;
+                margin: 10px;
+            }
+
+            .btn-title {
+                display: inline-block;
+            }
+
+            &>div {
+                display: inline-block;
+            }
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.8);
+                color: rgb(255, 115, 0);
+                border-bottom: 2px dashed white;
+            }
+        }
+    }
+
+    #highlight-container-html {
+        white-space: pre;
+        // background-color: #282c34;
+    }
+
+    #highlight-container-ts {
+        white-space: pre;
+        // background-color: #282c34;
     }
 }
 

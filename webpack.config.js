@@ -1,5 +1,5 @@
 const path = require('path');
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+// const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 // const CompressionPlugin = require('compression-webpack-plugin');
 // const { library } = require('webpack');
 
@@ -44,29 +44,29 @@ module.exports = {
       }
     ],
   },
-  // optimization: {
-  //   splitChunks: {
-  //     cacheGroups: {
-  //       defaultVendors: {
-  //         test: /[\\/]node_modules[\\/]/,
-  //         minChunks: 2,
-  //         maxInitialRequests: 5,
-  //         priority: -10,
-  //         reuseExistingChunk: true,
-  //       },
-  //       default: {
-  //         minChunks: 2,
-  //         maxInitialRequests: 5,
-  //         priority: -20,
-  //         reuseExistingChunk: true,
-  //       },
-  //     },
-  //   },
-  // },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        defaultVendors: {
+          test: /[\\/]node_modules[\\/]/,
+          minChunks: 2,
+          maxInitialRequests: 5,
+          priority: -10,
+          reuseExistingChunk: true,
+        },
+        default: {
+          minChunks: 2,
+          maxInitialRequests: 5,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
+    },
+  },
   plugins: [
-    new MonacoWebpackPlugin({
-      languages: ['json', 'typescript', 'html', 'scss']
-    }),
+    // new MonacoWebpackPlugin({
+    //   languages: ['json', 'typescript', 'html', 'scss']
+    // }),
     // new CompressionPlugin({
     //   algorithm: 'gzip',
     // })

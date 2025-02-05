@@ -4,25 +4,17 @@ import { getDeepValue, setDeepValue } from "../core/helpers/deep-value.helper";
 export class SharkJSContext {
     dataContext: any;
     state: string = '';
-
+    
     constructor() {
 
     }
 }
 
-export interface IfBinding {
-    bindingRef: HTMLElement;
-    bindingHtml: string;
-    state: boolean;
-}
-
 export class ComponentResolver {
     private dependencyResolver!: DependencyResolver;
-    ifBindings: IfBinding[];
 
     constructor() {
         this.dependencyResolver = (<any>this).injectedData as DependencyResolver;
-        this.ifBindings = [];
     }
 
     resolveComponents(componentRef?: HTMLElement) {
@@ -57,11 +49,14 @@ export class ComponentResolver {
                 this.resolveComponentPropertyChangedBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveComponentPropertyBindings(componentRef as HTMLElement, componentInstance);
 
-                this.resolveComponents(componentRef as HTMLElement);
+                this.resolveComponents(componentRef as HTMLElement);                
                 this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
+
                 this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
-                this.resolveTextBindings(componentRef as HTMLElement, componentInstance);            
+                this.resolveTextBindings(componentRef as HTMLElement, componentInstance);
+                this.resolveTextContent(componentRef as HTMLElement, componentInstance);
                 this.resolveRepeatableBindings(componentRef as HTMLElement, componentInstance);
+
                 this.resolveCssClassBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveEventBindings(componentRef as HTMLElement, componentInstance);
             }
@@ -130,6 +125,34 @@ export class ComponentResolver {
                 }
                 if (newValue != null) {
                     binding.innerHTML = newValue;
+                }
+                (<any>binding).sharkJS.state = 'resolved';
+            }
+        });
+    }
+
+    resolveTextContent(componentRef: HTMLElement, componentInstance: any) {
+        const bindings = componentRef.querySelectorAll('[bind-text-content]');
+        bindings.forEach(binding => {
+            const bindingValue = binding.attributes.getNamedItem('bind-text-content')?.value;
+            let newValue;
+            if (bindingValue) {
+                const exist = this.checkExistingSourceForBinding(componentInstance, bindingValue);
+                // console.log(`${exist} - component instance - ${componentInstance.name} - ${bindingValue}`)
+                if (!exist) {
+                    return;
+                }
+                this.sharkJSConextFactory(binding, {...componentInstance});
+                // console.log(`component instance - ${componentInstance.name} - ${bindingValue}`);
+                // console.log(componentInstance);
+                if (bindingValue && bindingValue.indexOf('.') !== -1) {
+                    const v = getDeepValue(componentInstance, bindingValue);
+                    newValue = v;
+                } else if(componentInstance[bindingValue] != null) {
+                    newValue = componentInstance[bindingValue];
+                }
+                if (newValue != null) {
+                    binding.textContent = newValue;
                 }
                 (<any>binding).sharkJS.state = 'resolved';
             }
@@ -215,42 +238,48 @@ export class ComponentResolver {
     }
     
     resolveIfBindings(componentRef: HTMLElement, componentInstance: any) {
-        // Resolve true state of bindings
-        this.ifBindings.forEach(binding => {
-            if (!binding.state) {
-                binding.bindingRef.innerHTML = binding.bindingHtml;
-                this.ifBindings.splice(this.ifBindings.indexOf(binding), 1);
-            }
-        });
-
-        // Resolve bindings with false state
         const bindings = componentRef.querySelectorAll('[bind-if]');
         bindings.forEach(binding => {
             const bindingValue = binding.attributes.getNamedItem('bind-if')?.value;
             let newValue;
             if (bindingValue) {
-                const exist = this.checkExistingSourceForBinding(componentInstance, bindingValue);
-                // console.log(`${exist} - component instance - ${componentInstance.name} - ${bindingValue}`)
-                if (!exist) {
-                    return;
-                }
-                this.sharkJSConextFactory(binding, {...componentInstance});
-                if (bindingValue && bindingValue.indexOf('.') !== -1) {
+                // const exist = this.checkExistingSourceForBinding(componentInstance, bindingValue);
+                // // console.log(`${exist} - component instance - ${componentInstance.name} - ${bindingValue}`)
+                // if (!exist) {
+                //     return;
+                // }
+                
+
+                // if (bindingValue.indexOf('[') !== -1) {
+                //     const regExp = new RegExp(/(\S+)\[(\d+)\]\.(\S+)/gmi);
+                //     const result = regExp.exec(bindingValue);
+                //     if (result != null) {
+                //         const source = result[1];
+                //         const index = result[2];
+                //         const property = result[3];
+                //     }
+                    
+
+                //     console.log(result);
+                // }
+                // else 
+                if (bindingValue.indexOf('.') !== -1) {
                     const v = getDeepValue(componentInstance, bindingValue);
                     newValue = v;
                 } else if(componentInstance[bindingValue] != null) {
                     newValue = componentInstance[bindingValue];
                 }
 
+                const defaultDisplay = getComputedStyle(binding as HTMLElement).display;
+                if ((<any>binding).oldDisplay == null) {
+                    (<any>binding).oldDisplay = defaultDisplay;
+                }
+
                 newValue = Boolean(newValue);
-                if (!newValue) {
-                    this.ifBindings.push({
-                        bindingRef: binding as HTMLElement,
-                        bindingHtml: binding.innerHTML,
-                        state: newValue
-                    });
-                    this.destroyEventsOnBindingRef(binding as HTMLElement);
-                    binding.innerHTML = '';
+                if (newValue) {
+                    (binding as HTMLElement).style.display = (<any>binding).oldDisplay;
+                } else {
+                    (binding as HTMLElement).style.display = 'none';
                 }
             }
         });
@@ -284,14 +313,42 @@ export class ComponentResolver {
                     const evetnSplitValue = event.split(':');
                     const eventType = evetnSplitValue[0];
                     const eventSource = evetnSplitValue[1];
+                    let eventPassedArgument = evetnSplitValue[2];
+
+                    if (eventPassedArgument && eventPassedArgument.indexOf("'") !== -1) {
+                        eventPassedArgument = eventPassedArgument.replace(/'/g, '');
+                    } 
+                    else if (eventPassedArgument && eventPassedArgument.indexOf('{') !== -1) {
+                        eventPassedArgument = eventPassedArgument.replace(/{/g, '');
+                        eventPassedArgument = eventPassedArgument.replace(/}/g, '');
+                        // TODO - rework needs
+                        const sharkJS = (<any>binding).parentElement.sharkJS;
+                        if (sharkJS != null) {
+                            eventPassedArgument = sharkJS.dataContext;
+                        }
+                    }
+                    else {
+                        if (eventPassedArgument && eventPassedArgument.indexOf('.') !== -1) {
+                            eventPassedArgument = getDeepValue(componentInstance, eventPassedArgument);
+                        } else if (componentInstance[eventPassedArgument] != null) {
+                            eventPassedArgument = componentInstance[eventPassedArgument];
+                        }
+                    }
+
                     const sharkJS = this.getSharkJSContextFromParent(binding as HTMLElement);
 
                     // Check for current binding is in current component context
                     if (componentInstance[eventSource]) {
                         this.destroyEventsOnBindingRef(binding as HTMLElement);
+
                         function eventHandler(e: any) {
-                            componentInstance[eventSource].apply(componentInstance, [{ event: e, sharkJS: sharkJS }]);
+                            const evetArgData = {
+                                event: e,
+                                value: eventPassedArgument
+                            };
+                            componentInstance[eventSource].apply(componentInstance, [{ event: evetArgData, sharkJS: sharkJS }]);
                         }
+
                         const eventExist = (<any>binding).sharkJS.attachedEvents.get(eventType) != null;
                         // console.log(eventExist);
                         // console.log((<any>binding).sharkJS.attachedEvents);
@@ -340,12 +397,15 @@ export class ComponentResolver {
                 const arrSrc = bindingValueSplit[0];
                 const indexedItem = bindingValueSplit[1];
                 const track = bindingValueSplit[2];
+
                 const template = (<any>binding).htmlTemplate || binding.innerHTML;
                 
                 const arraySrc = componentInstance[arrSrc] as any[];
 
                 this.sharkJSConextFactory(binding, arrSrc);
-                (<any>binding).htmlTemplate = template;
+                if ((<any>binding).htmlTemplate == null) {
+                    (<any>binding).htmlTemplate = template;
+                }
 
                 this.destroyEventsOnBindingRef(binding as HTMLElement);
 
