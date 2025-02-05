@@ -15,11 +15,33 @@ export class MainDataService {
 
     async getComponentsSampleValues() {
         const simpleBindExampleHtml = `
-            <div bind-text="testProperty"></div>
-            <div bind-text="complexObject.property1"></div>
-            <div bind-text="complexObject.deepProperty.test"></div>
-            <input type="text" bind-value="complexObject.deepProperty.test" bind-event="keydown:onDeepValueChanged" />
-            <input type="text" bind-value="testProperty" bind-event="keydown:onValueChanged" />
+            <div class="simple-binding-root">
+                <div class="section-content">
+                    <label class="label medium">Simple binding example</label>
+                    <div bind-text="testProperty"></div>
+                    <div bind-text="complexObject.property1"></div>
+                    <div bind-text="complexObject.deepProperty.test"></div>
+                    <input type="text" 
+                            bind-value="complexObject.deepProperty.test" 
+                            bind-event="keydown:onDeepValueChanged" />
+                    <input type="text" 
+                            bind-value="testProperty" 
+                            bind-event="keydown:onValueChanged" />
+
+                    <div>
+                        <label bind-if="isVisibleProperty" class="label small">
+                            Component property bindings from outside
+                        </label>
+                        <div>
+                            <span>isVisibleProperty value - </span>
+                            <span bind-text="isVisibleProperty"></span>
+                        </div>
+                        <button bind-event="click:changeVisibleProperty">
+                            Change isVisibleProperty
+                        </button>
+                    </div>
+                </div>
+            </div>
         `;
 
         const simpleBindExampleTS = `
@@ -90,7 +112,10 @@ export class MainDataService {
                     </button>
                 
                     <div>
-                        <label class="label small">visible as property of this context is <span bind-text="visible"></span></label>
+                        <label class="label small">
+                            visible as property of this context is 
+                            <span bind-text="visible"></span>
+                        </label>
                     </div>
                 </div>
             </div>
