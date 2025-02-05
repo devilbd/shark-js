@@ -14,6 +14,51 @@ export class MainDataService {
     }
 
     async getComponentsSampleValues() {
+        const appIndexHtml = `
+        <!DOCTYPE html>
+        <html>
+            <header>
+                <meta charset="utf-8" />
+                <title>.:: SharkJS ::.</title>
+                <link rel="icon" type="image/x-icon" href="favicon.ico" alt="">
+            </header>
+            <body>
+                <div bind-component="AppRootComponent">
+                </div>
+            </body>
+            <script src="dist/shark.js"></script>
+        </html>
+        `;
+
+        const appBootConfiguration = `
+            // Core
+            import { SharkCore } from "../framework/core/shark-core/shark-core";
+            
+            // Styles
+            import './styles/main.scss';
+            
+            // Services
+            import { DataService } from "service_path";
+            
+            // Components
+            import { AppRootComponent } from "./views/app-root/app-root.component";
+            
+            // Parent component needs be imported before child's one
+            import { DashboardComponent } from "./components/dashboard-component/dashboard.component";
+            
+            (() => {
+                // core initialization
+                const sharkCore = new SharkCore();
+                
+                // Register dependencies
+                sharkCore.dependencyResolver.registerSingletonType<DataService>('DataService', DataService);
+            
+                sharkCore.dependencyResolver.declareComponent<AppRootComponent>('AppRootComponent', AppRootComponent, ['ChangeDetector', 'DataService']);
+                
+                sharkCore.runApp('AppRootComponent');
+            })();
+        `;
+
         const simpleBindExampleHtml = `
             <div class="simple-binding-root">
                 <div class="section-content">
@@ -272,6 +317,10 @@ export class MainDataService {
 
         let promiseResult = new Promise((resolve, reject) => {
             const result = {
+                ApBootConfiguration: {
+                    html: hljs.default.highlight(appIndexHtml, { language: 'html' }).value,
+                    ts: hljs.default.highlight(appBootConfiguration, { language: 'typescript' }).value
+                },
                 SimpleBindingSampleComponent: {
                     html: hljs.default.highlight(simpleBindExampleHtml, { language: 'html' }).value,
                     ts: hljs.default.highlight(simpleBindExampleTS, { language: 'typescript' }).value

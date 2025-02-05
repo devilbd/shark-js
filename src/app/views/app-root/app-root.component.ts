@@ -23,6 +23,11 @@ export class AppRootComponent {
 
     components: any = [
         {
+            title: 'App Boot Configuration',
+            visible: false,
+            name: 'ApBootConfiguration',
+        },
+        {
             title: 'Simple binding',
             visible: false,
             name: 'SimpleBindingSampleComponent',
@@ -41,7 +46,7 @@ export class AppRootComponent {
             title: 'Condition bindings',
             visible: false,
             name: 'ConditionsSampleComponent',
-        },
+        }        
     ];
 
     componentsSamplesData: any;
@@ -64,14 +69,6 @@ export class AppRootComponent {
         this.hideAll();
         eventArgs.event.value.visible = true;        
         this.changeDetector.updateView(this);
-
-        // setTimeout(() => {
-        //     const highlightContainerHtml = document.querySelector('#highlight-container-html') as HTMLElement;
-        //     const highlightContainerTS = document.querySelector('#highlight-container-ts') as HTMLElement;
-            
-        //     hljs.default.highlightElement(highlightContainerHtml);
-        //     hljs.default.highlightElement(highlightContainerTS);
-        // });
     }
 
     hideAll() {
