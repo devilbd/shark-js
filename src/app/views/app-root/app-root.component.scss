@@ -6,21 +6,20 @@
     align-items: stretch;
 
     .header {
-        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b5bdc8+0,828c95+36,28343b+100;Grey+Black+3D */
-        background: linear-gradient(to bottom,  #b5bdc8 0%,#828c95 36%,#28343b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         padding: 20px;
         display: flex;
         flex-direction: row;
         justify-content: center;
         align-items: center;
         flex: 1 auto;
+        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b5bdc8+0,828c95+36,28343b+100;Grey+Black+3D */
+        background: linear-gradient(to bottom,  #b5bdc8 0%,#828c95 36%,#28343b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
     }
 
     .body {
-        /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#28343b+0,828c95+36,b5bdc8+100 */
-        background: linear-gradient(to bottom,  #28343b 0%,#828c95 36%,#b5bdc8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        background:  #333e4b;
         flex: 10 auto;
-
         display: flex;
         flex-direction: row;
         justify-content: stretch;
@@ -42,20 +41,20 @@
         margin: 20px;
         border-radius: 5px;
         box-shadow: 8px 8px 12px black;
-        background-color: #27282244;
+        max-width: 800px;
+        overflow: auto;
     }
 
     .navigation-panel {
-        flex: 1 auto;
-        background-color: rgba(58, 74, 99, 0.63);
+        flex: 0 auto;
         height: 100%;
     }
 
     .selected-page-content {
         flex: 1 auto;
-        flex-grow: 10;
-        background-color: rgba(0, 66, 165, 0.411);
         height: 100%;
+        max-width: 850px;
+        overflow-x: auto;
     }
 
     .samples-title {

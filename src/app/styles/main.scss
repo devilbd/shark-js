@@ -4,3 +4,32 @@ html, body, [bind-component="AppRootComponent"] {
     padding: 0;
     margin: 0;
 }
+
+/* Style the scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #000000;
+    /* Track of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #0044ff;
+    /* Thumb (handle) of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #1b2957;
+    /* Hover state of the thumb */
+}
+
+/* For Firefox */
+* {
+    scrollbar-width: thin;
+    /* Width of the scrollbar */
+    scrollbar-color: #000000 #f1f1f1;
+    /* Thumb and track color */
+}

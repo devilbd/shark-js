@@ -8,11 +8,6 @@ import './simple-binding-sample.component.scss';
     html: html
 })
 export class SimpleBindingSampleComponent  {
-    isVisibleProperty!: boolean;
-    isVisiblePropertyChanged = () => {
-
-    };
-
     testProperty;
     complexObject = {
         property1: 'property 1 of complex object',
@@ -40,11 +35,5 @@ export class SimpleBindingSampleComponent  {
         this.onDeepValueChangedTimeout = setTimeout(() => {
             this.changeDetector.updateView(this);
         }, 250);
-    }
-
-    changeVisibleProperty() {
-        this.isVisibleProperty = !this.isVisibleProperty;
-        this.isVisiblePropertyChanged();
-        this.changeDetector.updateView(this);
     }
 }

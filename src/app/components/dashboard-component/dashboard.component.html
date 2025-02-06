@@ -1,8 +1,16 @@
 <div class="dashboard-component-root">
     <div class="section-content">
-        <label class="label medium">Working with services</label>
-        <div>Dashboard</div>
-        <div bind-text="myProperty1"></div>
-        <button bind-event="click:getData">Get data</button>
+        <label class="label medium">Dashboard component</label>
+        <div>
+            <label class="label small">Property of dashboard component</label>
+            <div bind-text="dropDownExpanded""></div>
+            <button bind-event="click:expandFromOutside">
+                Expand drop down from dashboard
+            </button>
+        </div>
+        <div bind-component="DropDownComponent"
+             bind-property="dropDownExpanded->expanded"
+             bind-property-changed="expandedChanged->dropDownExpandedChanged">
+        </div>
     </div>
 </div>

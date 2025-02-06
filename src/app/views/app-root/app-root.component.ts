@@ -51,6 +51,11 @@ export class AppRootComponent {
             title: 'Http client',
             visibile: false,
             name: 'HttpClientSampleComponent'
+        },
+        {
+            title: 'Property bindings',
+            visibile: false,
+            name: 'PropertyBindingsSampleComponent'
         }
     ];
 

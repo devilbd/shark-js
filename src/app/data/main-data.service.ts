@@ -382,6 +382,96 @@ export class MainDataService {
             }
         `;
 
+        const propertyBindingsSampleHtml = `
+            <!-- Dashboard component HTML -->
+            <div class="dashboard-component-root">
+                <div class="section-content">
+                    <label class="label medium">Dashboard component</label>
+                    <div>
+                        <label class="label small">Property of dashboard component</label>
+                        <div bind-text="dropDownExpanded""></div>
+                        <button bind-event="click:expandFromOutside">
+                            Expand drop down from dashboard
+                        </button>
+                    </div>
+                    <div bind-component="DropDownComponent"
+                        bind-property="dropDownExpanded->expanded"
+                        bind-property-changed="expandedChanged->dropDownExpandedChanged">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drop down component HTML --> 
+            <div class="drop-down-component-root">
+                <div>
+                    <label class="label small">Property of drop down component</label>
+                    <div bind-text="expanded"></div>
+                </div>
+                <button bind-event="click:onExpand">
+                    expand
+                </button>
+                <button bind-event="click:onCollapse">
+                    collapse
+                </button>
+            </div>
+        `;
+
+        const propertyBindingsSampleTS = `
+            // Dashboard component TS
+            import { ChangeDetector } from "../../../framework/ui/change-detector";
+            import { Component } from "../../../framework/ui/component";
+            import html from './dashboard.component.html';
+            import './dashboard.component.scss';
+
+            @Component({
+                name: 'DashboardComponent',
+                html: html
+            })
+            export class DashboardComponent {
+                dropDownExpanded!: boolean;
+                dropDownExpandedChanged = (newValue: boolean) => {
+                    console.log('dropDownExpandedChanged', newValue);
+                    console.log(this);
+                };
+
+                constructor(private changeDetector: ChangeDetector) {
+                    
+                }
+
+                expandFromOutside() {
+                    this.dropDownExpanded = !this.dropDownExpanded;
+                    this.changeDetector.updateView(this);
+                }
+            }
+
+            // Drop down component TS
+            import { ChangeDetector } from "../../../framework/ui/change-detector";
+            import { Component } from "../../../framework/ui/component";
+            import html from './drop-down.component.html';
+            import './drop-down.component.scss';
+
+            @Component({
+                name: 'DropDownComponent',
+                html: html
+            })
+            export class DropDownComponent {
+                expanded = false;
+                constructor(private changeDetector: ChangeDetector) {
+
+                }
+
+                onExpand(e: any) {
+                    this.expanded = true;
+                    this.changeDetector.updateView(this);
+                }
+
+                onCollapse(e: any) {
+                    this.expanded = false;
+                    this.changeDetector.updateView(this);
+                }
+            }
+        `;
+
         let promiseResult = new Promise((resolve, reject) => {
             const result = {
                 ApBootConfiguration: {
@@ -407,6 +497,10 @@ export class MainDataService {
                 HttpClientSampleComponent: {
                     html: hljs.default.highlight(httpClientSampleHtml, { language: 'html' }).value,
                     ts: hljs.default.highlight(httpClientSampleTS, { language: 'typescript' }).value
+                },
+                PropertyBindingsSampleComponent: {
+                    html: hljs.default.highlight(propertyBindingsSampleHtml, { language: 'html' }).value,
+                    ts: hljs.default.highlight(propertyBindingsSampleTS, { language: 'typescript' }).value
                 }
             };
             resolve(result);
