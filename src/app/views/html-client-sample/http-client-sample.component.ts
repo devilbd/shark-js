@@ -1,5 +1,3 @@
-// https://api.coindesk.com/v1/bpi/currentprice.json
-
 import { HttpClient, HttpRequestType, Header } from "../../../framework/core/communication/http-client";
 import { ChangeDetector } from "../../../framework/ui/change-detector";
 import { Component } from "../../../framework/ui/component";
@@ -11,30 +9,40 @@ import './http-client-sample.component.scss';
     html: html
 })
 export class HttpClientSampleComponent {
+
+    _isLoading!: boolean;
+
+    get isLoading() { 
+        return this._isLoading;
+    }
+
+    set isLoading(value: boolean) { 
+        this._isLoading = value;
+        this.changeDetector.updateView(this);
+    }
+
+    get showData() {
+        return this.viewModel.setup !== '';
+    }
+
+    viewModel = {
+        punchline: '',
+        setup: '',
+        type: '',
+    };
+
     constructor(private changeDetector: ChangeDetector, private httpClient: HttpClient) {
 
     }
 
     async getData() {
-        const headers = [
-            { name: 'Accept', value: 'application/json' }
-        ];
-
+        this.isLoading = true;
         this.httpClient.createAndSend({
             type: HttpRequestType.GET,
-            url: 'http://localhost:5186/weatherforecast/',
-            headers: headers
-        }).subscribe((data: any) => {
-            console.log(data);
+            url: 'https://official-joke-api.appspot.com/random_joke',
+        }).subscribe((result: any) => {
+            this.viewModel = result.data;
+            this.isLoading = false;
         });
-
-        // const result = await fetch('https://official-joke-api.appspot.com/random_joke').then(response => {
-        //     console.log((<any>response).data);
-        // }).then(data => {
-        //     console.log(data);
-        // }).catch(error => {
-        //     console.log(error);
-        // }).finally(() => {});
-        // console.log(result);
     }
 }

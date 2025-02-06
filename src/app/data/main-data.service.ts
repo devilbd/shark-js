@@ -315,6 +315,73 @@ export class MainDataService {
             }
         `;
 
+        const httpClientSampleHtml = `
+            <div class="html-client-component-root">
+                <div class="section-content">
+                    <label class="label medium">HttpClient</label>
+                    <button bind-event="click:getData">
+                        Get data via HttpClient
+                    </button>
+                    <div bind-if="isLoading" class="ajax-loader"></div>
+                    <div>
+                        <label class="label small">Punchline:</label>
+                        <div bind-text="viewModel.punchline"></div>
+                        <label class="label small">Setup:</label>
+                        <div bind-text="viewModel.setup"></div>
+                        <label class="label small">Type:</label>
+                        <div bind-text="viewModel.type"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const httpClientSampleTS = `
+            import { HttpClient, HttpRequestType, Header } from "../../../framework/core/communication/http-client";
+            import { ChangeDetector } from "../../../framework/ui/change-detector";
+            import { Component } from "../../../framework/ui/component";
+            import html from './http-client-sample.component.html';
+            import './http-client-sample.component.scss';
+
+            @Component({
+                name: 'HttpClientSampleComponent',
+                html: html
+            })
+            export class HttpClientSampleComponent {
+
+                _isLoading!: boolean;
+
+                get isLoading() { 
+                    return this._isLoading;
+                }
+
+                set isLoading(value: boolean) { 
+                    this._isLoading = value;
+                    this.changeDetector.updateView(this);
+                }
+
+                viewModel = {
+                    punchline: '',
+                    setup: '',
+                    type: '',
+                };
+
+                constructor(private changeDetector: ChangeDetector, private httpClient: HttpClient) {
+
+                }
+
+                async getData() {
+                    this.isLoading = true;
+                    this.httpClient.createAndSend({
+                        type: HttpRequestType.GET,
+                        url: 'https://official-joke-api.appspot.com/random_joke',
+                    }).subscribe((result: any) => {
+                        this.viewModel = result.data;
+                        this.isLoading = false;
+                    });
+                }
+            }
+        `;
+
         let promiseResult = new Promise((resolve, reject) => {
             const result = {
                 ApBootConfiguration: {
@@ -336,6 +403,10 @@ export class MainDataService {
                 RepeatableSampleComponent: {
                     html: hljs.default.highlight(repeatableSampleHtml, { language: 'html' }).value,
                     ts: hljs.default.highlight(repeatableSampleTS, { language: 'typescript' }).value
+                },
+                HttpClientSampleComponent: {
+                    html: hljs.default.highlight(httpClientSampleHtml, { language: 'html' }).value,
+                    ts: hljs.default.highlight(httpClientSampleTS, { language: 'typescript' }).value
                 }
             };
             resolve(result);

@@ -30,7 +30,7 @@ export class HttpClient {
         try {
             const httpRequest = new XMLHttpRequest();
 
-            httpRequest.open(httpRequestOptions.type.toString(), httpRequestOptions.url, true);
+            httpRequest.open(HttpRequestType[httpRequestOptions.type], httpRequestOptions.url, true);
 
             httpRequestOptions.headers?.forEach(header => {
                 httpRequest.setRequestHeader(header.name, header.value);    
