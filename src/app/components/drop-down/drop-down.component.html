@@ -1,12 +1,9 @@
 <div class="drop-down-component-root">
-    <div>
-        <label class="label small">Property of drop down component</label>
-        <div bind-text="expanded"></div>
+    <div bind-event="click:onBodyToggle" class="selected-item">
+        <div class="icon" bind-class="body-expanded:expanded"></div>
+        <div class="selected-item-text" bind-text="selectedItem"></div>
     </div>
-    <button bind-event="click:onExpand">
-        expand
-    </button>
-    <button bind-event="click:onCollapse">
-        collapse
-    </button>
+    <div class="dropdown-body" bind-if="expanded" bind-for="itemsSource;item;idx">
+        <div class="body-item" bind="item" bind-event="click:onSelectItem:{item}"></div>
+    </div>
 </div>

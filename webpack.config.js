@@ -4,7 +4,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 // const { library } = require('webpack');
 
 module.exports = {
-  mode: 'production',
+  mode: 'development',
   entry: [
     './src/app/app-boot.ts'
   ],

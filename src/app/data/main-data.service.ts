@@ -395,7 +395,7 @@ export class MainDataService {
                         </button>
                     </div>
                     <div bind-component="DropDownComponent"
-                        bind-property="dropDownExpanded->expanded"
+                        bind-property="dropDownExpanded->expanded,itemsSource->itemsSource"
                         bind-property-changed="expandedChanged->dropDownExpandedChanged">
                     </div>
                 </div>
@@ -403,16 +403,13 @@ export class MainDataService {
 
             <!-- Drop down component HTML --> 
             <div class="drop-down-component-root">
-                <div>
-                    <label class="label small">Property of drop down component</label>
-                    <div bind-text="expanded"></div>
+                <div bind-event="click:onBodyToggle" class="selected-item">
+                    <div class="icon" bind-class="body-expanded:expanded"></div>
+                    <div class="selected-item-text" bind-text="selectedItem"></div>
                 </div>
-                <button bind-event="click:onExpand">
-                    expand
-                </button>
-                <button bind-event="click:onCollapse">
-                    collapse
-                </button>
+                <div class="dropdown-body" bind-if="expanded" bind-for="itemsSource;item;idx">
+                    <div class="body-item" bind="item" bind-event="click:onSelectItem:{item}"></div>
+                </div>
             </div>
         `;
 
@@ -433,6 +430,14 @@ export class MainDataService {
                     console.log('dropDownExpandedChanged', newValue);
                     console.log(this);
                 };
+
+                itemsSource = [
+                    'item1',
+                    'item2',
+                    'item3',
+                    'item4',
+                    'item5'
+                ];
 
                 constructor(private changeDetector: ChangeDetector) {
                     
@@ -456,18 +461,24 @@ export class MainDataService {
             })
             export class DropDownComponent {
                 expanded = false;
+                itemsSource: any[] = [];
+                selectedItem: any;
+
                 constructor(private changeDetector: ChangeDetector) {
-
+                    setTimeout(() => {
+                        this.selectedItem = this.itemsSource[0];
+                    });
                 }
 
-                onExpand(e: any) {
-                    this.expanded = true;
+                onBodyToggle(e: any) {
+                    this.expanded = !this.expanded;
                     this.changeDetector.updateView(this);
                 }
 
-                onCollapse(e: any) {
-                    this.expanded = false;
-                    this.changeDetector.updateView(this);
+                onSelectItem(e: any) {
+                    console.log(e);
+                    this.selectedItem = e.event.value;
+                    this.onBodyToggle(e);
                 }
             }
         `;

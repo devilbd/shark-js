@@ -169,13 +169,29 @@ export class ComponentResolver {
             if (bindingValue) {
                 this.sharkJSConextFactory(binding, {...componentInstance});
 
-                const bindingValueSplit = bindingValue.split('->');
-                const componentOfProperty = binding.attributes.getNamedItem('bind-component')?.value;      
-                if (componentOfProperty != null) {
-                    const dataContextValue = componentInstance[bindingValueSplit[0]];
-                    const sourceToBind = this.dependencyResolver.getComponent(componentOfProperty) as any;
-                    if (sourceToBind[bindingValueSplit[1]] != dataContextValue) {
-                        sourceToBind[bindingValueSplit[1]] = dataContextValue;
+                if (bindingValue.indexOf(',') !== -1) {
+                    const bindingValues = bindingValue.split(',');
+                    bindingValues.forEach(bindingValue => {
+                        const bindingValueSplit = bindingValue.split('->');
+                        const componentOfProperty = binding.attributes.getNamedItem('bind-component')?.value;
+                        if (componentOfProperty != null) {
+                            const dataContextValue = componentInstance[bindingValueSplit[0]];
+                            const sourceToBind = this.dependencyResolver.getComponent(componentOfProperty) as any;
+                            if (sourceToBind[bindingValueSplit[1]] != dataContextValue) {
+                                sourceToBind[bindingValueSplit[1]] = dataContextValue;
+                            }
+                        }
+                    });
+                } else {
+                    // TODO - rework needs for duplicated code
+                    const bindingValueSplit = bindingValue.split('->');
+                    const componentOfProperty = binding.attributes.getNamedItem('bind-component')?.value;
+                    if (componentOfProperty != null) {
+                        const dataContextValue = componentInstance[bindingValueSplit[0]];
+                        const sourceToBind = this.dependencyResolver.getComponent(componentOfProperty) as any;
+                        if (sourceToBind[bindingValueSplit[1]] != dataContextValue) {
+                            sourceToBind[bindingValueSplit[1]] = dataContextValue;
+                        }
                     }
                 }
                 
@@ -196,21 +212,45 @@ export class ComponentResolver {
             if (bindingValue) {
                 this.sharkJSConextFactory(binding, {...componentInstance});
 
-                const bindingValueSplit = bindingValue.split('->');
-                const componentOfProperty = binding.attributes.getNamedItem('bind-component')?.value;      
-                if (componentOfProperty != null) {
-                    const parentContext = this.getSharkJSContextFromParent(binding as HTMLElement);
-                    const valueSource = bindingValueSplit[0].split('Changed')[0];
-                    const targetSource = bindingValueSplit[1].split('Changed')[0];
-                    const newValue = componentInstance[valueSource];
+                // TODO - rework needs to remove duplicated code for multiple bindings
+                if (bindingValue.indexOf(',') !== -1) {
+                    const bindingValues = bindingValue.split(',');
+                    bindingValues.forEach(bindingValue => {
+                        const bindingValueSplit = bindingValue.split('->');
+                        const componentOfProperty = binding.attributes.getNamedItem('bind-component')?.value;      
+                        if (componentOfProperty != null) {
+                            const parentContext = this.getSharkJSContextFromParent(binding as HTMLElement);
+                            const valueSource = bindingValueSplit[0].split('Changed')[0];
+                            const targetSource = bindingValueSplit[1].split('Changed')[0];
+                            const newValue = componentInstance[valueSource];
+    
+                            const parentContextDataContext = this.dependencyResolver.getComponent(parentContext.dataContext.name) as any;
+    
+                            if (parentContextDataContext != null && parentContextDataContext[targetSource] != newValue) {
+                                parentContextDataContext[targetSource] = newValue;
+                                parentContextDataContext[targetSource + 'Changed'].apply(parentContextDataContext, [newValue]);
+                                const parentComponentRef = document.querySelector(`[bind-component="${parentContext.dataContext.name}"]`) as HTMLElement;
+                                this.resolveTextBindings(parentComponentRef, parentContextDataContext);
+                            }
+                        }
+                    });
+                } else {
+                    const bindingValueSplit = bindingValue.split('->');
+                    const componentOfProperty = binding.attributes.getNamedItem('bind-component')?.value;      
+                    if (componentOfProperty != null) {
+                        const parentContext = this.getSharkJSContextFromParent(binding as HTMLElement);
+                        const valueSource = bindingValueSplit[0].split('Changed')[0];
+                        const targetSource = bindingValueSplit[1].split('Changed')[0];
+                        const newValue = componentInstance[valueSource];
 
-                    const parentContextDataContext = this.dependencyResolver.getComponent(parentContext.dataContext.name) as any;
+                        const parentContextDataContext = this.dependencyResolver.getComponent(parentContext.dataContext.name) as any;
 
-                    if (parentContextDataContext != null && parentContextDataContext[targetSource] != newValue) {
-                        parentContextDataContext[targetSource] = newValue;
-                        parentContextDataContext[targetSource + 'Changed'].apply(parentContextDataContext, [newValue]);
-                        const parentComponentRef = document.querySelector(`[bind-component="${parentContext.dataContext.name}"]`) as HTMLElement;
-                        this.resolveTextBindings(parentComponentRef, parentContextDataContext);
+                        if (parentContextDataContext != null && parentContextDataContext[targetSource] != newValue) {
+                            parentContextDataContext[targetSource] = newValue;
+                            parentContextDataContext[targetSource + 'Changed'].apply(parentContextDataContext, [newValue]);
+                            const parentComponentRef = document.querySelector(`[bind-component="${parentContext.dataContext.name}"]`) as HTMLElement;
+                            this.resolveTextBindings(parentComponentRef, parentContextDataContext);
+                        }
                     }
                 }
                 
@@ -225,26 +265,6 @@ export class ComponentResolver {
             const bindingValue = binding.attributes.getNamedItem('bind-if')?.value;
             let newValue;
             if (bindingValue) {
-                // const exist = this.checkExistingSourceForBinding(componentInstance, bindingValue);
-                // // console.log(`${exist} - component instance - ${componentInstance.name} - ${bindingValue}`)
-                // if (!exist) {
-                //     return;
-                // }
-                
-
-                // if (bindingValue.indexOf('[') !== -1) {
-                //     const regExp = new RegExp(/(\S+)\[(\d+)\]\.(\S+)/gmi);
-                //     const result = regExp.exec(bindingValue);
-                //     if (result != null) {
-                //         const source = result[1];
-                //         const index = result[2];
-                //         const property = result[3];
-                //     }
-                    
-
-                //     console.log(result);
-                // }
-                // else 
                 if (bindingValue.indexOf('.') !== -1) {
                     const v = getDeepValue(componentInstance, bindingValue);
                     newValue = v;
@@ -355,7 +375,10 @@ export class ComponentResolver {
     destroyEventsOnBindingRef(bindingRef: HTMLElement) {
         const bindings = bindingRef.querySelectorAll('[bind-event]');
         bindings.forEach(binding => {
-            if ((<any>binding).sharkJS != null && (<any>binding).sharkJS.attachedEvents.size > 0 && (<any>binding).sharkJS.destroyEvents != null) {
+            if ((<any>binding).sharkJS != null 
+                    && (<any>binding).sharkJS.attachedEvents != null 
+                    && (<any>binding).sharkJS.attachedEvents.size > 0 
+                    && (<any>binding).sharkJS.destroyEvents != null) {
                 (<any>binding).sharkJS.destroyEvents();
             }
         });
@@ -429,6 +452,8 @@ export class ComponentResolver {
                     } else {
                         binding.innerHTML = '';
                     }
+                } else if (dataContext != null) {
+                    binding.innerHTML = dataContext;
                 }
                 (<any>binding).sharkJS.state = 'resolved';
             }

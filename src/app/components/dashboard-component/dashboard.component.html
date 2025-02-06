@@ -9,7 +9,7 @@
             </button>
         </div>
         <div bind-component="DropDownComponent"
-             bind-property="dropDownExpanded->expanded"
+             bind-property="dropDownExpanded->expanded,itemsSource->itemsSource"
              bind-property-changed="expandedChanged->dropDownExpandedChanged">
         </div>
     </div>
