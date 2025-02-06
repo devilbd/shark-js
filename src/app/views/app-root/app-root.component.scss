@@ -14,7 +14,8 @@
         flex: 1 auto;
         /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b5bdc8+0,828c95+36,28343b+100;Grey+Black+3D */
         background: linear-gradient(to bottom,  #b5bdc8 0%,#828c95 36%,#28343b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-
+        box-shadow: 0 0 81px black;
+        z-index: 1;
     }
 
     .body {
@@ -68,8 +69,6 @@
     }
 
     .navigation-panel {
-
-
         .navigation-btn {
             background-color: rgba(0, 0, 0, 0.63);
             color: white;
@@ -79,9 +78,8 @@
             box-shadow: 3px 3px 8px black;
             cursor: pointer;
             text-decoration: none;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: bold;
-            text-transform: uppercase;
             transition: all 0.3s ease;
             display: flex;
             flex-direction: row;

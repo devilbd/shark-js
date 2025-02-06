@@ -19,7 +19,7 @@ export class MainDataService {
         <html>
             <header>
                 <meta charset="utf-8" />
-                <title>.:: SharkJS ::.</title>
+                <title>Shark</title>
                 <link rel="icon" type="image/x-icon" href="favicon.ico" alt="">
             </header>
             <body>
