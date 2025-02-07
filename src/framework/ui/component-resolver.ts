@@ -50,6 +50,7 @@ export class ComponentResolver {
 
                 this.resolveComponents(componentRef as HTMLElement);                
                 this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
+                this.resolveHtmlDomProperty(componentRef as HTMLElement, componentInstance);
 
                 this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveTextBindings(componentRef as HTMLElement, componentInstance);
@@ -283,6 +284,62 @@ export class ComponentResolver {
                 } else {
                     (binding as HTMLElement).style.display = 'none';
                 }
+            }
+        });
+    }
+
+    resolveHtmlDomProperty(componentRef: HTMLElement, componentInstance: any) {
+        // bind-dom-property="disabled:getDisabledValue,style.display.visibility:getVisibilityValue"
+        // bind-dom-property="disabled:complexObj.deepValue"
+        const bindings = componentRef.querySelectorAll('[bind-dom-property]');
+        bindings.forEach(binding => {
+            const bindingValue = binding.attributes.getNamedItem('bind-dom-property')?.value;
+            let newValue;
+            if (bindingValue) {
+                // TODO - rework needs for duplicated code
+                const bindingValues = bindingValue.split(',');
+                if (bindingValue.indexOf(',') !== -1) {
+                    bindingValues.forEach(bindingValue => {
+                        const bindingValueSplit = bindingValue.split(':');
+                        this.sharkJSConextFactory(binding, {...componentInstance});
+                        let newValue;
+                        if (bindingValueSplit[1].indexOf('.') !== -1) {
+                            newValue = getDeepValue(componentInstance, bindingValueSplit[1]);
+                        } else {
+                            newValue = componentInstance[bindingValueSplit[1]];
+                        }
+                        
+                        if (newValue == null) {
+                            newValue = bindingValueSplit[1];
+                        }
+
+                        if (bindingValueSplit[0].indexOf('.') !== -1 ) {
+                            setDeepValue(binding, bindingValueSplit[0], newValue);
+                        } else {
+                            (<any>binding)[bindingValueSplit[0]] = newValue;
+                        }
+                    });
+                } else {
+                    const bindingValueSplit = bindingValue.split(':');
+                        this.sharkJSConextFactory(binding, {...componentInstance});
+                        let newValue;
+                        if (bindingValueSplit[1].indexOf('.') !== -1) {
+                            newValue = getDeepValue(componentInstance, bindingValueSplit[1]);
+                        } else {
+                            newValue = componentInstance[bindingValueSplit[1]];
+                        }
+                        
+                        if (newValue == null) {
+                            newValue = bindingValueSplit[1];
+                        }
+
+                        if (bindingValueSplit[0].indexOf('.') !== -1 ) {
+                            setDeepValue(binding, bindingValueSplit[0], newValue);
+                        } else {
+                            (<any>binding)[bindingValueSplit[0]] = newValue;
+                        }
+                }
+                (<any>binding).sharkJS.state = 'resolved';
             }
         });
     }

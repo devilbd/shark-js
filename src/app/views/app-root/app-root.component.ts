@@ -56,6 +56,11 @@ export class AppRootComponent {
             title: 'Property bindings',
             visibile: false,
             name: 'PropertyBindingsSampleComponent'
+        }, 
+        {
+            title: 'Form bindings',
+            visibile: false,
+            name: 'FormsBindingSampleComponent'
         }
     ];
 

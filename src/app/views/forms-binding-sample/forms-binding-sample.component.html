@@ -1,0 +1,46 @@
+<div class="forms-binding-sample-root">
+    <div class="section-content">
+        <label class="label medium">Form bindings</label>
+        <form>
+            <div>
+                <label>Name:</label>                
+                <input type="text" 
+                    bind-value="formData.name" 
+                    bind-event="input:onInputChange"
+                    required
+                    pattern="[a-zA-Z0-9]+" />
+            </div>
+            <div>
+                <label>Email:</label>
+                <input type="email" 
+                    bind-value="formData.email" 
+                    bind-event="input:onInputChange"
+                    pattern="^[^\s@]+@[^\s@]+\.[^\s@]+"
+                    required />
+            </div>
+            <div>
+                <label>Message:</label>
+                <textarea bind-value="formData.message" 
+                    bind-event="input:onInputChange"
+                    required
+                    maxlength="20">
+                </textarea>
+            </div>
+            <div>
+                <label>Field with custom validator:</label>
+                <input type="number" 
+                    bind-value="formData.customNumberValue" 
+                    bind-event="input:onInputChange"
+                    bind-class="invalid:customNumberValidation.invalid"
+                    required />
+            </div>
+            <div bind-if="customNumberValidation.invalid" bind-dom-property="style.border:customNumberValidation.invalid">
+                <div bind-text="customNumberValidation.error"></div>
+            </div>
+            <div bind-if="isFormInvalid" bind-dom-property="style.border:invalidStyleValue">
+                Invalid data!
+            </div>
+            <input type="button" bind-event="click:onSubmit" bind-dom-property="disabled:isFormInvalid" value="Submit" />
+        </form>
+    </div>
+</div>
