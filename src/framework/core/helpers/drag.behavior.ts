@@ -25,6 +25,9 @@ export function draggable(componentRef: HTMLElement) {
     });
 
     handle.addEventListener('touchstart', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        
         const touch = event.touches[0];
         let offsetX = touch.clientX - componentRef.getBoundingClientRect().left;
         let offsetY = touch.clientY - componentRef.getBoundingClientRect().top;
