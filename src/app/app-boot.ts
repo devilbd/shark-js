@@ -15,6 +15,7 @@ import { HttpClientSampleComponent } from "./views/html-client-sample/http-clien
 import { DropDownComponent } from "./components/drop-down/drop-down.component";
 import { BaseInputComponent } from "./components/base-input/base-input.component";
 import { DashboardComponent } from "./components/dashboard-component/dashboard.component";
+
 // import { MonacoEditorComponent } from "./components/monaco-editor-component/monaco-editor.component";
 
 // Views
@@ -24,6 +25,7 @@ import { RepeatableSampleComponent } from "./views/repeatable-sample/repeatable-
 import { EventsSampleComponent } from "./views/events-sample/events-sample.component";
 import { PropertyBindingsSampleComponent } from "./views/property-bindings-sample/property-bindings-sample.component";
 import { FormsBindingSampleComponent } from "./views/forms-binding-sample/forms-binding-sample.component";
+import { ClockComponent } from "./components/clock/clock.component";
 
 (() => {
     const sharkCore = new SharkCore();
@@ -36,6 +38,7 @@ import { FormsBindingSampleComponent } from "./views/forms-binding-sample/forms-
     sharkCore.dependencyResolver.declareComponent<SimpleBindingSampleComponent>('SimpleBindingSampleComponent', SimpleBindingSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<ConditionsSampleComponent>('ConditionsSampleComponent', ConditionsSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<DropDownComponent>('DropDownComponent', DropDownComponent, ['ChangeDetector']);
+    sharkCore.dependencyResolver.declareComponent<ClockComponent>('ClockComponent', ClockComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<DashboardComponent>('DashboardComponent', DashboardComponent, ['ChangeDetector']);
     // sharkCore.dependencyResolver.declareComponent<MonacoEditorComponent>('MonacoEditorComponent', MonacoEditorComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<HttpClientSampleComponent>('HttpClientSampleComponent', HttpClientSampleComponent, ['ChangeDetector', 'HttpClient']);

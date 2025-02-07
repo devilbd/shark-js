@@ -2,6 +2,7 @@
     <div class="header">
         <div class="shark-js-logo"></div>
         <div class="label big">SharK</div>
+        <div bind-component="ClockComponent"></div>
     </div>
     <div class="body">
         <div class="navigation-panel">
@@ -22,6 +23,7 @@
             <div bind-if="components[5].visible" bind-component="HttpClientSampleComponent"></div>
             <div bind-if="components[6].visible" bind-component="PropertyBindingsSampleComponent"></div>
             <div bind-if="components[7].visible" bind-component="FormsBindingSampleComponent"></div>
+            <div bind-if="components[8].visible" bind-component="ClockComponent"></div>
             
             <div bind-if="codingSectionVisible">
                 <div class="section-content">

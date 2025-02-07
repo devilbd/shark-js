@@ -1,0 +1,33 @@
+[bind-component="ClockComponent"] {
+    position: absolute;
+    z-index: 9999;
+    top: 1%;
+    left: 80%;
+    box-shadow: 8px 8px 12px black;
+    border-radius: 5px;
+}
+
+.clock-component-root {    
+    .clock {
+        font-family: fantasy;
+        font-size: 2em;
+        color: rgb(255, 115, 0);
+        background-color: #13171c;
+        border-top: none;
+        padding: 20px;
+        text-align: center;
+        transition: all 1s;
+    }
+
+    .clock-time {
+        display: inline-block;
+        min-width: 200px;
+    }
+
+    .handle {
+        text-align: center;
+        background-color: #13171c;
+        color: white;
+        cursor: grab;
+    }
+}

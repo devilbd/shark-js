@@ -61,6 +61,11 @@ export class AppRootComponent {
             title: 'Form bindings',
             visibile: false,
             name: 'FormsBindingSampleComponent'
+        },
+        {
+            title: 'Clock component sample',
+            visibile: false,
+            name: 'ClockComponent'
         }
     ];
 

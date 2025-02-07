@@ -483,6 +483,172 @@ export class MainDataService {
             }
         `;
 
+        const formsBindingSampleHtml = `
+            <div class="forms-binding-sample-root">
+                <div class="section-content">
+                    <label class="label medium">Form bindings</label>
+                    <form>
+                        <div>
+                            <label>Name:</label>                
+                            <input type="text" 
+                                bind-value="formData.name" 
+                                bind-event="input:onInputChange"
+                                required
+                                pattern="[a-zA-Z0-9]+" />
+                        </div>
+                        <div>
+                            <label>Email:</label>
+                            <input type="email" 
+                                bind-value="formData.email" 
+                                bind-event="input:onInputChange"
+                                pattern="^[^\s@]+@[^\s@]+\.[^\s@]+"
+                                required />
+                        </div>
+                        <div>
+                            <label>Message:</label>
+                            <textarea bind-value="formData.message" 
+                                bind-event="input:onInputChange"
+                                required
+                                maxlength="20">
+                            </textarea>
+                        </div>
+                        <div>
+                            <label>Field with custom validator:</label>
+                            <input type="number" 
+                                bind-value="formData.customNumberValue" 
+                                bind-event="input:onInputChange"
+                                bind-class="invalid:customNumberValidation.invalid"
+                                required />
+                        </div>
+                        <div bind-if="customNumberValidation.invalid" bind-dom-property="style.border:customNumberValidation.invalid">
+                            <div bind-text="customNumberValidation.error"></div>
+                        </div>
+                        <div bind-if="isFormInvalid" bind-dom-property="style.border:invalidStyleValue">
+                            Invalid data!
+                        </div>
+                        <input type="button" bind-event="click:onSubmit" bind-dom-property="disabled:isFormInvalid" value="Submit" />
+                    </form>
+                </div>
+            </div>
+
+        `;
+        const formsBindingSampleTS = `
+            import { Component } from "../../../framework/ui/component";
+            import { ChangeDetector } from "../../../framework/ui/change-detector";
+            import html from './forms-binding-sample.component.html';
+            import './forms-binding-sample.component.scss';
+            import { FormDataValidator } from "./validators/form-data.validator";
+
+            @Component({
+                name: 'FormsBindingSampleComponent',
+                html: html
+            })
+            export class FormsBindingSampleComponent {
+                formData = {
+                    name: '',
+                    email: '',
+                    message: '',
+                    customNumberValue: 0
+                };
+
+                private formDataValidator: FormDataValidator;
+
+                private inputChangeTimeout: any;
+
+                get isFormInvalid() {
+                    const isFormValid = document.querySelector('form')?.checkValidity();
+                    return !isFormValid;
+                }
+
+                get invalidStyleValue() {
+                    return this.isFormInvalid ? '1px solid crimson' : '';
+                }
+
+                customNumberValidation: any;
+
+                constructor(private changeDetector: ChangeDetector) {
+                    this.formDataValidator = new FormDataValidator();
+                }
+
+                onInputChange(event: any) {
+                    clearTimeout(this.inputChangeTimeout);
+                    this.inputChangeTimeout = setTimeout(() => {
+                        this.customNumberValidation = this.formDataValidator.isValidNumber(this.formData);
+                        this.changeDetector.updateView(this);
+                    }, 250);
+                }
+
+                onSubmit() {
+                    console.log('Form submitted:', this.formData);
+                }
+            }
+        `;
+
+        const clockComponentHtml = `
+            <div class="clock-component-root" bind-event="mouseenter:onMouseEnter,mouseleave:onMouseLeave">
+                <div class="handle" 
+                        bind-if="isMouseIn">::::</div>
+                <div class="clock">
+                    <span class="clock-time" bind-text="time">            
+                    </span>
+                </div>
+            </div>
+        `;
+
+        const clokcComponentTS = `
+            import { ChangeDetector } from './../../../framework/ui/change-detector';
+            import { Component } from "../../../framework/ui/component";
+            import html from './clock.component.html';
+            import './clock.component.scss';
+            import { draggable } from '../../../framework/core/helpers/drag.behavior';
+
+            @Component({
+                name: 'ClockComponent',
+                html: html
+            })
+            export class ClockComponent {
+                time!: string;
+
+                _isMouseIn = false;
+                get isMouseIn() {
+                    return this._isMouseIn;
+                }
+
+                set isMouseIn(v: boolean) {
+                    this._isMouseIn = v;
+                }
+
+                constructor(private changeDetector: ChangeDetector) {
+                    this.updateTime();
+                    setInterval(() => this.updateTime(), 1000);
+                    setTimeout(() => {
+                        const componentRef = document.querySelector("[bind-component="ClockComponent"]") as HTMLElement;
+                        draggable(componentRef);
+                    });
+                }
+
+                updateTime() {
+                    const now = new Date();
+                    this.time = now.toLocaleTimeString();
+                    this.changeDetector.updateView(this);
+                }
+
+                onMouseEnter(e: any) {
+                    this.isMouseIn = true;
+                    setTimeout(() => {
+                        this.changeDetector.updateView(this);
+                    });
+                }
+
+                onMouseLeave(e: any) {
+                    this.isMouseIn = false;
+                    setTimeout(() => {
+                        this.changeDetector.updateView(this);
+                    });
+                }
+            }
+        `;
+
         let promiseResult = new Promise((resolve, reject) => {
             const result = {
                 ApBootConfiguration: {
@@ -512,6 +678,14 @@ export class MainDataService {
                 PropertyBindingsSampleComponent: {
                     html: hljs.default.highlight(propertyBindingsSampleHtml, { language: 'html' }).value,
                     ts: hljs.default.highlight(propertyBindingsSampleTS, { language: 'typescript' }).value
+                }, 
+                FormsBindingSampleComponent: {
+                    html: hljs.default.highlight(formsBindingSampleHtml, { language: 'html' }).value,
+                    ts: hljs.default.highlight(formsBindingSampleTS, { language: 'html' }).value,
+                },
+                ClockComponent: {
+                    html: hljs.default.highlight(clockComponentHtml, { language: 'html' }).value,
+                    ts: hljs.default.highlight(clokcComponentTS, { language: 'typescript' }).value,
                 }
             };
             resolve(result);
