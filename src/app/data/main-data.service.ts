@@ -649,6 +649,51 @@ export class MainDataService {
             }
         `;
 
+        const dropDownComponentHtml = `
+            <div class="drop-down-component-root">
+                <div bind-event="click:onBodyToggle" class="selected-item">
+                    <div class="icon" bind-class="body-expanded:expanded"></div>
+                    <div class="selected-item-text" bind-text="selectedItem"></div>
+                </div>
+                <div class="dropdown-body" bind-if="expanded" bind-for="itemsSource;item;idx">
+                    <div class="body-item" bind="item" bind-event="click:onSelectItem:{item}"></div>
+                </div>
+            </div>
+        `;
+        const dropDownComponentTS = `
+            import { ChangeDetector } from "../../../framework/ui/change-detector";
+            import { Component } from "../../../framework/ui/component";
+            import html from './drop-down.component.html';
+            import './drop-down.component.scss';
+
+            @Component({
+                name: 'DropDownComponent',
+                html: html
+            })
+            export class DropDownComponent {
+                expanded = false;
+                itemsSource: any[] = [];
+                selectedItem: any;
+
+                constructor(private changeDetector: ChangeDetector) {
+                    setTimeout(() => {
+                        this.selectedItem = this.itemsSource[0];
+                    });
+                }
+
+                onBodyToggle(e: any) {
+                    this.expanded = !this.expanded;
+                    this.changeDetector.updateView(this);
+                }
+
+                onSelectItem(e: any) {
+                    console.log(e);
+                    this.selectedItem = e.event.value;
+                    this.onBodyToggle(e);
+                }
+            }
+        `;
+
         let promiseResult = new Promise((resolve, reject) => {
             const result = {
                 ApBootConfiguration: {
@@ -686,6 +731,10 @@ export class MainDataService {
                 ClockComponent: {
                     html: hljs.default.highlight(clockComponentHtml, { language: 'html' }).value,
                     ts: hljs.default.highlight(clokcComponentTS, { language: 'typescript' }).value,
+                },
+                DropDownComponent: {
+                    html: hljs.default.highlight(dropDownComponentHtml, { language: 'html' }).value,
+                    ts: hljs.default.highlight(dropDownComponentTS, { language: 'typescript' }).value,
                 }
             };
             resolve(result);

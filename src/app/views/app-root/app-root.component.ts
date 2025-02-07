@@ -49,23 +49,27 @@ export class AppRootComponent {
         },
         {
             title: 'Http client',
-            visibile: false,
+            visible: false,
             name: 'HttpClientSampleComponent'
         },
         {
             title: 'Property bindings',
-            visibile: false,
+            visible: false,
             name: 'PropertyBindingsSampleComponent'
         }, 
         {
             title: 'Form bindings',
-            visibile: false,
+            visible: false,
             name: 'FormsBindingSampleComponent'
         },
         {
             title: 'Clock component sample',
-            visibile: false,
+            visible: false,
             name: 'ClockComponent'
+        }, {
+            title: 'Drop down component',
+            visible: false,
+            name: 'DropDownComponent'
         }
     ];
 
