@@ -1,9 +1,8 @@
 export function draggable(componentRef: HTMLElement) {
-
     const parentElement = componentRef.parentElement;
+    const handle = componentRef.querySelector('.handle') as HTMLElement;
     parentElement?.removeChild(componentRef);    
     document.body.appendChild(componentRef);
-    const handle = componentRef.querySelector('.handle') as HTMLElement;
 
     handle.addEventListener('mousedown', (event) => {
         let offsetX = event.clientX - componentRef.getBoundingClientRect().left;
@@ -23,5 +22,27 @@ export function draggable(componentRef: HTMLElement) {
 
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
+    });
+
+    handle.addEventListener('touchstart', (event) => {
+        const touch = event.touches[0];
+        let offsetX = touch.clientX - componentRef.getBoundingClientRect().left;
+        let offsetY = touch.clientY - componentRef.getBoundingClientRect().top;
+        handle.style.cursor = 'grabbing';
+
+        const onTouchMouve = (moveEvent: any) => {
+            const moveTouch = moveEvent.touches[0];
+            componentRef.style.left = `${moveTouch.clientX - offsetX}px`;
+            componentRef.style.top = `${moveTouch.clientY - offsetY}px`;
+        };
+
+        const onTouchEnd = () => {
+            document.removeEventListener('touchmove', onTouchMouve);
+            document.removeEventListener('touchend', onTouchEnd);
+            handle.style.cursor = 'grab';
+        };
+
+        document.addEventListener('touchmove', onTouchMouve);
+        document.addEventListener('touchend', onTouchEnd);
     });
 }
