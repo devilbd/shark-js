@@ -1,10 +1,10 @@
 <div class="html-client-component-root">
     <div class="section-content">
         <label class="label medium">HttpClient</label>
+        <div bind-if="isLoading" class="ajax-loader"></div>
         <button bind-event="click:getData">
             Get data via HttpClient
         </button>
-        <div bind-if="isLoading" class="ajax-loader"></div>
         <div bind-if="showData">
             <label class="label small">Punchline:</label>
             <div bind-text="viewModel.punchline"></div>

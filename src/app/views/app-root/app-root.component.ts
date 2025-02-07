@@ -23,12 +23,12 @@ export class AppRootComponent {
 
     components: any = [
         {
-            title: 'App Boot Configuration',
+            title: 'App boot conf',
             visible: false,
             name: 'ApBootConfiguration',
         },
         {
-            title: 'Simple binding',
+            title: 'Simple bindings',
             visible: false,
             name: 'SimpleBindingSampleComponent',
         },
@@ -43,12 +43,12 @@ export class AppRootComponent {
             name: 'EventsSampleComponent',
         },
         {
-            title: 'Condition bindings',
+            title: 'Conditional bindings',
             visible: false,
             name: 'ConditionsSampleComponent',
         },
         {
-            title: 'Http client',
+            title: 'HTTP client',
             visible: false,
             name: 'HttpClientSampleComponent'
         },
