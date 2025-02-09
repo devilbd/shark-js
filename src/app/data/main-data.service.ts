@@ -737,7 +737,7 @@ export class MainDataService {
                 }, 
                 FormsBindingSampleComponent: {
                     html: hljs.default.highlight(formsBindingSampleHtml, { language: 'html' }).value,
-                    ts: hljs.default.highlight(formsBindingSampleTS, { language: 'html' }).value,
+                    ts: hljs.default.highlight(formsBindingSampleTS, { language: 'typescript' }).value,
                 },
                 ClockComponent: {
                     html: hljs.default.highlight(clockComponentHtml, { language: 'html' }).value,

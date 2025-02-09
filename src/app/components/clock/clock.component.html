@@ -1,6 +1,7 @@
 <div class="clock-component-root" bind-event="mouseenter:onMouseEnter,mouseleave:onMouseLeave">
-    <div class="handle" 
-            bind-if="isMouseIn">::::</div>
+    <div class="handle" bind-if="isMouseIn">
+            <div class="grab-handle">::::</div>
+    </div>
     <div class="clock">
         <span class="clock-time" bind-text="time">            
         </span>
