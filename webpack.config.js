@@ -1,14 +1,12 @@
 const path = require('path');
-// const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
-// const { library } = require('webpack');
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: [
     './src/app/app-boot.ts'
   ],
-  devtool: 'inline-source-map',
+  // devtool: 'inline-source-map',
   module: {
     rules: [
       {
@@ -45,39 +43,27 @@ module.exports = {
     ],
   },
   optimization: {
-    splitChunks: {
-      cacheGroups: {
-        defaultVendors: {
-          test: /[\\/]node_modules[\\/]/,
-          minChunks: 2,
-          maxInitialRequests: 5,
-          priority: -10,
-          reuseExistingChunk: true,
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          ecma: undefined,
+          parse: {},
+          compress: {
+            drop_console: true,
+            drop_debugger: true
+          },
+          mangle: true,
+          module: true,
         },
-        default: {
-          minChunks: 2,
-          maxInitialRequests: 5,
-          priority: -20,
-          reuseExistingChunk: true,
-        },
-      },
-    },
+      }),
+    ],
   },
-  plugins: [
-    // new MonacoWebpackPlugin({
-    //   languages: ['json', 'typescript', 'html', 'scss']
-    // }),
-    new CompressionPlugin({
-      algorithm: 'gzip',
-    })
-  ],
+  plugins: [],
   resolve: {
     extensions: ['.ts', '.js', '.scss', '.css'],
   },
   output: {
-    // filename: 'bundle.js',
-    // path: path.resolve(__dirname, 'dist'),
-    // filename: 'shark.[contenthash].js',
     filename: 'shark.js',
     library: "sharkJS",
     path: path.resolve(__dirname, 'dist'),

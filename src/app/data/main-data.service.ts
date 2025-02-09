@@ -1,7 +1,18 @@
 import * as hljs from 'highlight.js';
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 
 export class MainDataService {
     private testProp = 5;
+
+    constructor () {
+        const j = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlLZXkiOiJBSXphU3lDOWNVS1c1R3lhNzN4b1I2UnE4QVZTb0N3aFBZWjhiOEkiLCJhdXRoRG9tYWluIjoic2hhcmstanMuZmlyZWJhc2VhcHAuY29tIiwiZGF0YWJhc2VVUkwiOiJodHRwczovL3NoYXJrLWpzLWRlZmF1bHQtcnRkYi5ldXJvcGUtd2VzdDEuZmlyZWJhc2VkYXRhYmFzZS5hcHAiLCJwcm9qZWN0SWQiOiJzaGFyay1qcyIsInN0b3JhZ2VCdWNrZXQiOiJzaGFyay1qcy5maXJlYmFzZXN0b3JhZ2UuYXBwIiwibWVzc2FnaW5nU2VuZGVySWQiOiIxMDQ0ODE1NTU3MTgxIiwiYXBwSWQiOiIxOjEwNDQ4MTU1NTcxODE6d2ViOjhmNDNlYzBiMjIzZWRkNjgwZTcwNTQiLCJtZWFzdXJlbWVudElkIjoiRy04UUpXWkJRR0hKIn0.g1iiLTzYtRqWQl58yuy5vWjKUuc1TL0IOHP-jyM7Rcg";
+        const config = JSON.parse(atob(j.split('.')[1]))
+        // Initialize Firebase
+        const app = initializeApp(config);
+        const analytics = getAnalytics(app);
+    }
+
     setData() {
         this.testProp += 5;
     }
