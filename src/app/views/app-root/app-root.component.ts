@@ -4,7 +4,7 @@ import html from './app-root.component.html';
 import './app-root.component.scss';
 import { MainDataService } from '../../data/main-data.service';
 
-import 'highlight.js/styles/monokai.css';
+import 'highlight.js/styles/monokai.min.css';
 import { environment } from '../../environment';
 
 @Component({
