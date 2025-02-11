@@ -1,12 +1,11 @@
 [bind-component="AnalogueClockComponent"] {
     position: absolute;
     top: 10%;
-    left: 90%;
-    margin: 10px;
-    box-shadow: 1px 1px 30px black;
-    padding: 10px;
+    left: 80%;
+    box-shadow: 1px 1px 30px #000;
     border-radius: 30px;
     z-index: 9999;
+    padding: 10px;
 }
 
 .analogue-clock-component-root {
