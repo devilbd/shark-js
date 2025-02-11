@@ -5,6 +5,7 @@ import './app-root.component.scss';
 import { MainDataService } from '../../data/main-data.service';
 
 import 'highlight.js/styles/monokai.css';
+import { environment } from '../../environment';
 
 @Component({
     name: 'AppRootComponent',
@@ -19,6 +20,10 @@ export class AppRootComponent {
             return true;
         }
         return false;
+    }
+
+    get appVersion() {
+        return environment.version;
     }
 
     components: any = [

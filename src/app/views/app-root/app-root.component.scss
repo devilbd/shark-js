@@ -16,6 +16,8 @@
         background: linear-gradient(to bottom,  #b5bdc8 0%,#828c95 36%,#28343b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         box-shadow: 0 0 81px black;
         z-index: 1;
+
+        
     }
 
     .footer {
@@ -161,4 +163,18 @@
     height: 64px;
     width: 64px;
     display: inline-block; 
+}
+
+.default-copyright-text {
+    font-style: italic;
+    color: rgb(255, 115, 0)!important;
+    margin: 0 10px;
+}
+
+.app-version {
+    @extend .default-copyright-text;
+}
+
+.copyright-text {
+    @extend .default-copyright-text;
 }
