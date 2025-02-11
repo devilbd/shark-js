@@ -14,6 +14,7 @@ import { environment } from '../../environment';
 export class AppRootComponent {
     // TODO - needs to implement if condition during resolving of components into component resolver
     selectedPage: string = '';
+    selectedComponent: string = '';
 
     get codingSectionVisible() {
         if (this.selectedComponentData != null) {
@@ -26,7 +27,7 @@ export class AppRootComponent {
         return environment.version;
     }
 
-    components: any = [
+    componentSamples = [
         {
             title: 'App boot conf',
             visible: false,
@@ -67,6 +68,9 @@ export class AppRootComponent {
             visible: false,
             name: 'FormsBindingSampleComponent'
         },
+    ];
+
+    components = [
         {
             title: 'Clock component sample',
             visible: false,
@@ -79,28 +83,49 @@ export class AppRootComponent {
     ];
 
     componentsSamplesData: any;
+    componentsData: any;
     selectedComponentData: any;
 
     constructor(private changeDetector: ChangeDetector, private mainDataService: MainDataService) {
-        this.componentsSamplesData = this.mainDataService.getComponentsSampleValues().then((data: any) => {
+        this.mainDataService.getComponentsSampleValues().then((data: any) => {
             this.componentsSamplesData = data;
         });
-        
+        this.mainDataService.getComponentsValues().then((data: any) => {
+            this.componentsData = data;
+        });
     }
 
-    async onSelectPage(eventArgs: any) {
+    onSelectPage(eventArgs: any) {
         this.selectedPage = eventArgs.event.value;
-        this.components.forEach((component: any) => {
+        this.componentSamples.forEach((component: any) => {
             if (component.name === eventArgs.event.value.name) {
                 this.selectedComponentData = this.componentsSamplesData[component.name];
             }
         });
+
+        this.hideAll();
+        eventArgs.event.value.visible = true;        
+        this.changeDetector.updateView(this);
+    }
+
+    onSelectComponent(eventArgs: any) {
+        this.selectedComponent = eventArgs.event.value;
+        this.components.forEach((component: any) => {
+            if (component.name === eventArgs.event.value.name) {
+                this.selectedComponentData = this.componentsData[component.name];
+            }
+        });
+
         this.hideAll();
         eventArgs.event.value.visible = true;        
         this.changeDetector.updateView(this);
     }
 
     hideAll() {
+        for (let idx in this.componentSamples) {
+            this.componentSamples[idx].visible = false;
+        }
+
         for (let idx in this.components) {
             this.components[idx].visible = false;
         }

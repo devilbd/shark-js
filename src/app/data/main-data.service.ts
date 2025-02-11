@@ -24,21 +24,270 @@ export class MainDataService {
         return promiseResult;
     }
 
+    async getComponentsValues() {
+        const clockComponentHtml = `
+            <div class="clock-component-root" bind-event="mouseenter:onMouseEnter,mouseleave:onMouseLeave">
+                <div class="handle" 
+                        bind-if="isMouseIn">::::</div>
+                <div class="clock">
+                    <span class="clock-time" bind-text="time">            
+                    </span>
+                </div>
+            </div>
+        `;
+
+        const clokcComponentTS = `
+            import { ChangeDetector } from './../../../framework/ui/change-detector';
+            import { Component } from "../../../framework/ui/component";
+            import html from './clock.component.html';
+            import './clock.component.scss';
+            import { draggable } from '../../../framework/core/helpers/drag.behavior';
+
+            @Component({
+                name: 'ClockComponent',
+                html: html
+            })
+            export class ClockComponent {
+                time!: string;
+
+                _isMouseIn = false;
+                get isMouseIn() {
+                    return this._isMouseIn;
+                }
+
+                set isMouseIn(v: boolean) {
+                    this._isMouseIn = v;
+                }
+
+                constructor(private changeDetector: ChangeDetector) {
+                    this.updateTime();
+                    setInterval(() => this.updateTime(), 1000);
+                    setTimeout(() => {
+                        const componentRef = document.querySelector("[bind-component="ClockComponent"]") as HTMLElement;
+                        draggable(componentRef);
+                    });
+                }
+
+                updateTime() {
+                    const now = new Date();
+                    this.time = now.toLocaleTimeString();
+                    this.changeDetector.updateView(this);
+                }
+
+                onMouseEnter(e: any) {
+                    this.isMouseIn = true;
+                    setTimeout(() => {
+                        this.changeDetector.updateView(this);
+                    });
+                }
+
+                onMouseLeave(e: any) {
+                    this.isMouseIn = false;
+                    setTimeout(() => {
+                        this.changeDetector.updateView(this);
+                    });
+                }
+            }
+        `;
+
+        const clockComponentSASS = `
+            [bind-component="ClockComponent"] {
+                position: absolute;
+                z-index: 9999;
+                top: 1%;
+                left: 70%;
+                box-shadow: 8px 8px 12px black;
+                border-radius: 5px;
+
+                .clock-component-root {    
+                    .clock {
+                        font-family: fantasy;
+                        font-size: 2em;
+                        color: rgb(255, 115, 0);
+                        background-color: #13171c;
+                        border-top: none;
+                        padding: 20px;
+                        text-align: center;
+                        transition: all 1s;
+                    }
+                
+                    .clock-time {
+                        display: inline-block;
+                        min-width: 200px;
+                    }
+                
+                    .handle {
+                        text-align: center;
+                        background-color: #13171c;
+                        color: white;
+                        cursor: grab;
+                        position: relative;
+                        .grab-handle {
+                            display: inline-block;
+                            padding: 0 30px;
+                            background-color: #333e4b;
+                            position: absolute;
+                            top: -10px;
+                            left: 35%;
+                            border-radius: 5px;
+                            border: 1px solid #000000;
+                        }
+                    }
+                }
+            }
+        `;
+
+        const dropDownComponentHtml = `
+            <div class="drop-down-component-root">
+                <div bind-event="click:onBodyToggle" class="selected-item">
+                    <div class="icon" bind-class="body-expanded:expanded"></div>
+                    <div class="selected-item-text" bind-text="selectedItem"></div>
+                </div>
+                <div class="dropdown-body" bind-if="expanded" bind-for="itemsSource;item;idx">
+                    <div class="body-item" bind="item" bind-event="click:onSelectItem:{item}"></div>
+                </div>
+            </div>
+        `;
+        const dropDownComponentTS = `
+            import { ChangeDetector } from "../../../framework/ui/change-detector";
+            import { Component } from "../../../framework/ui/component";
+            import html from './drop-down.component.html';
+            import './drop-down.component.scss';
+
+            @Component({
+                name: 'DropDownComponent',
+                html: html
+            })
+            export class DropDownComponent {
+                expanded = false;
+                itemsSource: any[] = [];
+                selectedItem: any;
+
+                constructor(private changeDetector: ChangeDetector) {
+                    setTimeout(() => {
+                        this.selectedItem = this.itemsSource[0];
+                    });
+                }
+
+                onBodyToggle(e: any) {
+                    this.expanded = !this.expanded;
+                    this.changeDetector.updateView(this);
+                }
+
+                onSelectItem(e: any) {
+                    console.log(e);
+                    this.selectedItem = e.event.value;
+                    this.onBodyToggle(e);
+                }
+            }
+        `;
+
+        const dropDownComponentSASS = `
+            .drop-down-component-root {
+                border: 2px dashed rgb(0, 0, 0);
+                padding: 10px;
+                margin: 5px;
+                border-radius: 5px;
+                box-shadow: 0 0 12px #000;
+                position: relative;
+                opacity: 0.7;
+
+                &:hover {
+                    cursor: pointer;
+                    opacity: 1;
+                    color: rgb(179, 179, 179);
+                }
+
+                .dropdown-body {
+                    border: 2px dashed rgb(0, 0, 0);
+                    padding: 10px;
+                    margin: 75px 0px;
+                    border-radius: 5px;
+                    box-shadow: 0 0 12px #000;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 95%;
+                    z-index: 999;
+                    background-color: #384452;
+                }
+
+                .body-item {
+                    padding: 10px;
+                    opacity: 0.7;
+                    border-radius: 5px;
+                }
+
+                .body-item:hover {
+                    cursor: pointer;
+                    opacity: 1;
+                    background-color: #252d36;
+                }
+
+                .icon {
+                    background-image: url('../../assets/arrow.png');
+                    background-color: #d3d3d3;
+                    background-position: center center;
+                    background-size: 38px 38px;
+                    height: 38px;
+                    width: 38px;
+                    display: inline-block;
+                    transform: rotate(0deg);
+                    transition: rotate 1s;
+                    border-radius: 100%;
+                    margin: 5px;
+                }
+
+                .selected-item {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .selected-item-text {
+                    display: inline-block;
+                }
+
+                .body-expanded {
+                    rotate: 90deg !important;
+                }
+            }
+        `;
+
+        let promiseResult = new Promise((resolve, reject) => {
+            const result = {
+                ClockComponent: {
+                    html: hljs.default.highlight(clockComponentHtml, { language: 'html' }).value,
+                    ts: hljs.default.highlight(clokcComponentTS, { language: 'typescript' }).value,
+                    sass: hljs.default.highlight(clockComponentSASS, { language: 'css' }).value 
+                },
+                DropDownComponent: {
+                    html: hljs.default.highlight(dropDownComponentHtml, { language: 'html' }).value,
+                    ts: hljs.default.highlight(dropDownComponentTS, { language: 'typescript' }).value,
+                    sass: hljs.default.highlight(dropDownComponentSASS, { language: 'css' }).value,
+                }
+            }
+            resolve(result);
+        });
+        return promiseResult;
+    }
+
     async getComponentsSampleValues() {
         const appIndexHtml = `
-        <!DOCTYPE html>
-        <html>
-            <header>
-                <meta charset="utf-8" />
-                <title>Shark</title>
-                <link rel="icon" type="image/x-icon" href="favicon.ico" alt="">
-            </header>
-            <body>
-                <div bind-component="AppRootComponent">
-                </div>
-            </body>
-            <script src="dist/shark.js"></script>
-        </html>
+            <!DOCTYPE html>
+            <html>
+                <header>
+                    <meta charset="utf-8" />
+                    <title>Shark</title>
+                    <link rel="icon" type="image/x-icon" href="favicon.ico" alt="">
+                </header>
+                <body>
+                    <div bind-component="AppRootComponent">
+                    </div>
+                </body>
+                <script src="dist/shark.js"></script>
+            </html>
         `;
 
         const appBootConfiguration = `
@@ -667,189 +916,6 @@ export class MainDataService {
             }
         `;
 
-        const clockComponentHtml = `
-            <div class="clock-component-root" bind-event="mouseenter:onMouseEnter,mouseleave:onMouseLeave">
-                <div class="handle" 
-                        bind-if="isMouseIn">::::</div>
-                <div class="clock">
-                    <span class="clock-time" bind-text="time">            
-                    </span>
-                </div>
-            </div>
-        `;
-
-        const clokcComponentTS = `
-            import { ChangeDetector } from './../../../framework/ui/change-detector';
-            import { Component } from "../../../framework/ui/component";
-            import html from './clock.component.html';
-            import './clock.component.scss';
-            import { draggable } from '../../../framework/core/helpers/drag.behavior';
-
-            @Component({
-                name: 'ClockComponent',
-                html: html
-            })
-            export class ClockComponent {
-                time!: string;
-
-                _isMouseIn = false;
-                get isMouseIn() {
-                    return this._isMouseIn;
-                }
-
-                set isMouseIn(v: boolean) {
-                    this._isMouseIn = v;
-                }
-
-                constructor(private changeDetector: ChangeDetector) {
-                    this.updateTime();
-                    setInterval(() => this.updateTime(), 1000);
-                    setTimeout(() => {
-                        const componentRef = document.querySelector("[bind-component="ClockComponent"]") as HTMLElement;
-                        draggable(componentRef);
-                    });
-                }
-
-                updateTime() {
-                    const now = new Date();
-                    this.time = now.toLocaleTimeString();
-                    this.changeDetector.updateView(this);
-                }
-
-                onMouseEnter(e: any) {
-                    this.isMouseIn = true;
-                    setTimeout(() => {
-                        this.changeDetector.updateView(this);
-                    });
-                }
-
-                onMouseLeave(e: any) {
-                    this.isMouseIn = false;
-                    setTimeout(() => {
-                        this.changeDetector.updateView(this);
-                    });
-                }
-            }
-        `;
-
-        const dropDownComponentHtml = `
-            <div class="drop-down-component-root">
-                <div bind-event="click:onBodyToggle" class="selected-item">
-                    <div class="icon" bind-class="body-expanded:expanded"></div>
-                    <div class="selected-item-text" bind-text="selectedItem"></div>
-                </div>
-                <div class="dropdown-body" bind-if="expanded" bind-for="itemsSource;item;idx">
-                    <div class="body-item" bind="item" bind-event="click:onSelectItem:{item}"></div>
-                </div>
-            </div>
-        `;
-        const dropDownComponentTS = `
-            import { ChangeDetector } from "../../../framework/ui/change-detector";
-            import { Component } from "../../../framework/ui/component";
-            import html from './drop-down.component.html';
-            import './drop-down.component.scss';
-
-            @Component({
-                name: 'DropDownComponent',
-                html: html
-            })
-            export class DropDownComponent {
-                expanded = false;
-                itemsSource: any[] = [];
-                selectedItem: any;
-
-                constructor(private changeDetector: ChangeDetector) {
-                    setTimeout(() => {
-                        this.selectedItem = this.itemsSource[0];
-                    });
-                }
-
-                onBodyToggle(e: any) {
-                    this.expanded = !this.expanded;
-                    this.changeDetector.updateView(this);
-                }
-
-                onSelectItem(e: any) {
-                    console.log(e);
-                    this.selectedItem = e.event.value;
-                    this.onBodyToggle(e);
-                }
-            }
-        `;
-
-        const dropDownComponentSASS = `
-            .drop-down-component-root {
-                border: 2px dashed rgb(0, 0, 0);
-                padding: 10px;
-                margin: 5px;
-                border-radius: 5px;
-                box-shadow: 0 0 12px #000;
-                position: relative;
-                opacity: 0.7;
-
-                &:hover {
-                    cursor: pointer;
-                    opacity: 1;
-                    color: rgb(179, 179, 179);
-                }
-
-                .dropdown-body {
-                    border: 2px dashed rgb(0, 0, 0);
-                    padding: 10px;
-                    margin: 75px 0px;
-                    border-radius: 5px;
-                    box-shadow: 0 0 12px #000;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 95%;
-                    z-index: 999;
-                    background-color: #384452;
-                }
-
-                .body-item {
-                    padding: 10px;
-                    opacity: 0.7;
-                    border-radius: 5px;
-                }
-
-                .body-item:hover {
-                    cursor: pointer;
-                    opacity: 1;
-                    background-color: #252d36;
-                }
-
-                .icon {
-                    background-image: url('../../assets/arrow.png');
-                    background-color: #d3d3d3;
-                    background-position: center center;
-                    background-size: 38px 38px;
-                    height: 38px;
-                    width: 38px;
-                    display: inline-block;
-                    transform: rotate(0deg);
-                    transition: rotate 1s;
-                    border-radius: 100%;
-                    margin: 5px;
-                }
-
-                .selected-item {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
-                }
-
-                .selected-item-text {
-                    display: inline-block;
-                }
-
-                .body-expanded {
-                    rotate: 90deg !important;
-                }
-            }
-        `;
-
         let promiseResult = new Promise((resolve, reject) => {
             const result = {
                 ApBootConfiguration: {
@@ -885,15 +951,7 @@ export class MainDataService {
                     ts: hljs.default.highlight(formsBindingSampleTS, { language: 'typescript' }).value,
                     sass: hljs.default.highlight(formsBindingSampleSASS, { language: 'css' }).value
                 },
-                ClockComponent: {
-                    html: hljs.default.highlight(clockComponentHtml, { language: 'html' }).value,
-                    ts: hljs.default.highlight(clokcComponentTS, { language: 'typescript' }).value,
-                },
-                DropDownComponent: {
-                    html: hljs.default.highlight(dropDownComponentHtml, { language: 'html' }).value,
-                    ts: hljs.default.highlight(dropDownComponentTS, { language: 'typescript' }).value,
-                    sass: hljs.default.highlight(dropDownComponentSASS, { language: 'typescript' }).value,
-                }
+                
             };
             resolve(result);
         });
