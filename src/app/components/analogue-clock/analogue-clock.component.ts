@@ -1,3 +1,4 @@
+import { draggable } from "../../../framework/core/helpers/drag.behavior";
 import { Component } from "../../../framework/ui/component";
 import html from './analogue-clock.component.html';
 import './analogue-clock.component.scss';
@@ -7,10 +8,16 @@ import './analogue-clock.component.scss';
     html: html
 })
 export class AnalogueClockComponent {
+    isInitialized = false;
     constructor() {
-        setTimeout(() => {
-            this.startClock();
-        }, 500);
+        if (!this.isInitialized) {
+            setTimeout(() => {
+                this.startClock();
+                const elementRef = document.querySelector('[bind-component="AnalogueClockComponent"]') as HTMLElement;
+                draggable(elementRef);
+            }, 500);
+            this.isInitialized = true;
+        }
     }
 
     startClock(): void {
@@ -32,9 +39,7 @@ export class AnalogueClockComponent {
     
     getSecondsToday() {
         let now: any = new Date();
-
         let today: any = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
         let diff = now - today;
         return Math.round(diff / 1000);
     }

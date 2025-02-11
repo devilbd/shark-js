@@ -72,10 +72,6 @@ export class AppRootComponent {
 
     components = [
         {
-            title: 'Clock component sample',
-            visible: false,
-            name: 'ClockComponent'
-        }, {
             title: 'Drop down component',
             visible: false,
             name: 'DropDownComponent'

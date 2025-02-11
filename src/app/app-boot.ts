@@ -25,7 +25,6 @@ import { RepeatableSampleComponent } from "./views/repeatable-sample/repeatable-
 import { EventsSampleComponent } from "./views/events-sample/events-sample.component";
 import { PropertyBindingsSampleComponent } from "./views/property-bindings-sample/property-bindings-sample.component";
 import { FormsBindingSampleComponent } from "./views/forms-binding-sample/forms-binding-sample.component";
-import { ClockComponent } from "./components/clock/clock.component";
 import { AnalogueClockComponent } from "./components/analogue-clock/analogue-clock.component";
 
 (() => {
@@ -39,7 +38,6 @@ import { AnalogueClockComponent } from "./components/analogue-clock/analogue-clo
     sharkCore.dependencyResolver.declareComponent<SimpleBindingSampleComponent>('SimpleBindingSampleComponent', SimpleBindingSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<ConditionsSampleComponent>('ConditionsSampleComponent', ConditionsSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<DropDownComponent>('DropDownComponent', DropDownComponent, ['ChangeDetector']);
-    sharkCore.dependencyResolver.declareComponent<ClockComponent>('ClockComponent', ClockComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<AnalogueClockComponent>('AnalogueClockComponent', AnalogueClockComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<DashboardComponent>('DashboardComponent', DashboardComponent, ['ChangeDetector']);
     // sharkCore.dependencyResolver.declareComponent<MonacoEditorComponent>('MonacoEditorComponent', MonacoEditorComponent, ['ChangeDetector']);

@@ -1,8 +1,10 @@
 export function draggable(componentRef: HTMLElement) {
     const parentElement = componentRef.parentElement;
-    const handle = componentRef.querySelector('.handle') as HTMLElement;
+    const handle = componentRef.querySelector('.handle') as HTMLElement || componentRef;
+
     parentElement?.removeChild(componentRef);    
     document.body.appendChild(componentRef);
+
     if (handle != null) {
         handle.addEventListener('mousedown', (event) => {
             let offsetX = event.clientX - componentRef.getBoundingClientRect().left;
