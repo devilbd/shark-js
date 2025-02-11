@@ -47,18 +47,15 @@ export class ComponentResolver {
 
                 this.resolveComponentPropertyBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveComponentPropertyChangedBindings(componentRef as HTMLElement, componentInstance);
-
                 this.resolveComponents(componentRef as HTMLElement);                
-                this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveHtmlDomProperty(componentRef as HTMLElement, componentInstance);
-
                 this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveTextBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveTextContent(componentRef as HTMLElement, componentInstance);
                 this.resolveRepeatableBindings(componentRef as HTMLElement, componentInstance);
-
                 this.resolveCssClassBindings(componentRef as HTMLElement, componentInstance);
                 this.resolveEventBindings(componentRef as HTMLElement, componentInstance);
+                this.resolveIfBindings(componentRef as HTMLElement, componentInstance);
             }
         });
     }

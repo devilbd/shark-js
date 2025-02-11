@@ -13,11 +13,19 @@ export class FormsBindingSampleComponent {
         name: '',
         email: '',
         message: '',
-        customNumberValue: 0
     };
 
-    private formDataValidator: FormDataValidator;
+    _customNumberValue: any = 0;
+    get customNumberValue() {
+        return this._customNumberValue;
+    }
 
+    set customNumberValue(v) {
+        this._customNumberValue = v;
+        this.customNumberValidation = this.formDataValidator.isValidNumber(parseFloat(this.customNumberValue));
+    }
+
+    private formDataValidator: FormDataValidator;
     private inputChangeTimeout: any;
 
     get isFormInvalid() {
@@ -38,7 +46,6 @@ export class FormsBindingSampleComponent {
     onInputChange(event: any) {
         clearTimeout(this.inputChangeTimeout);
         this.inputChangeTimeout = setTimeout(() => {
-            this.customNumberValidation = this.formDataValidator.isValidNumber(this.formData);
             this.changeDetector.updateView(this);
         }, 250);
     }
