@@ -494,6 +494,54 @@ export class MainDataService {
             }
         `;
 
+        const formsBindingSampleSASS = `
+            .forms-binding-sample-root {
+                form {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+
+                    label {
+                        font-weight: bold;
+                    }
+
+                    input, textarea {
+                        padding: 8px;
+                        font-size: 14px;
+                        border: 1px solid #ccc;
+                        border-radius: 4px;
+                    }
+
+                    input:invalid, textarea:invalid {
+                        border: 2px dashed crimson;
+                    }
+
+                    .invalid {
+                        border: 2px dashed crimson;
+                    }
+
+                    button {
+                        padding: 10px;
+                        font-size: 16px;
+                        background-color: #007bff;
+                        color: white;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: #0056b3;
+                        }
+
+                        &:disabled {
+                            opacity: 0.7;
+                            cursor: no-drop;
+                        }
+                    }
+                }
+            }
+        `;
+
         const formsBindingSampleHtml = `
             <div class="forms-binding-sample-root">
                 <div class="section-content">
@@ -526,7 +574,7 @@ export class MainDataService {
                         <div>
                             <label>Field with custom validator:</label>
                             <input type="number" 
-                                bind-value="formData.customNumberValue" 
+                                bind-value="customNumberValue" 
                                 bind-event="input:onInputChange"
                                 bind-class="invalid:customNumberValidation.invalid"
                                 required />
@@ -541,6 +589,7 @@ export class MainDataService {
                     </form>
                 </div>
             </div>
+
 
         `;
         const formsBindingSampleTS = `
@@ -559,11 +608,19 @@ export class MainDataService {
                     name: '',
                     email: '',
                     message: '',
-                    customNumberValue: 0
                 };
 
-                private formDataValidator: FormDataValidator;
+                _customNumberValue: any = 0;
+                get customNumberValue() {
+                    return this._customNumberValue;
+                }
 
+                set customNumberValue(v) {
+                    this._customNumberValue = v;
+                    this.customNumberValidation = this.formDataValidator.isValidNumber(parseFloat(this.customNumberValue));
+                }
+
+                private formDataValidator: FormDataValidator;
                 private inputChangeTimeout: any;
 
                 get isFormInvalid() {
@@ -584,13 +641,28 @@ export class MainDataService {
                 onInputChange(event: any) {
                     clearTimeout(this.inputChangeTimeout);
                     this.inputChangeTimeout = setTimeout(() => {
-                        this.customNumberValidation = this.formDataValidator.isValidNumber(this.formData);
                         this.changeDetector.updateView(this);
                     }, 250);
                 }
 
                 onSubmit() {
                     console.log('Form submitted:', this.formData);
+                }
+            }
+
+            // Custom validator TypeScript
+            export class FormDataValidator {
+                isValidNumber(customNumberValue: number) {
+                    const result = { 
+                        invalid: true,
+                        error: 'Number should be bigger than 5!'
+                    };
+
+                    if (customNumberValue < 5) {
+                        return result;
+                    }
+
+                    return null;
                 }
             }
         `;
@@ -705,6 +777,79 @@ export class MainDataService {
             }
         `;
 
+        const dropDownComponentSASS = `
+            .drop-down-component-root {
+                border: 2px dashed rgb(0, 0, 0);
+                padding: 10px;
+                margin: 5px;
+                border-radius: 5px;
+                box-shadow: 0 0 12px #000;
+                position: relative;
+                opacity: 0.7;
+
+                &:hover {
+                    cursor: pointer;
+                    opacity: 1;
+                    color: rgb(179, 179, 179);
+                }
+
+                .dropdown-body {
+                    border: 2px dashed rgb(0, 0, 0);
+                    padding: 10px;
+                    margin: 75px 0px;
+                    border-radius: 5px;
+                    box-shadow: 0 0 12px #000;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 95%;
+                    z-index: 999;
+                    background-color: #384452;
+                }
+
+                .body-item {
+                    padding: 10px;
+                    opacity: 0.7;
+                    border-radius: 5px;
+                }
+
+                .body-item:hover {
+                    cursor: pointer;
+                    opacity: 1;
+                    background-color: #252d36;
+                }
+
+                .icon {
+                    background-image: url('../../assets/arrow.png');
+                    background-color: #d3d3d3;
+                    background-position: center center;
+                    background-size: 38px 38px;
+                    height: 38px;
+                    width: 38px;
+                    display: inline-block;
+                    transform: rotate(0deg);
+                    transition: rotate 1s;
+                    border-radius: 100%;
+                    margin: 5px;
+                }
+
+                .selected-item {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .selected-item-text {
+                    display: inline-block;
+                }
+
+                .body-expanded {
+                    rotate: 90deg !important;
+                }
+            }
+        `;
+
         let promiseResult = new Promise((resolve, reject) => {
             const result = {
                 ApBootConfiguration: {
@@ -738,6 +883,7 @@ export class MainDataService {
                 FormsBindingSampleComponent: {
                     html: hljs.default.highlight(formsBindingSampleHtml, { language: 'html' }).value,
                     ts: hljs.default.highlight(formsBindingSampleTS, { language: 'typescript' }).value,
+                    sass: hljs.default.highlight(formsBindingSampleSASS, { language: 'css' }).value
                 },
                 ClockComponent: {
                     html: hljs.default.highlight(clockComponentHtml, { language: 'html' }).value,
@@ -746,6 +892,7 @@ export class MainDataService {
                 DropDownComponent: {
                     html: hljs.default.highlight(dropDownComponentHtml, { language: 'html' }).value,
                     ts: hljs.default.highlight(dropDownComponentTS, { language: 'typescript' }).value,
+                    sass: hljs.default.highlight(dropDownComponentSASS, { language: 'typescript' }).value,
                 }
             };
             resolve(result);

@@ -122,6 +122,8 @@ export class ComponentResolver {
                 }
                 if (newValue != null) {
                     binding.innerHTML = newValue;
+                } else {
+                    binding.innerHTML = '';
                 }
                 (<any>binding).sharkJS.state = 'resolved';
             }
