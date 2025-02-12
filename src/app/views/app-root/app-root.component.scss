@@ -112,7 +112,7 @@
 
             &:hover {
                 background-color: rgba(0, 0, 0, 0.8);
-                color: rgb(255, 115, 0);
+                color: #6cb6ff;
                 border-bottom: 2px dashed white;
 
                 .icon {
@@ -152,7 +152,7 @@
     &.medium {
         font-size: 25px!important;            
         text-decoration: none;
-        color: rgb(255, 115, 0)!important;
+        color: #6cb6ff!important;
     }
 
     &.big {
@@ -172,7 +172,7 @@
 
 .default-copyright-text {
     font-style: italic;
-    color: rgb(255, 115, 0)!important;
+    color: #6cb6ff!important;
     margin: 0 10px;
 }
 
