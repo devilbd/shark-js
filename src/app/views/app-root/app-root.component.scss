@@ -84,20 +84,22 @@
             text-decoration: none;
             font-size: 16px;
             font-weight: bold;
-            transition: all 0.3s ease;
+            transition: all 1s ease;
             display: flex;
             flex-direction: row;
             justify-content: flex-start;
             align-items: center;
 
-            .gear-icon {
+            .icon { 
+                visibility: hidden;
                 display: inline-block;
-                background-image: url('../../assets/gear_settings.png');
+                background-image: url('../../assets/old_navigation_icon_reworked.png');
                 background-position: center center;
-                background-size: 32px 32px;
-                height: 32px;
-                width: 32px;
+                background-size: 42px 42px;
+                height: 42px;
+                width: 42px;
                 margin: 10px;
+                border-radius: 100%;
             }
 
             .btn-title {
@@ -112,6 +114,10 @@
                 background-color: rgba(0, 0, 0, 0.8);
                 color: rgb(255, 115, 0);
                 border-bottom: 2px dashed white;
+
+                .icon {
+                    visibility: visible !important;
+                }
             }
         }
     }
@@ -135,6 +141,7 @@
     font-size: 20px;
     display: inline-block;
     text-decoration: overline;
+    margin: 0 10px;
 
     &.small {
         font-size: 18px!important; 
@@ -150,17 +157,17 @@
 
     &.big {
         font-size: 35px!important;
-        
     }
 }
 
 .shark-js-logo {
-    background-image: url('../../assets/shark_js_logo.png');
+    background-image: url('../../assets/shark-js-logo.png');
     background-position: center center;
-    background-size: 64px 64px;
-    height: 64px;
-    width: 64px;
-    display: inline-block; 
+    background-size: 128px 128px;
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+    display: inline-block;
 }
 
 .default-copyright-text {
