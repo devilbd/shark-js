@@ -36,8 +36,9 @@ export class NotificationsSampleComponent  {
     onCreateErrorMessage() {
         const notification = {
             title: 'Error',
-            body: 'I am error notification message!',
-            type: NotificationType.Error
+            body: 'I am error notification message! Delay is 3 seconds...',
+            type: NotificationType.Error,
+            autoCloseOn: 3000
         } as Notification;
         this.notifications.notify(notification);
     }

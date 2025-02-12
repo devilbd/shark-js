@@ -1,3 +1,5 @@
+import './notifications.scss';
+
 export class NotificationsService {
     private notifications: HTMLElement[] = [];
 
@@ -22,13 +24,13 @@ export class NotificationsService {
 
         this.notifications.push(notificationEl);
 
-        // setTimeout(() => {
-        //     notificationEl.style.opacity = '0';
-        //     setTimeout(() => {
-        //         document.body.removeChild(notificationEl);
-        //         this.notifications = this.notifications.filter(t => t !== notificationEl);
-        //     }, 500);
-        // }, 3000);
+        if (notification.autoCloseOn) {
+            setTimeout(() => {
+                notificationEl.style.opacity = '0';
+                document.body.removeChild(notificationEl);
+                this.notifications = this.notifications.filter(t => t !== notificationEl);
+            }, notification.autoCloseOn);
+        }
     }
 
     createNotificationDom(notification: Notification) {
@@ -76,4 +78,5 @@ export interface Notification {
     body: string;
     type: NotificationType;
     onClose: Function;
+    autoCloseOn?: number;
 }
