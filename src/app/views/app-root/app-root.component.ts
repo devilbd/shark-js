@@ -72,15 +72,31 @@ export class AppRootComponent {
 
     components = [
         {
-            title: 'Drop down component',
+            title: 'Drop down',
             visible: false,
             name: 'DropDownComponent'
+        },
+        {
+            title: 'Notifications',
+            visible: false,
+            name: 'NotificationsSampleComponent'
+        }
+    ];
+
+    services = [
+        {
+            title: 'Notifications service',
+            visible: false,
+            name: 'NotificationsService'
         }
     ];
 
     componentsSamplesData: any;
     componentsData: any;
+    servicesData: any;
+
     selectedComponentData: any;
+    selectedService: any;
 
     constructor(private changeDetector: ChangeDetector, private mainDataService: MainDataService) {
         this.mainDataService.getComponentsSampleValues().then((data: any) => {
@@ -88,6 +104,9 @@ export class AppRootComponent {
         });
         this.mainDataService.getComponentsValues().then((data: any) => {
             this.componentsData = data;
+        });
+        this.mainDataService.getServicesData().then((data: any) => {
+            this.servicesData = data;
         });
     }
 
@@ -117,6 +136,19 @@ export class AppRootComponent {
         this.changeDetector.updateView(this);
     }
 
+    onSelectService(eventArgs: any) {
+        this.selectedService = eventArgs.event.value;
+        this.services.forEach((service: any) => {
+            if (service.name === eventArgs.event.value.name) {
+                this.selectedComponentData = this.servicesData[service.name];
+            }
+        });
+
+        this.hideAll();
+        eventArgs.event.value.visible = true;        
+        this.changeDetector.updateView(this);
+    }
+
     hideAll() {
         for (let idx in this.componentSamples) {
             this.componentSamples[idx].visible = false;
@@ -124,6 +156,10 @@ export class AppRootComponent {
 
         for (let idx in this.components) {
             this.components[idx].visible = false;
+        }
+
+        for (let idx in this.services) {
+            this.services[idx].visible = false;
         }
     }
 }

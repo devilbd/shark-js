@@ -1,5 +1,6 @@
 import { ChangeDetector } from "../../../framework/ui/change-detector";
 import { Component } from "../../../framework/ui/component";
+import { NotificationsService } from "../../services/notifications/notifications.service";
 import html from './dashboard.component.html';
 import './dashboard.component.scss';
 
@@ -22,7 +23,7 @@ export class DashboardComponent {
         'item5'
     ];
 
-    constructor(private changeDetector: ChangeDetector) {
+    constructor(private changeDetector: ChangeDetector, private notifications: NotificationsService) {
         
     }
 
@@ -30,4 +31,5 @@ export class DashboardComponent {
         this.dropDownExpanded = !this.dropDownExpanded;
         this.changeDetector.updateView(this);
     }
+
 }

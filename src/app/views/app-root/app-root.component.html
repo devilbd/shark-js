@@ -22,6 +22,14 @@
                     <div class="btn-title" bind="component.title"></div>
                 </div>
             </div>
+            <label class="samples-title label medium">Services</label>
+            <hr />
+            <div bind-for="services;service;idx">
+                <div class="navigation-btn" bind-event="click:onSelectService:{service}">
+                    <div class="gear-icon"></div>
+                    <div class="btn-title" bind="service.title"></div>
+                </div>
+            </div>
         </div>
         <div class="selected-page-content">
             <div bind-if="componentSamples[1].visible" bind-component="SimpleBindingSampleComponent"></div>
@@ -31,8 +39,9 @@
             <div bind-if="componentSamples[5].visible" bind-component="HttpClientSampleComponent"></div>
             <div bind-if="componentSamples[6].visible" bind-component="PropertyBindingsSampleComponent"></div>
             <div bind-if="componentSamples[7].visible" bind-component="FormsBindingSampleComponent"></div>
-            <div bind-if="componentSamples[9].visible" bind-component="DropDownComponent"></div>
-            
+            <div bind-if="components[0].visible" bind-component="DropDownComponent"></div>            
+            <div bind-if="components[1].visible" bind-component="NotificationsSampleComponent"></div>
+
             <div bind-if="codingSectionVisible">
                 <div class="section-content">
                     <label class="label medium">HTML</label>

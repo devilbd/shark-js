@@ -142,6 +142,40 @@ export class MainDataService {
                 }
             }
         `;
+        
+        const notificationsSampleHtml = `
+            <div class="notifications-sample">
+                <div class="section-content">
+                    <label class="label medium">Notifications sample</label>
+                    <button bind-event="click:onCreateToasterMessage">
+                        Create toaster message
+                    </button>
+                </div>
+            </div>
+        `;
+        const notificationsSampleTS = `
+            import { ChangeDetector } from "../../../framework/ui/change-detector";
+            import { Component } from "../../../framework/ui/component";
+            import { NotificationsService } from "../../services/notifications/notifications.service";
+            import html from './notifications-sample.component.html';
+            import './notifications-sample.component.scss';
+
+            @Component({
+                name: 'NotificationsSampleComponent',
+                html: html
+            })
+            export class NotificationsSampleComponent  {
+                
+
+                constructor(private changeDetector: ChangeDetector, private notifications: NotificationsService) {
+                }
+
+                
+                onCreateToasterMessage() {
+                    this.notifications.sendNotification('I am toaster message!');
+                }
+            }
+        `;
 
         let promiseResult = new Promise((resolve, reject) => {
             const result = {
@@ -149,6 +183,10 @@ export class MainDataService {
                     html: hljs.default.highlight(dropDownComponentHtml, { language: 'html' }).value,
                     ts: hljs.default.highlight(dropDownComponentTS, { language: 'typescript' }).value,
                     sass: hljs.default.highlight(dropDownComponentSASS, { language: 'css' }).value,
+                },
+                NotificationsSampleComponent: {
+                    html: hljs.default.highlight(notificationsSampleHtml, { language: 'html' }).value,
+                    ts: hljs.default.highlight(notificationsSampleTS, { language: 'typescript' }).value,
                 }
             }
             resolve(result);
@@ -839,5 +877,70 @@ export class MainDataService {
             resolve(result);
         });
         return promiseResult;
+    }
+
+    async getServicesData() {
+        const notificationsServiceTS = `
+           export class NotificationsService {
+                private toasters: HTMLElement[] = [];
+
+                sendNotification(message: string): void {
+                    this.createToaster(message);
+                }
+
+                private createToaster(message: string): void {
+                    if (this.toasters.length >= 3) {
+                        const oldestToaster = this.toasters.shift();
+                        if (oldestToaster) {
+                            document.body.removeChild(oldestToaster);
+                        }
+                    }
+
+                    const toaster = document.createElement('div');
+                    toaster.innerText = message;
+                    toaster.style.top = \`\${10 + this.toasters.length * 50}px\`; // Changed from bottom to top
+                    toaster.classList.add('toaster-notification');
+
+                    const closeButton = document.createElement('button');
+                    closeButton.innerText = 'x';
+                    closeButton.classList.add('close-button');
+
+                    closeButton.onclick = () => {
+                        toaster.style.opacity = '0';
+                        setTimeout(() => {
+                            document.body.removeChild(toaster);
+                            this.toasters = this.toasters.filter(t => t !== toaster);
+                        }, 500);
+                    };
+
+                    toaster.appendChild(closeButton);
+                    document.body.appendChild(toaster);
+
+                    setTimeout(() => {
+                        toaster.style.opacity = '1';
+                    }, 0);
+
+                    this.toasters.push(toaster);
+
+                    setTimeout(() => {
+                        toaster.style.opacity = '0';
+                        setTimeout(() => {
+                            document.body.removeChild(toaster);
+                            this.toasters = this.toasters.filter(t => t !== toaster);
+                        }, 500);
+                    }, 3000);
+                }
+            }
+        `;
+
+        const result = {
+            NotificationsService: {
+                ts: hljs.default.highlight(notificationsServiceTS, { language: 'typescript' }).value,
+            }
+        }
+        
+        return new Promise((resolve, reject) => { 
+            resolve(result);
+        });
     }
 }

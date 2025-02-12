@@ -6,6 +6,7 @@ import './styles/main.scss';
 
 // Services
 import { MainDataService } from "./data/main-data.service";
+import { NotificationsService } from "./services/notifications/notifications.service";
 
 // Components
 import { AppRootComponent } from "./views/app-root/app-root.component";
@@ -25,6 +26,7 @@ import { RepeatableSampleComponent } from "./views/repeatable-sample/repeatable-
 import { EventsSampleComponent } from "./views/events-sample/events-sample.component";
 import { PropertyBindingsSampleComponent } from "./views/property-bindings-sample/property-bindings-sample.component";
 import { FormsBindingSampleComponent } from "./views/forms-binding-sample/forms-binding-sample.component";
+import { NotificationsSampleComponent } from "./views/notifications-sample/notifications-sample.component";
 import { AnalogueClockComponent } from "./components/analogue-clock/analogue-clock.component";
 
 (() => {
@@ -32,6 +34,7 @@ import { AnalogueClockComponent } from "./components/analogue-clock/analogue-clo
     
     // Register dependencies
     sharkCore.dependencyResolver.registerSingletonType<MainDataService>('MainDataService', MainDataService);
+    sharkCore.dependencyResolver.registerSingletonType<NotificationsService>('NotificationsService', NotificationsService);
 
     sharkCore.dependencyResolver.declareComponent<AppRootComponent>('AppRootComponent', AppRootComponent, ['ChangeDetector', 'MainDataService']);
     sharkCore.dependencyResolver.declareComponent<BaseInputComponent>('BaseInputComponent', BaseInputComponent, ['ChangeDetector']);
@@ -39,13 +42,14 @@ import { AnalogueClockComponent } from "./components/analogue-clock/analogue-clo
     sharkCore.dependencyResolver.declareComponent<ConditionsSampleComponent>('ConditionsSampleComponent', ConditionsSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<DropDownComponent>('DropDownComponent', DropDownComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<AnalogueClockComponent>('AnalogueClockComponent', AnalogueClockComponent, ['ChangeDetector']);
-    sharkCore.dependencyResolver.declareComponent<DashboardComponent>('DashboardComponent', DashboardComponent, ['ChangeDetector']);
+    sharkCore.dependencyResolver.declareComponent<DashboardComponent>('DashboardComponent', DashboardComponent, ['ChangeDetector', 'NotificationsService']);
     // sharkCore.dependencyResolver.declareComponent<MonacoEditorComponent>('MonacoEditorComponent', MonacoEditorComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<HttpClientSampleComponent>('HttpClientSampleComponent', HttpClientSampleComponent, ['ChangeDetector', 'HttpClient']);
     sharkCore.dependencyResolver.declareComponent<RepeatableSampleComponent>('RepeatableSampleComponent', RepeatableSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<EventsSampleComponent>('EventsSampleComponent', EventsSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<PropertyBindingsSampleComponent>('PropertyBindingsSampleComponent', PropertyBindingsSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<FormsBindingSampleComponent>('FormsBindingSampleComponent', FormsBindingSampleComponent, ['ChangeDetector']);
+    sharkCore.dependencyResolver.declareComponent<NotificationsSampleComponent>('NotificationsSampleComponent', NotificationsSampleComponent, ['ChangeDetector', 'NotificationsService']);
     
     sharkCore.runApp('AppRootComponent');
 })();
