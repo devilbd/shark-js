@@ -147,8 +147,14 @@ export class MainDataService {
             <div class="notifications-sample">
                 <div class="section-content">
                     <label class="label medium">Notifications sample</label>
-                    <button bind-event="click:onCreateToasterMessage">
-                        Create toaster message
+                    <button bind-event="click:onCreateInfoMessage">
+                        Create info message
+                    </button>
+                    <button bind-event="click:onCreateSuccessMessage">
+                        Create success message
+                    </button>
+                    <button bind-event="click:onCreateErrorMessage">
+                        Create error message
                     </button>
                 </div>
             </div>
@@ -156,7 +162,7 @@ export class MainDataService {
         const notificationsSampleTS = `
             import { ChangeDetector } from "../../../framework/ui/change-detector";
             import { Component } from "../../../framework/ui/component";
-            import { NotificationsService } from "../../services/notifications/notifications.service";
+            import { Notification, NotificationsService, NotificationType } from "../../services/notifications/notifications.service";
             import html from './notifications-sample.component.html';
             import './notifications-sample.component.scss';
 
@@ -165,14 +171,34 @@ export class MainDataService {
                 html: html
             })
             export class NotificationsSampleComponent  {
-                
-
                 constructor(private changeDetector: ChangeDetector, private notifications: NotificationsService) {
                 }
-
                 
-                onCreateToasterMessage() {
-                    this.notifications.sendNotification('I am toaster message!');
+                onCreateInfoMessage() {
+                    const notification = {
+                        title: 'Info',
+                        body: 'I am info notification message!',
+                        type: NotificationType.Info
+                    } as Notification;
+                    this.notifications.notify(notification);
+                }
+
+                onCreateSuccessMessage() {
+                    const notification = {
+                        title: 'Success',
+                        body: 'I am success notification message!',
+                        type: NotificationType.Success
+                    } as Notification;
+                    this.notifications.notify(notification);
+                }
+
+                onCreateErrorMessage() {
+                    const notification = {
+                        title: 'Error',
+                        body: 'I am error notification message!',
+                        type: NotificationType.Error
+                    } as Notification;
+                    this.notifications.notify(notification);
                 }
             }
         `;

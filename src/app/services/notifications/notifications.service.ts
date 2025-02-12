@@ -1,62 +1,67 @@
 export class NotificationsService {
-    private toasters: HTMLElement[] = [];
+    private notifications: HTMLElement[] = [];
 
-    sendNotification(message: string, notificationType: NotificationType): void {
-        this.createToaster(message, notificationType);
-    }
-
-    private createToaster(message: string, notificationType: NotificationType): void {
-        if (this.toasters.length >= 3) {
-            const oldestToaster = this.toasters.shift();
-            if (oldestToaster) {
-                document.body.removeChild(oldestToaster);
+    notify(notification: Notification): void {
+        if (this.notifications.length >= 3) {
+            const oldestNotification = this.notifications.shift();
+            if (oldestNotification) {
+                document.body.removeChild(oldestNotification);
             }
         }
 
-        const toaster = this.createToasterDom(message, notificationType);
-        const closeBtn = this.createToasterCloseButton(toaster)       
+        const notificationEl = this.createNotificationDom(notification);
+        const rootToAppend = notificationEl.querySelector('.title') as HTMLElement;
+        const closeBtnEl = this.createNotificationCloseButton(rootToAppend, notification.onClose);
 
-        toaster.appendChild(closeBtn);
-        document.body.appendChild(toaster);
+        document.body.appendChild(notificationEl);
+        rootToAppend.appendChild(closeBtnEl);
 
         setTimeout(() => {
-            toaster.style.opacity = '1';
+            notificationEl.style.opacity = '1';
         }, 0);
 
-        this.toasters.push(toaster);
+        this.notifications.push(notificationEl);
 
-        setTimeout(() => {
-            toaster.style.opacity = '0';
-            setTimeout(() => {
-                document.body.removeChild(toaster);
-                this.toasters = this.toasters.filter(t => t !== toaster);
-            }, 500);
-        }, 3000);
+        // setTimeout(() => {
+        //     notificationEl.style.opacity = '0';
+        //     setTimeout(() => {
+        //         document.body.removeChild(notificationEl);
+        //         this.notifications = this.notifications.filter(t => t !== notificationEl);
+        //     }, 500);
+        // }, 3000);
     }
 
-    createToasterDom(message: string, notificationType: NotificationType) {
-        const toaster = document.createElement('div');
-        toaster.innerText = message;
-        toaster.style.top = `${10 + this.toasters.length * 50}px`; // Changed from bottom to top
-        toaster.classList.add('toaster-notification');
-        const notificationClass = NotificationType[notificationType].toLowerCase().toString();
-        toaster.classList.add(notificationClass);
-        return toaster;
+    createNotificationDom(notification: Notification) {
+        const notificationEl = document.createElement('div');
+        notificationEl.innerHTML = `
+            <div class="title">
+                <div>${notification.title}</div>
+            </div>
+            <div class="body">${notification.body}</div>`;
+
+        notificationEl.classList.add('notification');
+        notificationEl.style.top = `${10 + this.notifications.length * 100}px`; // Changed from bottom to top
+        
+        const notificationClass = NotificationType[notification.type].toLowerCase().toString();
+        notificationEl.classList.add(notificationClass);
+        return notificationEl;
     }
 
-    createToasterCloseButton(toaster: HTMLElement) {
-        const closeButton = document.createElement('button');
-        closeButton.innerText = 'x';
-        closeButton.classList.add('close-button');
+    createNotificationCloseButton(notificationEl: HTMLElement, eventCallBack: Function) {
+        const closeButtonEl = document.createElement('button');
+        closeButtonEl.innerText = 'x';
+        closeButtonEl.classList.add('close-button');
 
-        closeButton.onclick = () => {
-            toaster.style.opacity = '0';
-            setTimeout(() => {
-                document.body.removeChild(toaster);
-                this.toasters = this.toasters.filter(t => t !== toaster);
-            }, 500);
+        closeButtonEl.onclick = () => {
+            notificationEl.style.opacity = '0';
+            this.notifications = this.notifications.filter(t => t !== notificationEl.parentElement as HTMLElement);
+            document.body.removeChild(notificationEl.parentElement as HTMLElement);
+            if (eventCallBack != null) {
+                eventCallBack();
+            }
         };
-        return closeButton;
+
+        return closeButtonEl;
     }
 }
 
@@ -64,4 +69,11 @@ export enum NotificationType {
     Info,
     Success,
     Error,
+}
+
+export interface Notification {
+    title: string;
+    body: string;
+    type: NotificationType;
+    onClose: Function;
 }

@@ -1,6 +1,6 @@
 import { ChangeDetector } from "../../../framework/ui/change-detector";
 import { Component } from "../../../framework/ui/component";
-import { NotificationsService, NotificationType } from "../../services/notifications/notifications.service";
+import { Notification, NotificationsService, NotificationType } from "../../services/notifications/notifications.service";
 import html from './notifications-sample.component.html';
 import './notifications-sample.component.scss';
 
@@ -9,21 +9,36 @@ import './notifications-sample.component.scss';
     html: html
 })
 export class NotificationsSampleComponent  {
-    
-
     constructor(private changeDetector: ChangeDetector, private notifications: NotificationsService) {
     }
-
     
     onCreateInfoMessage() {
-        this.notifications.sendNotification('I am toaster message!', NotificationType.Info);
+        const notification = {
+            title: 'Info',
+            body: 'I am info notification message!',
+            type: NotificationType.Info,
+            onClose: () => {
+                console.log('Notification closed.');
+            }
+        } as Notification;
+        this.notifications.notify(notification);
     }
 
     onCreateSuccessMessage() {
-        this.notifications.sendNotification('I am toaster message!', NotificationType.Success);
+        const notification = {
+            title: 'Success',
+            body: 'I am success notification message!',
+            type: NotificationType.Success
+        } as Notification;
+        this.notifications.notify(notification);
     }
 
     onCreateErrorMessage() {
-        this.notifications.sendNotification('I am toaster message!', NotificationType.Error);
+        const notification = {
+            title: 'Error',
+            body: 'I am error notification message!',
+            type: NotificationType.Error
+        } as Notification;
+        this.notifications.notify(notification);
     }
 }
