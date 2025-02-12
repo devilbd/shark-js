@@ -948,14 +948,14 @@ export class MainDataService {
 
                 createNotificationDom(notification: Notification) {
                     const notificationEl = document.createElement('div');
-                    notificationEl.innerHTML = `
+                    notificationEl.innerHTML = \`
                         <div class="title">
-                            <div>${notification.title}</div>
+                            <div>\${notification.title}</div>
                         </div>
-                        <div class="body">${notification.body}</div>`;
+                        <div class="body">\${notification.body}</div>\`;
 
                     notificationEl.classList.add('notification');
-                    notificationEl.style.top = `${10 + this.notifications.length * 100}px`; // Changed from bottom to top
+                    notificationEl.style.top = \`\${10 + this.notifications.length * 100}px\`; // Changed from bottom to top
                     
                     const notificationClass = NotificationType[notification.type].toLowerCase().toString();
                     notificationEl.classList.add(notificationClass);
