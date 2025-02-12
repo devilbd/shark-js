@@ -13,24 +13,10 @@ export class NotificationsService {
             }
         }
 
-        const toaster = document.createElement('div');
-        toaster.innerText = message;
-        toaster.style.top = `${10 + this.toasters.length * 50}px`; // Changed from bottom to top
-        toaster.classList.add('toaster-notification');
+        const toaster = this.createToasterDom(message);
+        const closeBtn = this.createToasterCloseButton(toaster)       
 
-        const closeButton = document.createElement('button');
-        closeButton.innerText = 'x';
-        closeButton.classList.add('close-button');
-
-        closeButton.onclick = () => {
-            toaster.style.opacity = '0';
-            setTimeout(() => {
-                document.body.removeChild(toaster);
-                this.toasters = this.toasters.filter(t => t !== toaster);
-            }, 500);
-        };
-
-        toaster.appendChild(closeButton);
+        toaster.appendChild(closeBtn);
         document.body.appendChild(toaster);
 
         setTimeout(() => {
@@ -46,5 +32,28 @@ export class NotificationsService {
                 this.toasters = this.toasters.filter(t => t !== toaster);
             }, 500);
         }, 3000);
+    }
+
+    createToasterDom(message: string) {
+        const toaster = document.createElement('div');
+        toaster.innerText = message;
+        toaster.style.top = `${10 + this.toasters.length * 50}px`; // Changed from bottom to top
+        toaster.classList.add('toaster-notification');
+        return toaster;
+    }
+
+    createToasterCloseButton(toaster: HTMLElement) {
+        const closeButton = document.createElement('button');
+        closeButton.innerText = 'x';
+        closeButton.classList.add('close-button');
+
+        closeButton.onclick = () => {
+            toaster.style.opacity = '0';
+            setTimeout(() => {
+                document.body.removeChild(toaster);
+                this.toasters = this.toasters.filter(t => t !== toaster);
+            }, 500);
+        };
+        return closeButton;
     }
 }
