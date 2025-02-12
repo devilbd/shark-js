@@ -77,4 +77,23 @@ export function draggable(componentRef: HTMLElement) {
             document.addEventListener('touchend', onTouchEnd);
         });
     }
+
+    const resetPosition = () => {
+        const rect = componentRef.getBoundingClientRect();
+        const docWidth = document.documentElement.clientWidth;
+        const docHeight = document.documentElement.clientHeight;
+
+        let newLeft = rect.left;
+        let newTop = rect.top;
+
+        if (newLeft < 0) newLeft = 0;
+        if (newTop < 0) newTop = 0;
+        if (newLeft + rect.width > docWidth) newLeft = docWidth - rect.width;
+        if (newTop + rect.height > docHeight) newTop = docHeight - rect.height;
+
+        componentRef.style.left = `${newLeft}px`;
+        componentRef.style.top = `${newTop}px`;
+    };
+
+    window.addEventListener('resize', resetPosition);
 }
