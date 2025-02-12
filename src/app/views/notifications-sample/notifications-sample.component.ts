@@ -1,6 +1,6 @@
 import { ChangeDetector } from "../../../framework/ui/change-detector";
 import { Component } from "../../../framework/ui/component";
-import { NotificationsService } from "../../services/notifications/notifications.service";
+import { NotificationsService, NotificationType } from "../../services/notifications/notifications.service";
 import html from './notifications-sample.component.html';
 import './notifications-sample.component.scss';
 
@@ -15,7 +15,15 @@ export class NotificationsSampleComponent  {
     }
 
     
-    onCreateToasterMessage() {
-        this.notifications.sendNotification('I am toaster message!');
+    onCreateInfoMessage() {
+        this.notifications.sendNotification('I am toaster message!', NotificationType.Info);
+    }
+
+    onCreateSuccessMessage() {
+        this.notifications.sendNotification('I am toaster message!', NotificationType.Success);
+    }
+
+    onCreateErrorMessage() {
+        this.notifications.sendNotification('I am toaster message!', NotificationType.Error);
     }
 }

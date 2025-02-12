@@ -65,4 +65,12 @@ html, body, [bind-component="AppRootComponent"] {
         border-radius: 3px;
         cursor: pointer;
     }
+
+    &.success {
+        background-color: #00c367!important;
+    }
+
+    &.error {
+        background-color: #ed143d94!important;
+    }
 }

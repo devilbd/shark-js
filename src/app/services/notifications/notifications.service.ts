@@ -1,11 +1,11 @@
 export class NotificationsService {
     private toasters: HTMLElement[] = [];
 
-    sendNotification(message: string): void {
-        this.createToaster(message);
+    sendNotification(message: string, notificationType: NotificationType): void {
+        this.createToaster(message, notificationType);
     }
 
-    private createToaster(message: string): void {
+    private createToaster(message: string, notificationType: NotificationType): void {
         if (this.toasters.length >= 3) {
             const oldestToaster = this.toasters.shift();
             if (oldestToaster) {
@@ -13,7 +13,7 @@ export class NotificationsService {
             }
         }
 
-        const toaster = this.createToasterDom(message);
+        const toaster = this.createToasterDom(message, notificationType);
         const closeBtn = this.createToasterCloseButton(toaster)       
 
         toaster.appendChild(closeBtn);
@@ -34,11 +34,13 @@ export class NotificationsService {
         }, 3000);
     }
 
-    createToasterDom(message: string) {
+    createToasterDom(message: string, notificationType: NotificationType) {
         const toaster = document.createElement('div');
         toaster.innerText = message;
         toaster.style.top = `${10 + this.toasters.length * 50}px`; // Changed from bottom to top
         toaster.classList.add('toaster-notification');
+        const notificationClass = NotificationType[notificationType].toLowerCase().toString();
+        toaster.classList.add(notificationClass);
         return toaster;
     }
 
@@ -56,4 +58,10 @@ export class NotificationsService {
         };
         return closeButton;
     }
+}
+
+export enum NotificationType {
+    Info,
+    Success,
+    Error,
 }
