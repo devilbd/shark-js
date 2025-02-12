@@ -96,4 +96,6 @@ export function draggable(componentRef: HTMLElement) {
     };
 
     window.addEventListener('resize', resetPosition);
+
+    resetPosition();
 }

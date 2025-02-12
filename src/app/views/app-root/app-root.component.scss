@@ -11,7 +11,6 @@
         flex-direction: row;
         justify-content: flex-start;
         align-items: center;
-        flex: 1 auto;
         /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b5bdc8+0,828c95+36,28343b+100;Grey+Black+3D */
         background: linear-gradient(to bottom,  #b5bdc8 0%,#828c95 36%,#28343b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         box-shadow: 0 0 81px black;
@@ -26,7 +25,6 @@
         flex-direction: row;
         justify-content: flex-end;
         align-items: end;
-        flex: 1 auto;
         /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b5bdc8+0,828c95+36,28343b+100;Grey+Black+3D */
         background: linear-gradient(to bottom,  #b5bdc8 0%,#828c95 36%,#28343b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         box-shadow: 0 0 81px black;
@@ -35,7 +33,7 @@
 
     .body {
         background:  #333e4b;
-        flex: 10 auto;
+        flex: 1 auto;
         display: flex;
         flex-direction: row;
         justify-content: stretch;
@@ -48,22 +46,20 @@
         margin: 20px;
         border-radius: 5px;
         box-shadow: 8px 8px 12px black;
-        max-width: 800px;
         overflow-x: auto;
         background-color: #22272e;
         color: white;
     }
 
     .navigation-panel {
-        flex: 0 auto;
         height: 100%;
     }
 
     .selected-page-content {
-        flex: 1 auto;
+        flex-grow: 1;
         height: 100%;
-        max-width: 850px;
-        overflow-x: auto;
+        max-width: 870px;
+        overflow: auto;
     }
 
     .samples-title {

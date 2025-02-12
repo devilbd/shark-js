@@ -1,7 +1,7 @@
 [bind-component="AnalogueClockComponent"] {
     position: absolute;
-    top: 10%;
-    left: 90%;
+    top: 5px;
+    left: 95%;
     box-shadow: 1px 1px 30px #000;
     border-radius: 30px;
     z-index: 9000;
@@ -20,7 +20,7 @@
 .analogue-clock-component-root {
     // Options
     $black: #1b1e23;
-    $size: 120px;
+    $size: 65px;
     $white: #f4eed7;
     $feature : #4b9aaa;
 
