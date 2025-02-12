@@ -911,55 +911,87 @@ export class MainDataService {
 
     async getServicesData() {
         const notificationsServiceTS = `
-           export class NotificationsService {
-                private toasters: HTMLElement[] = [];
+           import './notifications.scss';
 
-                sendNotification(message: string): void {
-                    this.createToaster(message);
-                }
+            export class NotificationsService {
+                private notifications: HTMLElement[] = [];
 
-                private createToaster(message: string): void {
-                    if (this.toasters.length >= 3) {
-                        const oldestToaster = this.toasters.shift();
-                        if (oldestToaster) {
-                            document.body.removeChild(oldestToaster);
+                notify(notification: Notification): void {
+                    if (this.notifications.length >= 3) {
+                        const oldestNotification = this.notifications.shift();
+                        if (oldestNotification) {
+                            document.body.removeChild(oldestNotification);
                         }
                     }
 
-                    const toaster = document.createElement('div');
-                    toaster.innerText = message;
-                    toaster.style.top = \`\${10 + this.toasters.length * 50}px\`; // Changed from bottom to top
-                    toaster.classList.add('toaster-notification');
+                    const notificationEl = this.createNotificationDom(notification);
+                    const rootToAppend = notificationEl.querySelector('.title') as HTMLElement;
+                    const closeBtnEl = this.createNotificationCloseButton(rootToAppend, notification.onClose);
 
-                    const closeButton = document.createElement('button');
-                    closeButton.innerText = 'x';
-                    closeButton.classList.add('close-button');
-
-                    closeButton.onclick = () => {
-                        toaster.style.opacity = '0';
-                        setTimeout(() => {
-                            document.body.removeChild(toaster);
-                            this.toasters = this.toasters.filter(t => t !== toaster);
-                        }, 500);
-                    };
-
-                    toaster.appendChild(closeButton);
-                    document.body.appendChild(toaster);
+                    document.body.appendChild(notificationEl);
+                    rootToAppend.appendChild(closeBtnEl);
 
                     setTimeout(() => {
-                        toaster.style.opacity = '1';
+                        notificationEl.style.opacity = '1';
                     }, 0);
 
-                    this.toasters.push(toaster);
+                    this.notifications.push(notificationEl);
 
-                    setTimeout(() => {
-                        toaster.style.opacity = '0';
+                    if (notification.autoCloseOn) {
                         setTimeout(() => {
-                            document.body.removeChild(toaster);
-                            this.toasters = this.toasters.filter(t => t !== toaster);
-                        }, 500);
-                    }, 3000);
+                            notificationEl.style.opacity = '0';
+                            document.body.removeChild(notificationEl);
+                            this.notifications = this.notifications.filter(t => t !== notificationEl);
+                        }, notification.autoCloseOn);
+                    }
                 }
+
+                createNotificationDom(notification: Notification) {
+                    const notificationEl = document.createElement('div');
+                    notificationEl.innerHTML = `
+                        <div class="title">
+                            <div>${notification.title}</div>
+                        </div>
+                        <div class="body">${notification.body}</div>`;
+
+                    notificationEl.classList.add('notification');
+                    notificationEl.style.top = `${10 + this.notifications.length * 100}px`; // Changed from bottom to top
+                    
+                    const notificationClass = NotificationType[notification.type].toLowerCase().toString();
+                    notificationEl.classList.add(notificationClass);
+                    return notificationEl;
+                }
+
+                createNotificationCloseButton(notificationEl: HTMLElement, eventCallBack: Function) {
+                    const closeButtonEl = document.createElement('button');
+                    closeButtonEl.innerText = 'x';
+                    closeButtonEl.classList.add('close-button');
+
+                    closeButtonEl.onclick = () => {
+                        notificationEl.style.opacity = '0';
+                        this.notifications = this.notifications.filter(t => t !== notificationEl.parentElement as HTMLElement);
+                        document.body.removeChild(notificationEl.parentElement as HTMLElement);
+                        if (eventCallBack != null) {
+                            eventCallBack();
+                        }
+                    };
+
+                    return closeButtonEl;
+                }
+            }
+
+            export enum NotificationType {
+                Info,
+                Success,
+                Error,
+            }
+
+            export interface Notification {
+                title: string;
+                body: string;
+                type: NotificationType;
+                onClose: Function;
+                autoCloseOn?: number;
             }
         `;
 
