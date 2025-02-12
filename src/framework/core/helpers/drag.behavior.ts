@@ -12,8 +12,21 @@ export function draggable(componentRef: HTMLElement) {
             handle.style.cursor = 'grabbing';
     
             const onMouseMove = (moveEvent: MouseEvent) => {
-                componentRef.style.left = `${moveEvent.clientX - offsetX}px`;
-                componentRef.style.top = `${moveEvent.clientY - offsetY}px`;
+                let newLeft = moveEvent.clientX - offsetX;
+                let newTop = moveEvent.clientY - offsetY;
+
+                // Ensure the element stays within the document borders
+                const rect = componentRef.getBoundingClientRect();
+                const docWidth = document.documentElement.clientWidth;
+                const docHeight = document.documentElement.clientHeight;
+
+                if (newLeft < 0) newLeft = 0;
+                if (newTop < 0) newTop = 0;
+                if (newLeft + rect.width > docWidth) newLeft = docWidth - rect.width;
+                if (newTop + rect.height > docHeight) newTop = docHeight - rect.height;
+
+                componentRef.style.left = `${newLeft}px`;
+                componentRef.style.top = `${newTop}px`;
             };
     
             const onMouseUp = () => {
@@ -35,19 +48,32 @@ export function draggable(componentRef: HTMLElement) {
             let offsetY = touch.clientY - componentRef.getBoundingClientRect().top;
             handle.style.cursor = 'grabbing';
     
-            const onTouchMouve = (moveEvent: any) => {
+            const onTouchMove = (moveEvent: any) => {
                 const moveTouch = moveEvent.touches[0];
-                componentRef.style.left = `${moveTouch.clientX - offsetX}px`;
-                componentRef.style.top = `${moveTouch.clientY - offsetY}px`;
+                let newLeft = moveTouch.clientX - offsetX;
+                let newTop = moveTouch.clientY - offsetY;
+
+                // Ensure the element stays within the document borders
+                const rect = componentRef.getBoundingClientRect();
+                const docWidth = document.documentElement.clientWidth;
+                const docHeight = document.documentElement.clientHeight;
+
+                if (newLeft < 0) newLeft = 0;
+                if (newTop < 0) newTop = 0;
+                if (newLeft + rect.width > docWidth) newLeft = docWidth - rect.width;
+                if (newTop + rect.height > docHeight) newTop = docHeight - rect.height;
+
+                componentRef.style.left = `${newLeft}px`;
+                componentRef.style.top = `${newTop}px`;
             };
     
             const onTouchEnd = () => {
-                document.removeEventListener('touchmove', onTouchMouve);
+                document.removeEventListener('touchmove', onTouchMove);
                 document.removeEventListener('touchend', onTouchEnd);
                 handle.style.cursor = 'grab';
             };
     
-            document.addEventListener('touchmove', onTouchMouve);
+            document.addEventListener('touchmove', onTouchMove);
             document.addEventListener('touchend', onTouchEnd);
         });
     }
