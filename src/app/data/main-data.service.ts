@@ -178,7 +178,10 @@ export class MainDataService {
                     const notification = {
                         title: 'Info',
                         body: 'I am info notification message!',
-                        type: NotificationType.Info
+                        type: NotificationType.Info,
+                        onClose: () => {
+                            console.log('Notification closed.');
+                        }
                     } as Notification;
                     this.notifications.notify(notification);
                 }
@@ -195,8 +198,9 @@ export class MainDataService {
                 onCreateErrorMessage() {
                     const notification = {
                         title: 'Error',
-                        body: 'I am error notification message!',
-                        type: NotificationType.Error
+                        body: 'I am error notification message! Delay is 3 seconds...',
+                        type: NotificationType.Error,
+                        autoCloseOn: 3000
                     } as Notification;
                     this.notifications.notify(notification);
                 }

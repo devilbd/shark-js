@@ -6,7 +6,6 @@
     border-radius: 5px;
     z-index: 9999;
     opacity: 0;
-
     background-color: rgba(0, 0, 0, 0.63);
     color: white;
     border-bottom: 2px dashed transparent;
@@ -16,9 +15,7 @@
     font-size: 14px;
     font-weight: bold;
     transition: all 0.3s ease;
-
     min-width: 330px;
-
     display: flex;
     flex-direction: column;
     justify-content: center;
