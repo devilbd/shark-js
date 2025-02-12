@@ -91,7 +91,6 @@
             align-items: center;
 
             .icon { 
-                visibility: hidden;
                 display: inline-block;
                 background-image: url('../../assets/old_navigation_icon_reworked.png');
                 background-position: center center;
@@ -100,6 +99,7 @@
                 width: 42px;
                 margin: 10px;
                 border-radius: 100%;
+                opacity: 0.5;
             }
 
             .btn-title {
@@ -116,7 +116,7 @@
                 border-bottom: 2px dashed white;
 
                 .icon {
-                    visibility: visible !important;
+                    opacity: 1;
                 }
             }
         }
