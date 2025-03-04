@@ -1,13 +1,14 @@
 import * as hljs from 'highlight.js';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { FirebaseProvider } from './firebase.provider';
 
 export class MainDataService {
     private testProp = 5;
 
-    constructor () {
+    constructor (private firebaseProvider: FirebaseProvider) {
         const j = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlLZXkiOiJBSXphU3lDOWNVS1c1R3lhNzN4b1I2UnE4QVZTb0N3aFBZWjhiOEkiLCJhdXRoRG9tYWluIjoic2hhcmstanMuZmlyZWJhc2VhcHAuY29tIiwiZGF0YWJhc2VVUkwiOiJodHRwczovL3NoYXJrLWpzLWRlZmF1bHQtcnRkYi5ldXJvcGUtd2VzdDEuZmlyZWJhc2VkYXRhYmFzZS5hcHAiLCJwcm9qZWN0SWQiOiJzaGFyay1qcyIsInN0b3JhZ2VCdWNrZXQiOiJzaGFyay1qcy5maXJlYmFzZXN0b3JhZ2UuYXBwIiwibWVzc2FnaW5nU2VuZGVySWQiOiIxMDQ0ODE1NTU3MTgxIiwiYXBwSWQiOiIxOjEwNDQ4MTU1NTcxODE6d2ViOjhmNDNlYzBiMjIzZWRkNjgwZTcwNTQiLCJtZWFzdXJlbWVudElkIjoiRy04UUpXWkJRR0hKIn0.g1iiLTzYtRqWQl58yuy5vWjKUuc1TL0IOHP-jyM7Rcg";
-        const config = JSON.parse(atob(j.split('.')[1]))
+        const config = JSON.parse(atob(j.split('.')[1]));
         // Initialize Firebase
         const app = initializeApp(config);
         const analytics = getAnalytics(app);
@@ -24,7 +25,11 @@ export class MainDataService {
         return promiseResult;
     }
 
+    // Added to firebase
+    // dropDownComponentHtml
     async getComponentsValues() {
+        // const dropDownComponentSample = await this.firebaseProvider.getSampleComponent('DropDownComponent');
+
         const dropDownComponentHtml = `
             <div class="drop-down-component-root">
                 <div bind-event="click:onBodyToggle" class="selected-item">
@@ -36,6 +41,7 @@ export class MainDataService {
                 </div>
             </div>
         `;
+
         const dropDownComponentTS = `
             import { ChangeDetector } from "../../../framework/ui/change-detector";
             import { Component } from "../../../framework/ui/component";
@@ -69,7 +75,6 @@ export class MainDataService {
                 }
             }
         `;
-
         const dropDownComponentSASS = `
             .drop-down-component-root {
                 border: 2px dashed rgb(0, 0, 0);
@@ -210,6 +215,9 @@ export class MainDataService {
         let promiseResult = new Promise((resolve, reject) => {
             const result = {
                 DropDownComponent: {
+                    // html: hljs.default.highlight((<any>dropDownComponentSample).html, { language: 'html' }).value,
+                    // ts: hljs.default.highlight((<any>dropDownComponentSample).ts, { language: 'typescript' }).value,
+                    // sass: hljs.default.highlight((<any>dropDownComponentSample).sass, { language: 'css' }).value,
                     html: hljs.default.highlight(dropDownComponentHtml, { language: 'html' }).value,
                     ts: hljs.default.highlight(dropDownComponentTS, { language: 'typescript' }).value,
                     sass: hljs.default.highlight(dropDownComponentSASS, { language: 'css' }).value,

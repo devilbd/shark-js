@@ -4,6 +4,9 @@ import { SharkCore } from "../framework/core/shark-core/shark-core";
 // Styles
 import './styles/main.scss';
 
+// Providers
+import { FirebaseProvider } from './data/firebase.provider';
+
 // Services
 import { MainDataService } from "./data/main-data.service";
 import { NotificationsService } from "./services/notifications/notifications.service";
@@ -28,12 +31,16 @@ import { PropertyBindingsSampleComponent } from "./views/property-bindings-sampl
 import { FormsBindingSampleComponent } from "./views/forms-binding-sample/forms-binding-sample.component";
 import { NotificationsSampleComponent } from "./views/notifications-sample/notifications-sample.component";
 import { AnalogueClockComponent } from "./components/analogue-clock/analogue-clock.component";
+import { RouterSampleComponent } from "./views/router-sample/router-sample.component";
+import { Router } from "../framework/core/router/router.service";
 
 (() => {
     const sharkCore = new SharkCore();
-    
     // Register dependencies
-    sharkCore.dependencyResolver.registerSingletonType<MainDataService>('MainDataService', MainDataService);
+
+    // FirebaseProvider
+    sharkCore.dependencyResolver.registerSingletonType<FirebaseProvider>('FirebaseProvider', FirebaseProvider);
+    sharkCore.dependencyResolver.registerSingletonType<MainDataService>('MainDataService', MainDataService, ['FirebaseProvider']);
     sharkCore.dependencyResolver.registerSingletonType<NotificationsService>('NotificationsService', NotificationsService);
 
     sharkCore.dependencyResolver.declareComponent<AppRootComponent>('AppRootComponent', AppRootComponent, ['ChangeDetector', 'MainDataService']);
@@ -50,6 +57,17 @@ import { AnalogueClockComponent } from "./components/analogue-clock/analogue-clo
     sharkCore.dependencyResolver.declareComponent<PropertyBindingsSampleComponent>('PropertyBindingsSampleComponent', PropertyBindingsSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<FormsBindingSampleComponent>('FormsBindingSampleComponent', FormsBindingSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<NotificationsSampleComponent>('NotificationsSampleComponent', NotificationsSampleComponent, ['ChangeDetector', 'NotificationsService']);
+    sharkCore.dependencyResolver.declareComponent<RouterSampleComponent>('RouterSampleComponent', RouterSampleComponent, ['ChangeDetector', 'Router']);
     
+    // Routes
+    const router = sharkCore.dependencyResolver.getType('Router') as Router;
+    router.routes = [
+        {
+            componentName: 'HttpClientSampleComponent',
+            path: '/http-client-sample',
+            parameters: undefined
+        }
+    ];
+
     sharkCore.runApp('AppRootComponent');
 })();

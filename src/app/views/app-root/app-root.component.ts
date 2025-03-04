@@ -68,6 +68,11 @@ export class AppRootComponent {
             visible: false,
             name: 'FormsBindingSampleComponent'
         },
+        {
+            title: 'Routing',
+            visible: false,
+            name: 'RouterSampleComponent'
+        },
     ];
 
     components = [

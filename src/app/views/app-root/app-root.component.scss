@@ -17,6 +17,7 @@
         z-index: 1;
 
         
+        
     }
 
     .footer {
@@ -49,6 +50,11 @@
         overflow-x: auto;
         background-color: #22272e;
         color: white;
+
+        code {
+            display: block !important;
+            margin-left: 20px;
+        }
     }
 
     .navigation-panel {

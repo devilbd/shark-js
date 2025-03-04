@@ -3,6 +3,7 @@ import { HttpClient } from "../communication/http-client";
 import { DependencyResolver } from "../dependency-resolver/dependency-resolver";
 import { ComponentResolver } from "../../ui/component-resolver";
 import { ChangeDetector } from "../../ui/change-detector";
+import { Router } from "../router/router.service";
 
 export class SharkCore { 
     public dependencyResolver = new DependencyResolver();
@@ -12,6 +13,10 @@ export class SharkCore {
     constructor() {
         // should be refactored
         this.dependencyResolver.registerType<SharkCore>('SharkCore', SharkCore);
+
+        this.dependencyResolver.registerSingletonType<Router>('Router', Router, [], () => {
+            return this.dependencyResolver;
+        });
 
         this.dependencyResolver.registerType<Configurations>('Configurations', Configurations);
 
