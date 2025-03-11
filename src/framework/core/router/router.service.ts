@@ -1,3 +1,4 @@
+import { ComponentResolver } from '../../ui/component-resolver';
 import { DependencyResolver } from '../dependency-resolver/dependency-resolver';
 import './router.scss';
 
@@ -11,22 +12,31 @@ export class Router {
 
     routes!: IRoute[];
     dependencyResolver: DependencyResolver;
+    componentResolver: ComponentResolver;
 
     constructor() {
-        this.dependencyResolver = (<any>this).injectedData as DependencyResolver;
+        const injectedData = (<any>this).injectedData;
+        this.dependencyResolver = injectedData.dependencyResolver as DependencyResolver;
+        this.componentResolver = injectedData.componentResolver as ComponentResolver;
+        
+        window.addEventListener('hashchange', () => {
+            this.navigateToRoute(window.location.hash);
+        });
     }
 
     navigateToRoute(path: string) {
-        history.pushState({}, '', path);
-        const route = this.routes.filter(route => route.path === window.location.pathname);
+        // history.pushState({}, '', path);
+        window.location.hash = `${path}`;
+        const route = this.routes.filter(route => route.path === window.location.hash);
         
         if (route != null) {
             const routerComponent = document.querySelector('router') as HTMLElement;
             if (routerComponent != null) {
-                console.log(routerComponent);
                 routerComponent.classList.add('router');
-                const componentForResolve = this.dependencyResolver.getComponent(route[0].componentName)
-                console.log(componentForResolve);
+                const componentForResolveDOM = document.createElement('div');
+                componentForResolveDOM.setAttribute('bind-component', route[0].componentName);
+                routerComponent.appendChild(componentForResolveDOM);
+                this.componentResolver.resolveComponents(routerComponent);
             }
         }
     }

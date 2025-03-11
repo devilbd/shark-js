@@ -1,5 +1,5 @@
 // Core
-import { SharkCore } from "../framework/core/shark-core/shark-core";
+import { AppConfig, SharkCore } from "../framework/core/shark-core/shark-core";
 
 // Styles
 import './styles/main.scss';
@@ -33,6 +33,7 @@ import { NotificationsSampleComponent } from "./views/notifications-sample/notif
 import { AnalogueClockComponent } from "./components/analogue-clock/analogue-clock.component";
 import { RouterSampleComponent } from "./views/router-sample/router-sample.component";
 import { Router } from "../framework/core/router/router.service";
+import { routes } from "./views/app-routes";
 
 (() => {
     const sharkCore = new SharkCore();
@@ -58,16 +59,10 @@ import { Router } from "../framework/core/router/router.service";
     sharkCore.dependencyResolver.declareComponent<FormsBindingSampleComponent>('FormsBindingSampleComponent', FormsBindingSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<NotificationsSampleComponent>('NotificationsSampleComponent', NotificationsSampleComponent, ['ChangeDetector', 'NotificationsService']);
     sharkCore.dependencyResolver.declareComponent<RouterSampleComponent>('RouterSampleComponent', RouterSampleComponent, ['ChangeDetector', 'Router']);
-    
-    // Routes
-    const router = sharkCore.dependencyResolver.getType('Router') as Router;
-    router.routes = [
-        {
-            componentName: 'HttpClientSampleComponent',
-            path: '/http-client-sample',
-            parameters: undefined
-        }
-    ];
 
-    sharkCore.runApp('AppRootComponent');
+    const appConfig = {
+        name: 'AppRootComponent',
+        routes: routes()
+    } as AppConfig;
+    sharkCore.runApp(appConfig);
 })();

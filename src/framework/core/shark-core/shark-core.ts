@@ -1,4 +1,3 @@
-import { Configurations } from "../../common/configurations";
 import { HttpClient } from "../communication/http-client";
 import { DependencyResolver } from "../dependency-resolver/dependency-resolver";
 import { ComponentResolver } from "../../ui/component-resolver";
@@ -11,14 +10,7 @@ export class SharkCore {
     public appName?: string;
 
     constructor() {
-        // should be refactored
         this.dependencyResolver.registerType<SharkCore>('SharkCore', SharkCore);
-
-        this.dependencyResolver.registerSingletonType<Router>('Router', Router, [], () => {
-            return this.dependencyResolver;
-        });
-
-        this.dependencyResolver.registerType<Configurations>('Configurations', Configurations);
 
         this.dependencyResolver.registerSingletonType<ChangeDetector>('ChangeDetector', ChangeDetector, [], () => {
             return {
@@ -30,17 +22,28 @@ export class SharkCore {
         this.dependencyResolver.registerType<ComponentResolver>('ComponentResolver', ComponentResolver, [], () => {
             return this.dependencyResolver;
         }); // need to pass dependencyresolver here as inject
-
         this.componentResolver = this.dependencyResolver.getType<ComponentResolver>('ComponentResolver');
-        const configurations = this.dependencyResolver.getType<Configurations>('Configurations');
+
+        this.dependencyResolver.registerSingletonType<Router>('Router', Router, [], () => {
+            return  {
+                dependencyResolver: this.dependencyResolver,
+                componentResolver: this.componentResolver
+            }
+        });
     }
 
-    runApp(appName: string) {
-        this.appName = appName;
+    runApp(appConfig: AppConfig) {
+        this.dependencyResolver.getType<Router>('Router').routes = appConfig.routes;
+        this.appName = appConfig.name;
         this.componentResolver.resolveComponents();
     }
 
     updateView(component: any) {
         this.componentResolver.resolveBindings(component);
     }
+}
+
+export interface AppConfig {
+    name: string;
+    routes: any[];
 }

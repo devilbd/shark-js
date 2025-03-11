@@ -14,6 +14,6 @@ export class RouterSampleComponent  {
     }
 
     onNavigate() {
-        this.router.navigateToRoute('/http-client-sample');
+        this.router.navigateToRoute('#http-client-sample');
     }
 }
