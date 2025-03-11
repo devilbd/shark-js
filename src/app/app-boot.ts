@@ -17,7 +17,6 @@ import { AppRootComponent } from "./views/app-root/app-root.component";
 // Parent component needs be imported before child's one
 import { HttpClientSampleComponent } from "./views/html-client-sample/http-client-sample.component";
 import { DropDownComponent } from "./components/drop-down/drop-down.component";
-import { BaseInputComponent } from "./components/base-input/base-input.component";
 import { DashboardComponent } from "./components/dashboard-component/dashboard.component";
 
 // import { MonacoEditorComponent } from "./components/monaco-editor-component/monaco-editor.component";
@@ -44,7 +43,6 @@ import { routes } from "./views/app-routes";
     sharkCore.dependencyResolver.registerSingletonType<NotificationsService>('NotificationsService', NotificationsService);
 
     sharkCore.dependencyResolver.declareComponent<AppRootComponent>('AppRootComponent', AppRootComponent, ['ChangeDetector', 'MainDataService']);
-    sharkCore.dependencyResolver.declareComponent<BaseInputComponent>('BaseInputComponent', BaseInputComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<SimpleBindingSampleComponent>('SimpleBindingSampleComponent', SimpleBindingSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<ConditionsSampleComponent>('ConditionsSampleComponent', ConditionsSampleComponent, ['ChangeDetector']);
     sharkCore.dependencyResolver.declareComponent<DropDownComponent>('DropDownComponent', DropDownComponent, ['ChangeDetector']);
