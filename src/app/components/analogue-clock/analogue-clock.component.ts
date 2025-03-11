@@ -13,7 +13,7 @@ export class AnalogueClockComponent {
         if (!this.isInitialized) {
             setTimeout(() => {
                 this.startClock();
-                const elementRef = document.querySelector('[bind-component="AnalogueClockComponent"]') as HTMLElement;
+                const elementRef = document.querySelector('AnalogueClockComponent') as HTMLElement;
                 draggable(elementRef);
             }, 500);
             this.isInitialized = true;

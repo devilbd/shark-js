@@ -2,7 +2,7 @@
     <div class="header">
         <div class="shark-js-logo"></div>
         <div class="label big">SharK</div>
-        <div bind-component="AnalogueClockComponent"></div>
+        <AnalogueClockComponent />
     </div>
     <div class="body">
         <div class="navigation-panel">
@@ -32,16 +32,36 @@
             </div>
         </div>
         <div class="selected-page-content">
-            <div bind-if="componentSamples[1].visible" bind-component="SimpleBindingSampleComponent"></div>
-            <div bind-if="componentSamples[2].visible" bind-component="RepeatableSampleComponent"></div>
-            <div bind-if="componentSamples[3].visible" bind-component="EventsSampleComponent"></div>
-            <div bind-if="componentSamples[4].visible" bind-component="ConditionsSampleComponent"></div>
-            <div bind-if="componentSamples[5].visible" bind-component="HttpClientSampleComponent"></div>
-            <div bind-if="componentSamples[6].visible" bind-component="PropertyBindingsSampleComponent"></div>
-            <div bind-if="componentSamples[7].visible" bind-component="FormsBindingSampleComponent"></div>
-            <div bind-if="componentSamples[8].visible" bind-component="RouterSampleComponent"></div>
-            <div bind-if="components[0].visible" bind-component="DropDownComponent"></div>            
-            <div bind-if="components[1].visible" bind-component="NotificationsSampleComponent"></div>
+            <div bind-if="componentSamples[1].visible">
+                <SimpleBindingSampleComponent />
+            </div>
+            <div bind-if="componentSamples[2].visible">
+                <RepeatableSampleComponent />
+            </div>
+            <div bind-if="componentSamples[3].visible">
+                <EventsSampleComponent />
+            </div>
+            <div bind-if="componentSamples[4].visible">
+                <ConditionsSampleComponent />
+            </div>
+            <div bind-if="componentSamples[5].visible">
+                <HttpClientSampleComponent />
+            </div>
+            <div bind-if="componentSamples[6].visible">
+                <PropertyBindingsSampleComponent />
+            </div>
+            <div bind-if="componentSamples[7].visible">
+                <FormsBindingSampleComponent />
+            </div>
+            <div bind-if="componentSamples[8].visible">
+                <RouterSampleComponent />
+            </div>
+            <div bind-if="components[0].visible">
+                <!-- <DropDownComponent /> -->
+            </div>
+            <div bind-if="components[1].visible">
+                <NotificationsSampleComponent />
+            </div>
 
             <div bind-if="codingSectionVisible">
                 <div class="section-content">

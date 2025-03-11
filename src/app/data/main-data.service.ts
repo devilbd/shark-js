@@ -242,8 +242,7 @@ export class MainDataService {
                     <link rel="icon" type="image/x-icon" href="favicon.ico" alt="">
                 </header>
                 <body>
-                    <div bind-component="AppRootComponent">
-                    </div>
+                    <AppRootComponent />
                 </body>
                 <script src="dist/shark.js"></script>
             </html>
@@ -257,7 +256,7 @@ export class MainDataService {
             import './styles/main.scss';
             
             // Services
-            import { DataService } from "service_path";
+            import { CustomDataService } from "custom_data_service_path";
             
             // Components
             import { AppRootComponent } from "./views/app-root/app-root.component";
@@ -613,10 +612,10 @@ export class MainDataService {
                             Expand drop down from dashboard
                         </button>
                     </div>
-                    <div bind-component="DropDownComponent"
+                    <DropDownComponent 
                         bind-property="dropDownExpanded->expanded,itemsSource->itemsSource"
-                        bind-property-changed="expandedChanged->dropDownExpandedChanged">
-                    </div>
+                        bind-property-changed="expandedChanged->dropDownExpandedChanged"
+                    />
                 </div>
             </div>
 

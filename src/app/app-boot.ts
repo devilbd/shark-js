@@ -32,7 +32,6 @@ import { FormsBindingSampleComponent } from "./views/forms-binding-sample/forms-
 import { NotificationsSampleComponent } from "./views/notifications-sample/notifications-sample.component";
 import { AnalogueClockComponent } from "./components/analogue-clock/analogue-clock.component";
 import { RouterSampleComponent } from "./views/router-sample/router-sample.component";
-import { Router } from "../framework/core/router/router.service";
 import { routes } from "./views/app-routes";
 
 (() => {

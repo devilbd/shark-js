@@ -9,7 +9,7 @@ import './dashboard.component.scss';
     html: html
 })
 export class DashboardComponent {
-    dropDownExpanded!: boolean;
+    dropDownExpanded = false;
     dropDownExpandedChanged = (newValue: boolean) => {
         console.log('dropDownExpandedChanged', newValue);
         console.log(this);
@@ -31,5 +31,4 @@ export class DashboardComponent {
         this.dropDownExpanded = !this.dropDownExpanded;
         this.changeDetector.updateView(this);
     }
-
 }

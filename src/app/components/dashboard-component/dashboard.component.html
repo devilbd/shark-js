@@ -8,10 +8,9 @@
                 Expand drop down from dashboard
             </button>
         </div>
-        <div bind-component="DropDownComponent"
-             bind-property="dropDownExpanded->expanded,itemsSource->itemsSource"
-             bind-property-changed="expandedChanged->dropDownExpandedChanged">
-        </div>
-        
+        <DropDownComponent 
+            bind-property="dropDownExpanded->expanded,itemsSource->itemsSource"
+            bind-property-changed="expandedChanged->dropDownExpandedChanged"
+        />
     </div>
 </div>

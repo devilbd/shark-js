@@ -33,8 +33,7 @@ export class Router {
             const routerComponent = document.querySelector('router') as HTMLElement;
             if (routerComponent != null) {
                 routerComponent.classList.add('router');
-                const componentForResolveDOM = document.createElement('div');
-                componentForResolveDOM.setAttribute('bind-component', route[0].componentName);
+                const componentForResolveDOM = document.createElement(route[0].componentName);
                 routerComponent.appendChild(componentForResolveDOM);
                 this.componentResolver.resolveComponents(routerComponent);
             }

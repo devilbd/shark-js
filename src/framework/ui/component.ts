@@ -6,7 +6,7 @@ export interface ComponentOptions {
 export function Component(componentOptions: ComponentOptions) {
     return function <T extends { new (...args: any[]): { } }>(constructor: T) {
         const result = class extends constructor implements ComponentOptions {
-            name = componentOptions.name;
+            name = componentOptions.name.toLowerCase();
             componentHtml = componentOptions.html;
         }
         return result;

@@ -1,6 +1,6 @@
 $mainColor: #6cb6ff;
 
-html, body, [bind-component="AppRootComponent"] {
+html, body, AppRootComponent {
     width: 100%;
     height: 100%;
     padding: 0;
