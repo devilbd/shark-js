@@ -57,9 +57,9 @@ export class ComponentResolver {
                     });
                 }
             });
-
-            this.resolveHtmlDomProperty(componentRef as HTMLElement, componentInstance);
+            
             this.resolveInputBindings(componentRef as HTMLElement, componentInstance);
+            this.resolveHtmlDomProperty(componentRef as HTMLElement, componentInstance);
             this.resolveTextBindings(componentRef as HTMLElement, componentInstance);
             this.resolveTextContent(componentRef as HTMLElement, componentInstance);
             this.resolveRepeatableBindings(componentRef as HTMLElement, componentInstance);
