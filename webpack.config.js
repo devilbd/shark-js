@@ -53,8 +53,8 @@ module.exports = (env, argv) => {
             ecma: undefined,
             parse: {},
             compress: {
-              drop_console: true,
-              drop_debugger: true
+              // drop_console: true,
+              // drop_debugger: true
             },
             mangle: true,
             module: true,

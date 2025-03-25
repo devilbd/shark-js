@@ -5,9 +5,7 @@ AnalogueClockComponent {
     box-shadow: 1px 1px 30px #000;
     border-radius: 30px;
     z-index: 9000;
-    padding: 15px 15px 12px 15px;
-
-
+    padding: 15px;
     background-color: rgba(0, 0, 0, 0.63);
     color: white;
     border-bottom: 2px dashed transparent;
@@ -28,7 +26,7 @@ AnalogueClockComponent {
     .clock {
         height: $size;
         width: $size;
-        border-radius: #{$size / 2};
+        border-radius: #{calc($size / 2)};
         display: flex;
         justify-content: center;
         position: relative;
@@ -44,31 +42,31 @@ AnalogueClockComponent {
             border-radius: 1px;
         }
         &__second {
-            height: #{($size / 2) - 10};
+            height: #{(calc($size / 2)) - 10};
             margin-top: 10px;
             background: $feature;
             animation: time 60s infinite steps(60);
             z-index: 3;
         }
         &__minute {
-            height: #{($size / 2) - 20};
+            height: #{calc($size / 2) - 20};
             margin-top: 20px;
             opacity: 0.75;
             animation: time 3600s linear infinite;
         }
         &__hour {
-            height: #{($size / 2) - 40};
+            height: #{calc($size / 2) - 40};
             margin-top: 40px;
             animation: time 43200s linear infinite;
         }
         &__indicator {
-            height: #{($size / 2) - 2};
+            height: #{calc($size / 2) - 2};
             border-top: 2px solid $feature;
             background: none;
         }
         &__indicator:nth-of-type(5n) {
             opacity: 1;
-            height: #{($size / 2) - 7};
+            height: #{calc($size / 2) - 7};
             border-top: 7px solid $white;
         }
         &__axis {
@@ -78,7 +76,7 @@ AnalogueClockComponent {
             border-radius: 3px;
             position: absolute;
             z-index: 4;
-            top: #{$size / 2 - 3};
+            top: #{calc($size / 2) - 3};
             
         }
     }

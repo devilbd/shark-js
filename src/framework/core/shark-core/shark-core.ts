@@ -11,19 +11,16 @@ export class SharkCore {
 
     constructor() {
         this.dependencyResolver.registerType<SharkCore>('SharkCore', SharkCore);
-
         this.dependencyResolver.registerSingletonType<ChangeDetector>('ChangeDetector', ChangeDetector, [], () => {
             return {
                 updateView: (component: any) => this.updateView(component)
             }
         });
-
         this.dependencyResolver.registerType<HttpClient>('HttpClient', HttpClient);
         this.dependencyResolver.registerType<ComponentResolver>('ComponentResolver', ComponentResolver, [], () => {
             return this.dependencyResolver;
-        }); // need to pass dependencyresolver here as inject
+        });
         this.componentResolver = this.dependencyResolver.getType<ComponentResolver>('ComponentResolver');
-
         this.dependencyResolver.registerSingletonType<Router>('Router', Router, [], () => {
             return  {
                 dependencyResolver: this.dependencyResolver,

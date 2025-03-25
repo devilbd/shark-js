@@ -1,11 +1,10 @@
+import { ComponentResolver } from "../../ui/component-resolver";
 import { generateGUID } from "../helpers/guid-generator.helper";
 
 export class DependencyResolver {
     private container = new Map<string, { constructor: any, dependencies: string[] | undefined, type: string | undefined }>();
 
-    constructor() {
-
-    }
+    constructor() {}
 
     registerType<T>(name: string, constructor: new (...args: any[]) => T, dependencies: string[] = [], injectionFactory?: Function) {
         if (injectionFactory) {
